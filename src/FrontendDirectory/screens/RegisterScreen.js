@@ -1,4 +1,4 @@
-import { Text, View } from "native-base";
+import { Text, View } from "react-native";
 import React from "react";
 
 function RegisterScreen() {
