@@ -1,0 +1,32 @@
+const products = [
+    {
+        _id: "1",
+        name: "Product Name",
+        image: "link name",
+        description: "Lorem Ipsim form the show of the ghost of the house of the hor",
+        price: 89,
+        countInStock: 3,
+        rating: 4,
+        numberOfReviews: 4,
+    },
+    {
+        _id: "2",
+        name: "Product Name 2",
+        image: "link name",
+        description: "Lorem Ipsim form the show of the ghost of the house of the hor",
+        price: 889,
+        countInStock: 3,
+        rating: 4,
+        numberOfReviews: 4,
+    },
+    {
+        _id: "3",
+        name: "Product Name 3",
+        image: "link name",
+        description: "Lorem Ipsim form the show of the ghost of the house of the hor",
+        price: 589,
+        countInStock: 3,
+        rating: 7,
+        numberOfReviews: 4,
+    },
+]
