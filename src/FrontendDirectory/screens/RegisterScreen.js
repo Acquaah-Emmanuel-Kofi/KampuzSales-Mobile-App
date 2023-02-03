@@ -10,12 +10,17 @@ function RegisterScreen() {
             <Text style={styles.heading}>Create New Account</Text>
             <View style={styles.inputBox}>
                 <Text style={styles.label}>Name*</Text>
-                <TextInput style={styles.textInputBox} placeholder="Robert Sam" />
+                <TextInput 
+                    style={styles.textInputBox} 
+                    placeholderTextColor={Colors.secondary}
+                    placeholder="Robert Sam" 
+                />
             </View>
             <View style={styles.inputBox}>
                 <Text style={styles.label}>Email</Text>
                 <TextInput 
                     style={styles.textInputBox} 
+                    placeholderTextColor={Colors.secondary}
                     placeholder="robert.sam@gmail.com" 
                 />
             </View>
@@ -24,6 +29,7 @@ function RegisterScreen() {
                 <TextInput 
                     style={styles.textInputBox} 
                     keyboardType = 'numeric'
+                    placeholderTextColor={Colors.secondary}
                     placeholder="Eg. +233 XXX XXX XXX" 
                 />
             </View>
