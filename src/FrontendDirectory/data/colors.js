@@ -6,6 +6,8 @@ const Colors = {
     secondary: "#667085",
     labelGray: "#344054",
     borderGray: "#D0D5DD",
+    productDetails: "#D9D9D9",
+    favIconBg: "#E0E0E0",
 };
 
 export default Colors;
