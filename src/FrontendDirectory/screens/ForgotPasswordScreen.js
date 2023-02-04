@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet ,Text, TextInput, View } from "react-native";
 import CustomButton from "../components/CustomButton";
-import GoogleCustomButton from "../components/GoogleCustomButton";
 import  Colors  from "../data/colors";
 
 function ForgotPasswordScreen() {
