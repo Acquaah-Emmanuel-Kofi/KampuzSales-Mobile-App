@@ -4,7 +4,7 @@ import  Colors  from "../data/colors";
 
 function CustomButton({buttonText}) {
     return (
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} onPress={() => alert("Button Clicked!")}>
             <Text style={styles.buttonText}>{buttonText}</Text>
         </Pressable>
     )
