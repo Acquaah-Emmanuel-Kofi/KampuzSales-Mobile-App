@@ -1,23 +1,26 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import  Colors  from "../data/colors";
 import  products  from "../data/testProducts";
+import CediSign from "./CediSign";
 
 function HomeProducts() {
+    const navigation = useNavigation();
     return (
         <ScrollView 
             contentContainerStyle={styles.container} 
             showsVerticalScrollIndicator={false}>
         {
             products.map((product) => (
-                <Pressable key={product._id} style={styles.productBox} onPress={() => alert("Pressed!")}>
+                <Pressable key={product._id} style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
                     <View style={styles.imageBox}>
                         <Image style={styles.image} source={{uri:product.image}} alt={product.name} />
                         <Image style={styles.imageCartTag} source={require('../data/images/Cart.png')} />
                     </View>
                     <View style={styles.productDetailsBox}>
                         <Text style={styles.productName}>{product.name}</Text>
-                        <Text style={styles.productPrice}>GHC {product.price}</Text>
+                        <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
                     </View>
                 </Pressable>
             ))
@@ -36,6 +39,7 @@ const styles = StyleSheet.create({
     productBox: {
         width: 157,
         height: 256,
+        marginVertical: 5,
     },
     imageBox: {
         position: 'relative',
