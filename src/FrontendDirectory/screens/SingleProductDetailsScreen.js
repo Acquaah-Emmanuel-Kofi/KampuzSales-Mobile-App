@@ -1,10 +1,12 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Image, ScrollView, Text, View, Pressable } from "react-native";
 import CediSign from "../components/CediSign";
-import CustomButton from "../components/CustomButton";
 import  Colors  from "../data/colors";
 
-function SingleProductDetailsScreen() {
+function SingleProductDetailsScreen({route}) {
+    const navigation = useNavigation();
+    const product = route.params
     return (
         <View>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -12,11 +14,11 @@ function SingleProductDetailsScreen() {
                     <View style={styles.productBackButton} onPress={() => alert("Back!")}>
                         <Text>K</Text>
                     </View>
-                    <Image style={styles.productImage} source={require("../data/images/productImage.jpeg")} />
+                    <Image style={styles.productImage} source={{uri: product.image}} />
                 </View>
                     <View style={styles.productDetailesContainer}>
-                        <Text style={styles.productName}>Product Name</Text>
-                        <Text style={styles.productPrice}><CediSign /> 50</Text>
+                        <Text style={styles.productName}>{product.name}</Text>
+                        <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
                         <View style={styles.productDetailsRow}>
                             <Text style={styles.productDescriptionName}>Condition: </Text>
                             <Text style={styles.productDescription}>No fault, blah blah blah</Text>
