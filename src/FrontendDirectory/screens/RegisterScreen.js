@@ -1,12 +1,12 @@
 import React from "react";
-import { StyleSheet ,Text, TextInput, View } from "react-native";
-import CustomButton from "../components/CustomButton";
+import { StyleSheet ,Text, TextInput, View, ScrollView, Button, Pressable } from "react-native";
 import GoogleCustomButton from "../components/GoogleCustomButton";
+import RegisterButton from "../components/RegisterButton";
 import  Colors  from "../data/colors";
 
-function RegisterScreen() {
+function RegisterScreen({navigation}) {
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.heading}>Create New Account</Text>
             <View style={styles.inputBox}>
                 <Text style={styles.label}>Name*</Text>
@@ -14,14 +14,6 @@ function RegisterScreen() {
                     style={styles.textInputBox} 
                     placeholderTextColor={Colors.secondary}
                     placeholder="Robert Sam" 
-                />
-            </View>
-            <View style={styles.inputBox}>
-                <Text style={styles.label}>Email</Text>
-                <TextInput 
-                    style={styles.textInputBox} 
-                    placeholderTextColor={Colors.secondary}
-                    placeholder="robert.sam@gmail.com" 
                 />
             </View>
             <View style={styles.inputBox}>
@@ -33,12 +25,30 @@ function RegisterScreen() {
                     placeholder="Eg. +233 XXX XXX XXX" 
                 />
             </View>
-            <CustomButton buttonText={"Sign Up"} />
+            <View style={styles.inputBox}>
+                <Text style={styles.label}>Password</Text>
+                <TextInput 
+                    style={styles.textInputBox} 
+                    secureTextEntry={true}
+                    placeholderTextColor={Colors.secondary}
+                    placeholder="*************" 
+                />
+            </View>
+            <View style={styles.inputBox}>
+                <Text style={styles.label}>Confirm Password</Text>
+                <TextInput 
+                    style={styles.textInputBox} 
+                    secureTextEntry={true}
+                    placeholderTextColor={Colors.secondary}
+                    placeholder="*************" 
+                />
+            </View>
+            <RegisterButton onPress={() => navigation.navigate("Login")} buttonText={"Sign Up"} />
             <GoogleCustomButton buttonText={"Sign up with Google"} />
             <Text style={styles.switchLoginScreenText}>
-                Already have an account? <Text style={styles.switchLoginScreenLinkText}>Sign in</Text>
+                Already have an account? <Pressable onPress={() => navigation.navigate("Register")}><Text style={styles.switchLoginScreenLinkText}>Sign in</Text></Pressable>
             </Text>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -55,7 +65,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: Colors.black,
         marginBottom: 20,
-        letterSpacing: 2,
+        // letterSpacing: 2,
     },
     inputBox: {
         width: '85%',
