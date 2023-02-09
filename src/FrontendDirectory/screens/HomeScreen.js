@@ -1,14 +1,18 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import HomeCategories from "../components/HomeCategories";
+import HomeNavbar from "../components/HomeNavbar";
 import HomeProducts from "../components/HomeProducts";
 import  Colors  from "../data/colors";
 
 function HomeScreen() {
     return (
         <View style={styles.container}>
-            <HomeCategories />
-            <HomeProducts />
+            <ScrollView contentInsetAdjustmentBehavior="automatic">
+              <HomeNavbar />
+              <HomeCategories />
+              <HomeProducts />
+            </ScrollView>
         </View>
     )
 }
