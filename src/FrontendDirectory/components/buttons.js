@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, Pressable } from "react-native";
 import  Colors  from "../data/colors";
 
 export function CustomButton({onPress, buttonText}) {
@@ -14,6 +14,14 @@ export function GoogleCustomButton({buttonText}) {
     return (
         <Pressable style={styles.googleButton}>
             <Text style={styles.googleButtonText}>{buttonText}</Text>
+        </Pressable>
+    )
+}
+
+export function BackButton({previousScreen, navigation}) {
+    return (
+        <Pressable style={styles.productBackButton} onPress={previousScreen}>
+            <Text>K</Text>
         </Pressable>
     )
 }
@@ -56,7 +64,22 @@ const styles = StyleSheet.create({
         color: Colors.labelGray,
         fontWeight: '500',
         fontSize: 16,
-    }
+    },
+    productBackButton: {
+        position: 'absolute',
+        top: 53,
+        left: 32,
+        zIndex: 999,
+        borderWidth: 1,
+        borderRadius: 8,
+        borderColor: Colors.favIconBg,
+        width: 40,
+        height: 40,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.favIconBg,
+    },
   });
   
 
