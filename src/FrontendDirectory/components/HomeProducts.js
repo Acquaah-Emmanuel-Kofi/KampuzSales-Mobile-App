@@ -8,8 +8,9 @@ import CediSign from "./CediSign";
 function HomeProducts() {
     const navigation = useNavigation();
     return (
-        <ScrollView 
-            contentContainerStyle={styles.container} 
+        <View style={styles.container}>
+            <ScrollView 
+            contentContainerStyle={styles.scrollViewContainer} 
             showsVerticalScrollIndicator={false}>
         {
             products.map((product) => (
@@ -26,11 +27,15 @@ function HomeProducts() {
             ))
         }
         </ScrollView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+        flex: 4,
+    },
+    scrollViewContainer: {
         backgroundColor: Colors.white,
         flexDirection: 'row',
         flexWrap: 'wrap',
