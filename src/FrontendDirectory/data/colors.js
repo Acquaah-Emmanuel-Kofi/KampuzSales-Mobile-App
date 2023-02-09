@@ -1,5 +1,5 @@
 const Colors = {
-    main: "#FF8617",
+    main: "#FF8617", // Cheange color to crimson
     white: "#F5F5F5",
     black: "#2F2E41",
     subBlack: "#909090",
