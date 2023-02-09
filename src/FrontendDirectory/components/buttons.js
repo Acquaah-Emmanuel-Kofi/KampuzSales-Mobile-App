@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, Pressable } from "react-native";
 import  Colors  from "../data/colors";
+import Feather from "react-native-vector-icons/Feather"
 
 export function CustomButton({onPress, buttonText}) {
     return (
@@ -21,7 +22,7 @@ export function GoogleCustomButton({buttonText}) {
 export function BackButton({previousScreen, navigation}) {
     return (
         <Pressable style={styles.productBackButton} onPress={previousScreen}>
-            <Text>K</Text>
+            <Feather name="chevron-left" size={24} color={Colors.black} />
         </Pressable>
     )
 }
@@ -73,12 +74,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 8,
         borderColor: Colors.favIconBg,
+        backgroundColor: Colors.favIconBg,
         width: 40,
         height: 40,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Colors.favIconBg,
     },
   });
   
