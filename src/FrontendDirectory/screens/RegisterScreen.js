@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet ,Text, TextInput, View, ScrollView, Button, Pressable } from "react-native";
-import GoogleCustomButton from "../components/GoogleCustomButton";
-import RegisterButton from "../components/RegisterButton";
+import { CustomButton, GoogleCustomButton } from "../components/buttons";
 import  Colors  from "../data/colors";
 
 function RegisterScreen({navigation}) {
@@ -43,10 +42,10 @@ function RegisterScreen({navigation}) {
                     placeholder="*************" 
                 />
             </View>
-            <RegisterButton onPress={() => navigation.navigate("Login")} buttonText={"Sign Up"} />
+            <CustomButton onPress={() => navigation.navigate("Login")} buttonText={"Sign Up"} />
             <GoogleCustomButton buttonText={"Sign up with Google"} />
             <Text style={styles.switchLoginScreenText}>
-                Already have an account? <Pressable onPress={() => navigation.navigate("Register")}><Text style={styles.switchLoginScreenLinkText}>Sign in</Text></Pressable>
+                Already have an account? <Pressable onPress={() => navigation.navigate("Login")}><Text style={styles.switchLoginScreenLinkText}>Sign in</Text></Pressable>
             </Text>
         </ScrollView>
     )

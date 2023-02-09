@@ -1,9 +1,9 @@
 import React from "react";
-import { StyleSheet ,Text, TextInput, View } from "react-native";
-import CustomButton from "../components/CustomButton";
+import { Pressable, StyleSheet ,Text, TextInput, View } from "react-native";
+import { CustomButton } from "../components/buttons";
 import  Colors  from "../data/colors";
 
-function ForgotPasswordScreen() {
+function ForgotPasswordScreen({navigation}) {
     return (
         <View style={styles.container}>
             <Text style={styles.heading}>Forgot Password</Text>
@@ -15,9 +15,9 @@ function ForgotPasswordScreen() {
                     placeholder="robert.sam@gmail.com" 
                 />
             </View>
-            <CustomButton buttonText={"Send reset link"} />
+            <CustomButton onPress={() => navigation.navigate("ResetPassword")} buttonText={"Send reset link"} />
             <Text style={styles.switchLoginScreenText}>
-                Don’t have an account? <Text style={styles.switchLoginScreenLinkText}>Sign up</Text>
+                Don’t have an account? <Pressable onPress={() => navigation.navigate("Register")}><Text style={styles.switchLoginScreenLinkText}>Sign up</Text></Pressable>
             </Text>
         </View>
     )
@@ -63,9 +63,13 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         color: Colors.secondary,
         marginVertical: 12,
+        display: 'flex',
+        alignItems: 'center'
     },
     switchLoginScreenLinkText: {
         color: Colors.main,
+        display: 'flex',
+        alignItems: 'center'
     },
   });
 

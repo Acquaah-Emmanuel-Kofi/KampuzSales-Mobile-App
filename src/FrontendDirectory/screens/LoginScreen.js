@@ -1,8 +1,7 @@
 import React from "react";
-import { Button, StyleSheet ,Text, TextInput, View } from "react-native";
+import { StyleSheet ,Text, TextInput, View } from "react-native";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
-import GoogleCustomButton from "../components/GoogleCustomButton";
-import LoginButton from "../components/LoginButton";
+import { CustomButton, GoogleCustomButton } from "../components/buttons";
 import  Colors  from "../data/colors";
 
 function LoginScreen({navigation}) {
@@ -26,10 +25,10 @@ function LoginScreen({navigation}) {
                     placeholder="*************" 
                 />
             </View>
-            <View style={styles.inputBox}>
+            <Pressable style={styles.inputBox}  onPress={() => navigation.navigate("ForgotPassword")}>
                 <Text style={styles.forgotPasswordLinkText}>Forgot password</Text>
-            </View>
-            <LoginButton onPress={() => navigation.navigate("Buttom")} buttonText={"Sign In"} />
+            </Pressable>
+            <CustomButton onPress={() => navigation.navigate("Buttom")} buttonText={"Sign In"} />
             <GoogleCustomButton buttonText={"Sign in with Google"} />
             <Text style={styles.switchLoginScreenText}>
                 Don’t have an account? <Pressable onPress={() => navigation.navigate("Register")}><Text style={styles.switchLoginScreenLinkText}>Sign up</Text></Pressable>

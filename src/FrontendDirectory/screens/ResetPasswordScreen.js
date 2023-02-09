@@ -1,9 +1,9 @@
 import React from "react";
 import { StyleSheet ,Text, TextInput, View } from "react-native";
-import CustomButton from "../components/CustomButton";
+import { CustomButton } from "../components/buttons";
 import  Colors  from "../data/colors";
 
-function ResetPasswordScreen() {
+function ResetPasswordScreen({navigation}) {
     return (
         <View style={styles.container}>
             <Text style={styles.heading}>Reset Password</Text>
@@ -25,7 +25,8 @@ function ResetPasswordScreen() {
                     placeholder="*************" 
                 />
             </View>
-            <CustomButton buttonText={"Save new password"} />
+            {/* <CustomButton buttonText={"Save new password"} /> */}
+            <CustomButton onPress={() => alert("Password Saved!")} buttonText={"Save new password"} />
         </View>
     )
 }
