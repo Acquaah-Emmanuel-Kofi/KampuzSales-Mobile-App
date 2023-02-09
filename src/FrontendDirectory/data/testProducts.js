@@ -2,7 +2,7 @@ const products = [
     {
         _id: "1",
         name: "Product Name",
-        image: "https://pixabay.com/get/gabdca649172a627417b21cb3696b60c27bcf198bfa5f6f04506e8347113c8aebe7145f38487aa11469e64124e5f8d98ba53c8532d1f03029b44b4b4246a17add_640.jpg",
+        image: "https://apps.canva-apps.com/integrations/promo_cards/large/generate_image_promo_card.png",
         description: "Lorem Ipsim form the show of the ghost of the house of the hor",
         price: 89.00,
         countInStock: 3,
@@ -12,7 +12,7 @@ const products = [
     {
         _id: "2",
         name: "Product Name 2",
-        image: "https://pixabay.com/get/g067367a3fafb59a228da299e74f350e770833977faad46be2486da5a713db9dc9214c897a356cf1e366eb96702547759_640.png",
+        image: "https://freeimagegenerator.com/images-temporary/create-art-online-1179-Medium-1675949963.jpg",
         description: "Lorem Ipsim form the show of the ghost of the house of the hor",
         price: 88.09,
         countInStock: 3,
@@ -22,7 +22,7 @@ const products = [
     {
         _id: "3",
         name: "Product Name 3",
-        image: "https://pixabay.com/get/g9772127ac24daf1045b894e173f6be25b64f7ae6c3be9684ae3c103d628329bd6db3a14586720cea821fa11f54e2eed87c45326fc769b33cf061b3c59d21d50b_640.jpg",
+        image: "https://freeimagegenerator.com/images-temporary/create-art-online-5486-Medium-1675949716.jpg",
         description: "Lorem Ipsim form the show of the ghost of the house of the hor",
         price: 589.00,
         countInStock: 3,
@@ -32,7 +32,7 @@ const products = [
     {
         _id: "4",
         name: "Product Name",
-        image: "https://pixabay.com/get/gabdca649172a627417b21cb3696b60c27bcf198bfa5f6f04506e8347113c8aebe7145f38487aa11469e64124e5f8d98ba53c8532d1f03029b44b4b4246a17add_640.jpg",
+        image: "https://freeimagegenerator.com/images-temporary/create-art-online-4681-Medium-1675949775.jpg",
         description: "Lorem Ipsim form the show of the ghost of the house of the hor",
         price: 89.00,
         countInStock: 3,
@@ -42,7 +42,7 @@ const products = [
     {
         _id: "5",
         name: "Product Name",
-        image: "https://pixabay.com/get/gabdca649172a627417b21cb3696b60c27bcf198bfa5f6f04506e8347113c8aebe7145f38487aa11469e64124e5f8d98ba53c8532d1f03029b44b4b4246a17add_640.jpg",
+        image: "https://freeimagegenerator.com/images-temporary/create-art-online-5023-Medium-1675949885.jpg",
         description: "Lorem Ipsim form the show of the ghost of the house of the hor",
         price: 89.00,
         countInStock: 3,
@@ -52,7 +52,7 @@ const products = [
     {
         _id: "6",
         name: "Product Name 2",
-        image: "https://pixabay.com/get/g067367a3fafb59a228da299e74f350e770833977faad46be2486da5a713db9dc9214c897a356cf1e366eb96702547759_640.png",
+        image: "https://freeimagegenerator.com/images-temporary/create-art-online-5921-Medium-1675949940.jpg",
         description: "Lorem Ipsim form the show of the ghost of the house of the hor",
         price: 88.09,
         countInStock: 3,
@@ -62,7 +62,7 @@ const products = [
     {
         _id: "7",
         name: "Product Name 3",
-        image: "https://pixabay.com/get/g9772127ac24daf1045b894e173f6be25b64f7ae6c3be9684ae3c103d628329bd6db3a14586720cea821fa11f54e2eed87c45326fc769b33cf061b3c59d21d50b_640.jpg",
+        image: "https://freeimagegenerator.com/images-temporary/create-art-online-9569-Medium-1675949621.jpg",
         description: "Lorem Ipsim form the show of the ghost of the house of the hor",
         price: 589.00,
         countInStock: 3,
@@ -72,7 +72,7 @@ const products = [
     {
         _id: "8",
         name: "Product Name",
-        image: "https://pixabay.com/get/gabdca649172a627417b21cb3696b60c27bcf198bfa5f6f04506e8347113c8aebe7145f38487aa11469e64124e5f8d98ba53c8532d1f03029b44b4b4246a17add_640.jpg",
+        image: "https://freeimagegenerator.com/images-temporary/create-art-online-4681-Medium-1675949775.jpg",
         description: "Lorem Ipsim form the show of the ghost of the house of the hor",
         price: 89.00,
         countInStock: 3,
