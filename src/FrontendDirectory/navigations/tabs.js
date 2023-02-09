@@ -1,12 +1,8 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, Text, View } from 'react-native';
-import Colors from '../data/colors';
 import RegisterScreen from '../screens/RegisterScreen';
 import LoginScreen from '../screens/LoginScreen';
-import PostScreen from '../screens/PostScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import SearchScreen from '../screens/SearchScreen';
-import WishlistScreen from '../screens/WishlistScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import ButtomNavigation from './ButtomNavigation';
 
 const Tab = createBottomTabNavigator();
@@ -18,10 +14,13 @@ const Tabs = () => {
             screenOptions={{
                 tabBarShowLabel: false,
                 headerShown: false,
+                tabBarStyle: { height: 0 },
             }}
         >
             <Tab.Screen name='Login' component={LoginScreen}></Tab.Screen>
             <Tab.Screen name='Register' component={RegisterScreen}></Tab.Screen>
+            <Tab.Screen name='ForgotPassword' component={ForgotPasswordScreen}></Tab.Screen>
+            <Tab.Screen name='ResetPassword' component={ResetPasswordScreen}></Tab.Screen>
             <Tab.Screen name='Buttom' component={ButtomNavigation}></Tab.Screen>
         </Tab.Navigator>
     );

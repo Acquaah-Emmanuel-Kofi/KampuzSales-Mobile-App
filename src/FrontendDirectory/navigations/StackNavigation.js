@@ -10,7 +10,8 @@ const StackNavigation = () => {
             initialRouteName='Home'
             screenOptions={{
                 tabBarShowLabel: false,
-                headerShown: false
+                headerShown: false,
+                tabBarStyle: { height: 0 },
             }}
         >
             <Tab.Screen name='Home' component={HomeScreen}></Tab.Screen>
