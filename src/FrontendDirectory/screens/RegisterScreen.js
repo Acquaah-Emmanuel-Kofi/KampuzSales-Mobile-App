@@ -5,7 +5,8 @@ import  Colors  from "../data/colors";
 
 function RegisterScreen({navigation}) {
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.container}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.signUpContainer}>
             <Text style={styles.heading}>Create New Account</Text>
             <View style={styles.inputBox}>
                 <Text style={styles.label}>Name*</Text>
@@ -48,6 +49,7 @@ function RegisterScreen({navigation}) {
                 Already have an account? <Pressable onPress={() => navigation.navigate("Login")}><Text style={styles.switchLoginScreenLinkText}>Sign in</Text></Pressable>
             </Text>
         </ScrollView>
+        </View>
     )
 }
 
@@ -55,8 +57,11 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: Colors.white,
-      alignItems: 'center',
-      justifyContent: 'center',
+    },
+    signUpContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 40
     },
     heading: {
         fontSize: 30,
