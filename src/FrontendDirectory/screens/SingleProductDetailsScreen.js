@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Image, ScrollView, Text, View, Pressable } from "react-native";
+import { BackButton } from "../components/buttons";
 import CediSign from "../components/CediSign";
 import  Colors  from "../data/colors";
 
@@ -11,9 +12,7 @@ function SingleProductDetailsScreen({route}) {
         <View>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View>
-                    <View style={styles.productBackButton} onPress={() => alert("Back!")}>
-                        <Text>K</Text>
-                    </View>
+                    <BackButton previousScreen={() => navigation.navigate("Home")} />
                     <Image style={styles.productImage} source={{uri: product.image}} />
                 </View>
                     <View style={styles.productDetailesContainer}>
