@@ -1,8 +1,8 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import HomeCategories from "../components/HomeCategories";
-import HomeNavbar from "../components/HomeNavbar";
-import HomeProducts from "../components/HomeProducts";
+import HomeCategories from "../components/HomeScreenComponents/HomeCategories";
+import HomeNavbar from "../components/MainNavbar";
+import HomeProducts from "../components/HomeScreenComponents/HomeProducts";
 import  Colors  from "../data/colors";
 
 function HomeScreen() {
