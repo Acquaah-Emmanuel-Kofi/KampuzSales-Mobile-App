@@ -1,8 +1,8 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import SingleProductDetailsScreen from '../screens/SingleProductDetailsScreen';
 
-const Tab = createBottomTabNavigator();
+const Tab = createNativeStackNavigator();
 
 const StackNavigation = () => {
     return(

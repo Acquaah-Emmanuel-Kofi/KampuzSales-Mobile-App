@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import Colors from '../data/colors';
 import PostScreen from '../screens/PostScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -57,11 +57,8 @@ const ButtomNavigation = () => {
                 tabBarIcon: ({focused}) => (
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
                         <View>
-                            {focused ? (
-                                <AntDesign name="pluscircle" size={50} color={Colors.main} style={{marginTop: -40}} />
-                                ) : ( 
-                                <AntDesign name="pluscircle" size={50} color={Colors.subBlack} style={{marginTop: -40}} />
-                            )}
+                            <AntDesign name="pluscircle" size={50} color={Colors.main} style={{marginTop: -40}} />
+
                         </View>
                         {/* <Text style={{color: focused ? Colors.main : Colors.subBlack}}>Post</Text> */}
                     </View>
