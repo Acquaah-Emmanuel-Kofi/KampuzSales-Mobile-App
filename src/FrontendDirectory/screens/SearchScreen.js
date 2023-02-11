@@ -1,12 +1,14 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import  Colors  from "../data/colors";
+import SearchInput from "../components/HomeScreenComponents/SearchInput";
+import MainNavbar from "../components/MainNavbar";
 
 function SearchScreen() {
     return (
         <View style={styles.container}>
             <SafeAreaView>
-              <Text>SearchScreen</Text>
+              <MainNavbar title={'Search'} />
+              <SearchInput />
             </SafeAreaView>
         </View>
     )
@@ -15,7 +17,6 @@ function SearchScreen() {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: Colors.white,
     },
   });
 
