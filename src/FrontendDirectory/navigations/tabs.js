@@ -3,7 +3,7 @@ import RegisterScreen from '../screens/RegisterScreen';
 import LoginScreen from '../screens/LoginScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
-import ButtomNavigation from './ButtomNavigation';
+import ButtomNavigation from './BottomNavigation';
 
 const Tab = createNativeStackNavigator();
 
