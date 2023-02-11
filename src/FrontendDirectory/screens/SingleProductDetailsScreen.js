@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, Image, ScrollView, Text, View, Pressable } from "react-native";
+import { StyleSheet, Image, ScrollView, Text, View, Pressable, SafeAreaView } from "react-native";
 import { BackButton } from "../components/buttons";
 import CediSign from "../components/CediSign";
 import  Colors  from "../data/colors";
@@ -10,7 +10,8 @@ function SingleProductDetailsScreen({route}) {
     const product = route.params
     return (
         <View>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <SafeAreaView>
+                            <ScrollView showsVerticalScrollIndicator={false}>
                 <View>
                     <BackButton previousScreen={() => navigation.navigate("Home")} />
                     <Image style={styles.productImage} source={{uri: product.image}} />
@@ -59,6 +60,7 @@ function SingleProductDetailsScreen({route}) {
                         </Pressable>
                     </View>
             </ScrollView>
+            </SafeAreaView>
         </View>
     )
 }

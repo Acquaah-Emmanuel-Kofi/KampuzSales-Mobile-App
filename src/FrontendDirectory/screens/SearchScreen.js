@@ -1,11 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import  Colors  from "../data/colors";
 
 function SearchScreen() {
     return (
         <View style={styles.container}>
-            <Text>SearchScreen</Text>
+            <SafeAreaView>
+              <Text>SearchScreen</Text>
+            </SafeAreaView>
         </View>
     )
 }
