@@ -1,11 +1,11 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import RegisterScreen from '../screens/RegisterScreen';
 import LoginScreen from '../screens/LoginScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import ButtomNavigation from './BottomNavigation';
 
-const Tab = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
     return(
