@@ -5,12 +5,13 @@ import { CustomButton, GoogleCustomButton } from "../components/buttons";
 import  Colors  from "../data/colors";
 
 function LoginScreen({navigation}) {
+
     return (
         <View style={styles.container}>
             <Text style={styles.heading}>Welcome Back , Login</Text>
             <View style={styles.inputBox}>
                 <Text style={styles.label}>Email</Text>
-                <TextInput 
+                <TextInput
                     style={styles.textInputBox} 
                     placeholderTextColor={Colors.secondary}
                     placeholder="robert.sam@gmail.com" 
