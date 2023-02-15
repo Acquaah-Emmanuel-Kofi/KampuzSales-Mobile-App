@@ -7,10 +7,10 @@ import SearchScreen from '../screens/SearchScreen';
 import WishlistScreen from '../screens/WishlistScreen';
 import StackNavigation from './StackNavigation';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Feather from "react-native-vector-icons/Feather";
 import Icon from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+// import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import NotificationScreen from '../screens/NotificationScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,9 +44,9 @@ const ButtomNavigation = () => {
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
                         <View>
                             {focused ? (
-                                <MaterialIcons name="favorite" size={24} color={Colors.main} />
+                                <Ionicons name="bookmark" size={24} color={Colors.main} />
                                 ) : ( 
-                                <MaterialIcons name="favorite-outline" size={24} color={Colors.subBlack} />
+                                <Ionicons name="bookmark-outline" size={24} color={Colors.subBlack} />
                             )}
                         </View>
                         <Text style={{color: focused ? Colors.main : Colors.subBlack, fontSize: 12}}>WhishList</Text>
@@ -64,17 +64,17 @@ const ButtomNavigation = () => {
                     </View>
                 ),
             }}></Tab.Screen>
-            <Tab.Screen name='Search' component={SearchScreen} options={{
+            <Tab.Screen name='Notification' component={NotificationScreen} options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
                         <View>
                             {focused ? (
-                                <Feather name="search" size={24} color={Colors.main} />
+                                <Ionicons name="ios-notifications-sharp" size={24} color={Colors.main} />
                                 ) : ( 
-                                <Feather name="search" size={24} color={Colors.subBlack} />
+                                <Ionicons name="ios-notifications-outline" size={24} color={Colors.subBlack} />
                             )}
                         </View>
-                        <Text style={{color: focused ? Colors.main : Colors.subBlack, fontSize: 12}}>Search</Text>
+                        <Text style={{color: focused ? Colors.main : Colors.subBlack, fontSize: 12}}>Notifications</Text>
                     </View>
                 ),
             }}></Tab.Screen>

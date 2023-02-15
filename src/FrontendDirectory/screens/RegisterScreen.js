@@ -44,7 +44,7 @@ function RegisterScreen({navigation}) {
                     placeholder="*************" 
                 />
             </View>
-            <CustomButton onPress={handleSignUp} buttonText={"Sign Up"} />
+            <CustomButton buttonText={"Sign Up"} />
             <GoogleCustomButton buttonText={"Sign up with Google"} />
             <Text style={styles.switchLoginScreenText}>
                 Already have an account? <Pressable onPress={() => navigation.navigate("Login")}><Text style={styles.switchLoginScreenLinkText}>Sign in</Text></Pressable>

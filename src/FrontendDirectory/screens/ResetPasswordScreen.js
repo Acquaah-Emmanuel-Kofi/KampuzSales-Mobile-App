@@ -25,8 +25,10 @@ function ResetPasswordScreen({navigation}) {
                     placeholder="*************" 
                 />
             </View>
-            {/* <CustomButton buttonText={"Save new password"} /> */}
-            <CustomButton onPress={() => alert("Password Saved!")} buttonText={"Save new password"} />
+            <CustomButton onPress={() => {
+                alert("Password Saved!")
+                navigation.navigate("Login")
+            }} buttonText={"Save new password"} />
         </View>
     )
 }

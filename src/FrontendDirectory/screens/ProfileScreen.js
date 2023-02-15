@@ -4,13 +4,14 @@ import  Colors  from "../data/colors";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MainNavbar from "../components/MainNavbar";
+import HeadTitle from "../components/HeadTitle";
 
 function ProfileScreen() {
     return (
         <View style={styles.container}>
             <SafeAreaView>
-              <View style={styles.profileDetails}>
+              <HeadTitle title={"Profile"} />
+            <View style={styles.profileDetails}>
               <View style={styles.imageContainer}>
                 <Image style={styles.image} source={require("../data/images/profile.png")} />
               </View>

@@ -1,13 +1,16 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import SearchInput from "../components/HomeScreenComponents/SearchInput";
-import MainNavbar from "../components/MainNavbar";
+import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
+import SearchInput from "../components/SearchInput";
 
-function SearchScreen() {
+function SearchScreen({navigation}) {
+
+  // const navigation = useNavigation();
+
     return (
         <View style={styles.container}>
             <SafeAreaView>
-              <MainNavbar title={'Search'} />
+              <HeadTitleWithBackIcon previousScreen={() => navigation.navigate("Home")} title={'Search'} />
               <SearchInput />
             </SafeAreaView>
         </View>

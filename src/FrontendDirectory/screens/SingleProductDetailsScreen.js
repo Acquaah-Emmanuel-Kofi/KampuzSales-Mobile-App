@@ -4,7 +4,7 @@ import { StyleSheet, Image, ScrollView, Text, View, Pressable, SafeAreaView } fr
 import { BackButton } from "../components/buttons";
 import CediSign from "../components/CediSign";
 import  Colors  from "../data/colors";
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 
 function SingleProductDetailsScreen({route}) {
     const navigation = useNavigation();
@@ -54,10 +54,10 @@ function SingleProductDetailsScreen({route}) {
                     </View>
                     <View style={styles.productDetailesContactRow}>
                         <Pressable style={styles.productFavoriteIcon} onPress={() => alert("Back!")}>
-                            <MaterialIcons name="favorite-outline" size={24} color={Colors.subBlack} />
+                            <Fontisto name="bookmark" size={24} color={Colors.subBlack} />
                         </Pressable>
                         <Pressable style={styles.button} onPress={() => alert("Input field required!")}>
-                            <Text style={styles.buttonText}>Contact Seller</Text>
+                            <Text style={styles.buttonText}>Add to cart</Text>
                         </Pressable>
                     </View>
             </ScrollView>
