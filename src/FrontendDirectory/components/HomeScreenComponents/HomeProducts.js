@@ -1,5 +1,5 @@
-import { useNavigation } from "@react-navigation/native";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import  Colors  from "../../data/colors";
 import  products  from "../../data/testProducts";
@@ -9,7 +9,7 @@ function HomeProducts() {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
-            <ScrollView 
+        <ScrollView 
             contentContainerStyle={styles.scrollViewContainer} 
             showsVerticalScrollIndicator={false}>
         {

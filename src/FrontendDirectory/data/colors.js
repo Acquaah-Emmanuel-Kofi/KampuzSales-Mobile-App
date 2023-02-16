@@ -1,5 +1,5 @@
 const Colors = {
-    main: "#FF8617", // Cheange color to crimson
+    main: "#FF8617",
     white: "#F5F5F5",
     black: "#2F2E41",
     subBlack: "#909090",
@@ -8,6 +8,8 @@ const Colors = {
     borderGray: "#D0D5DD",
     productDetails: "#D9D9D9",
     favIconBg: "#E0E0E0",
+    deepGray: "#909090",
+    cartIconGray: "#334054",
 };
 
 export default Colors;

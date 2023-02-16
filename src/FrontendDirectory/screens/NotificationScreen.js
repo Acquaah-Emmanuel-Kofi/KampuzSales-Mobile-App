@@ -6,7 +6,7 @@ function Notifications() {
     return (
         <View style={styles.container}>
             <HeadTitle title={'Notifications'} />
-            <Text>Testing</Text>
+            <Text> </Text>
         </View>
     )
 }

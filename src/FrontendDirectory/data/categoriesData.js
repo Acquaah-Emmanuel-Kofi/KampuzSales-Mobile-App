@@ -2,27 +2,27 @@ const categoriesData = [
     {
         _id: "1",
         name: "Popular",
-        image: require('./images/CategoriesIcon/star.png'),
+        image: "star",
     },
     {
         _id: "2",
-        name: "Chair",
-        image: require('./images/CategoriesIcon/chair.png'),
+        name: "Phones",
+        image: "phone-iphone",
     },
     {
         _id: "3",
-        name: "Table",
-        image: require('./images/CategoriesIcon/table.png'),
+        name: "Laptops",
+        image: "laptop",
     },
     {
         _id: "4",
-        name: "Armchair",
-        image: require('./images/CategoriesIcon/armchair.png'),
+        name: "Books",
+        image: "library-books",
     },
     {
         _id: "5",
-        name: "Bed",
-        image: require('./images/CategoriesIcon/bed.png'),
+        name: "Games",
+        image: "games",
     },
 ]
 

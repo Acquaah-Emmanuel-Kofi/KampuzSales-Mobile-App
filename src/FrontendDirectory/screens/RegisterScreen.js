@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet ,Text, TextInput, View, ScrollView, Button, Pressable } from "react-native";
+import React from "react";
+import { StyleSheet ,Text, TextInput, View, ScrollView, Image } from "react-native";
 import { CustomButton, GoogleCustomButton } from "../components/buttons";
 import  Colors  from "../data/colors";
 
@@ -7,8 +7,11 @@ function RegisterScreen({navigation}) {
 
     return (
         <View style={styles.container}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.signUpContainer}>
-            <Text style={styles.heading}>Create New Account</Text>
+            <ScrollView  contentContainerStyle={styles.signUpContainer}>
+            <View style={styles.headerBox}>
+                <Image style={styles.logo} source={require("../data/images/KampuzSales-Logo.png")} />
+                <Text style={styles.heading}>Create New Account</Text>
+            </View>
             <View style={styles.inputBox}>
                 <Text style={styles.label}>Name*</Text>
                 <TextInput 
@@ -47,8 +50,9 @@ function RegisterScreen({navigation}) {
             <CustomButton buttonText={"Sign Up"} />
             <GoogleCustomButton buttonText={"Sign up with Google"} />
             <Text style={styles.switchLoginScreenText}>
-                Already have an account? <Pressable onPress={() => navigation.navigate("Login")}><Text style={styles.switchLoginScreenLinkText}>Sign in</Text></Pressable>
+                Already have an account? <Text onPress={() => navigation.navigate("Login")} style={styles.switchLoginScreenLinkText}>Sign in</Text>
             </Text>
+            <View style={{height: 100}}></View>
         </ScrollView>
         </View>
     )
@@ -62,7 +66,17 @@ const styles = StyleSheet.create({
     signUpContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 40
+        marginVertical: 60,
+    },
+    headerBox: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    logo: {
+        width: 200,
+        height: 100,
+        marginRight: -20,
     },
     heading: {
         fontSize: 30,
@@ -70,7 +84,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: Colors.black,
         marginBottom: 20,
-        // letterSpacing: 2,
     },
     inputBox: {
         width: '85%',

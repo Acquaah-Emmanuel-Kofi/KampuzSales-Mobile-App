@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import CartItems from "../components/CartScreenComponents/CartItems";
 import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
 import  Colors  from "../data/colors";
@@ -10,9 +10,7 @@ function CartScreen({navigation}) {
             <View>
                 <HeadTitleWithBackIcon previousScreen={() => navigation.navigate("Home")} title={"Cart"} />
             </View>
-                <CartItems />
-            {/* <ScrollView>
-            </ScrollView> */}
+            <CartItems />
         </View>
     )
 }

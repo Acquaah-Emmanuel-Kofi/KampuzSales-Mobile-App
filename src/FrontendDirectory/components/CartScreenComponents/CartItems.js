@@ -23,9 +23,9 @@ function CartItems() {
                             <Text style={styles.productName}>{product.name}</Text>
                             <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
                         </View>
-                        <View>
+                        <Pressable>
                             <Fontisto name="close" size={24} color={Colors.black} />
-                        </View>
+                        </Pressable>
                     </Pressable>
                 ))
             }

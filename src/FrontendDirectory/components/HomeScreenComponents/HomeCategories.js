@@ -2,6 +2,7 @@ import React from "react";
 import { FlatList, Pressable, StyleSheet, Text, View, Image } from "react-native";
 import  Colors  from "../../data/colors";
 import categoriesData from "../../data/categoriesData";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 function HomeCategories() {
 
@@ -10,7 +11,7 @@ function HomeCategories() {
       <View>
         <Pressable style={styles.navCategoryItems}>
           <View style={styles.navCategoryIcon}>
-            <Image source={item.image} />
+            <MaterialIcons name={item.image} size={30} color={Colors.cartIconGray} />
           </View>
           <Text style={styles.navCategoryName}>{item.name}</Text>
         </Pressable>
@@ -25,7 +26,8 @@ function HomeCategories() {
                 renderItem={renderCategoryItem}
                 keyExtractor={(item) => item._id}
                 horizontal={true}
-              />
+                flashScrollIndicators={false}
+               />
             </View>
         </View>
     )

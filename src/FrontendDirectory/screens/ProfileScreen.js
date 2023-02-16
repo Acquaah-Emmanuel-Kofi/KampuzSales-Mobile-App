@@ -21,7 +21,7 @@ function ProfileScreen() {
                 <Text style={styles.dateJoined}>Member Since: June 2023</Text>
               </View>
             </View>
-            <Pressable onPress={() => alert('Freidn Invited!')}>
+            <Pressable onPress={() => alert('Friend Invited!')}>
               <View style={styles.inviteFriends}>
                 <Ionicons style={styles.icon} name="ios-person-add-outline" size={24} color={Colors.main} />
                 <Text>Invite Friends</Text>

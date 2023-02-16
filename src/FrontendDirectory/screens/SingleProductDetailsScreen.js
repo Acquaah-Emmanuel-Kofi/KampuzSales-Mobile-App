@@ -4,15 +4,18 @@ import { StyleSheet, Image, ScrollView, Text, View, Pressable, SafeAreaView } fr
 import { BackButton } from "../components/buttons";
 import CediSign from "../components/CediSign";
 import  Colors  from "../data/colors";
-import Fontisto from 'react-native-vector-icons/Fontisto';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 function SingleProductDetailsScreen({route}) {
     const navigation = useNavigation();
-    const product = route.params
+
+
+    const product = route.params;
+
     return (
         <View>
             <SafeAreaView>
-                            <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView showsVerticalScrollIndicator={false}>
                 <View>
                     <BackButton previousScreen={() => navigation.navigate("Home")} />
                     <Image style={styles.productImage} source={{uri: product.image}} />
@@ -21,42 +24,44 @@ function SingleProductDetailsScreen({route}) {
                         <Text style={styles.productName}>{product.name}</Text>
                         <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
                         <View style={styles.productDetailsRow}>
-                            <Text style={styles.productDescriptionName}>Condition: </Text>
-                            <Text style={styles.productDescription}>No fault, blah blah blah</Text>
+                            <Text style={styles.productDescriptionName}>{product.condition ? "Condition: " : ""}</Text>
+                            <Text style={styles.productDescription}>{product.condition}</Text>
                         </View>
                         <View style={styles.productDetailsRow}>
-                            <Text style={styles.productDescriptionName}>RAM: </Text>
-                            <Text style={styles.productDescription}>32GB</Text>
+                            <Text style={styles.productDescriptionName}>{product.ram ? "Ram: " : ""}</Text>
+                            <Text style={styles.productDescription}>{product.ram}</Text>
                         </View>
                         <View style={styles.productDetailsRow}>
-                            <Text style={styles.productDescriptionName}>Storage: </Text>
-                            <Text style={styles.productDescription}>1TB SSD</Text>
+                            <Text style={styles.productDescriptionName}>{product.storage ? "Storage: " : ""}</Text>
+                            <Text style={styles.productDescription}>{product.storage}</Text>
                         </View>
                         <View style={styles.productDetailsRow}>
-                            <Text style={styles.productDescriptionName}>Processor: </Text>
-                            <Text style={styles.productDescription}>Intel Core i9</Text>
+                            <Text style={styles.productDescriptionName}>{product.processor ? "Processor: " : ""}</Text>
+                            <Text style={styles.productDescription}>{product.processor}</Text>
                         </View>
                         <View style={styles.productDetailsRow}>
-                            <Text style={styles.productDescriptionName}>Display Size: </Text>
-                            <Text style={styles.productDescription}>17”/17.3”</Text>
+                            <Text style={styles.productDescriptionName}>{product.displaySize ? "Display Size:" : ""}</Text>
+                            <Text style={styles.productDescription}>{product.displaySize}</Text>
                         </View>
                         <View style={styles.productDetailsRow}>
-                            <Text style={styles.productDescriptionName}>Location: </Text>
-                            <Text style={styles.productDescription}>Market Circle</Text>
+                            <Text style={styles.productDescriptionName}>{product.location ? "Location:" : ""}</Text>
+                            <Text style={styles.productDescription}>{product.location}</Text>
                         </View>
                         <View style={styles.productDetailsRow}>
                             <Text style={styles.productDescriptionName}>Description: </Text>
                             <Text style={styles.productDescription}>
-                                Brand New Alienware m17r4 with 
-                                big storage and a very fast processor. Price is negotiable
+                                {product.description}
                             </Text>
                         </View>
                     </View>
                     <View style={styles.productDetailesContactRow}>
-                        <Pressable style={styles.productFavoriteIcon} onPress={() => alert("Back!")}>
-                            <Fontisto name="bookmark" size={24} color={Colors.subBlack} />
+                        <Pressable style={styles.productFavoriteIcon} onPress={() => alert("Added to favorites")}>
+                            <Ionicons name="bookmark-outline" size={24} color={Colors.subBlack} />
                         </Pressable>
-                        <Pressable style={styles.button} onPress={() => alert("Input field required!")}>
+                        <Pressable style={styles.button} onPress={() => {
+                            alert("Added to cart!")
+                            navigation.navigate("Cart")
+                        }}>
                             <Text style={styles.buttonText}>Add to cart</Text>
                         </Pressable>
                     </View>

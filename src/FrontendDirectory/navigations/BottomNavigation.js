@@ -49,7 +49,7 @@ const ButtomNavigation = () => {
                                 <Ionicons name="bookmark-outline" size={24} color={Colors.subBlack} />
                             )}
                         </View>
-                        <Text style={{color: focused ? Colors.main : Colors.subBlack, fontSize: 12}}>WhishList</Text>
+                        <Text style={{color: focused ? Colors.main : Colors.subBlack, fontSize: 12}}>Favorites</Text>
                     </View>
                 ),
             }}></Tab.Screen>
@@ -77,6 +77,7 @@ const ButtomNavigation = () => {
                         <Text style={{color: focused ? Colors.main : Colors.subBlack, fontSize: 12}}>Notifications</Text>
                     </View>
                 ),
+                tabBarBadge: 3
             }}></Tab.Screen>
             <Tab.Screen name='Profile' component={ProfileScreen} options={{
                 tabBarIcon: ({focused}) => (
@@ -91,7 +92,6 @@ const ButtomNavigation = () => {
                         <Text style={{color: focused ? Colors.main : Colors.subBlack, fontSize: 12}}>Profile</Text>
                     </View>
                 ),
-                tabBarBadge: 3
             }}></Tab.Screen>
         </Tab.Navigator>
     );
