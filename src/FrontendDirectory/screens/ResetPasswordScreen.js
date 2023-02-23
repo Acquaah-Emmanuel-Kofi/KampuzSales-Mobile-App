@@ -25,10 +25,12 @@ function ResetPasswordScreen({navigation}) {
                     placeholder="*************" 
                 />
             </View>
-            <CustomButton onPress={() => {
-                alert("Password Saved!")
-                navigation.navigate("Login")
-            }} buttonText={"Save new password"} />
+            <View style={styles.customButton}>
+                <CustomButton onPress={() => {
+                    alert("Password Saved!")
+                    navigation.navigate("Login")
+                }} buttonText={"Save new password"} />
+            </View>
         </View>
     )
 }
@@ -67,6 +69,10 @@ const styles = StyleSheet.create({
         paddingVertical: 14,
         color: Colors.secondary,
         gap: 8,
+    },
+    customButton: {
+        width: '100%',
+        paddingHorizontal: 30,
     },
     switchLoginScreenText: {
         fontSize: 14,

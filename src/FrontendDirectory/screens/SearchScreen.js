@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, View, TextInput, ScrollView, Pressable, Image, } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View, TextInput, ScrollView, Pressable, Image, Platform, } from "react-native";
 import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
 import  Colors  from "../data/colors";
 import Feather from "react-native-vector-icons/Feather";
@@ -101,11 +101,12 @@ const styles = StyleSheet.create({
         left: 10,
         zIndex: 1,
     },
-        scrollViewContainer: {
+    scrollViewContainer: {
         backgroundColor: Colors.white,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
+        paddingBottom: Platform.OS === 'ios' ? 150 : 200,
     },
     productBox: {
         width: 157,
