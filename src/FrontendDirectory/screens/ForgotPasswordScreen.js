@@ -15,7 +15,9 @@ function ForgotPasswordScreen({navigation}) {
                     placeholder="robert.sam@gmail.com" 
                 />
             </View>
-            <CustomButton onPress={() => navigation.navigate("ResetPassword")} buttonText={"Send reset link"} />
+            <View style={styles.customButton}>
+                <CustomButton onPress={() => navigation.navigate("ResetPassword")} buttonText={"Send reset link"} />
+            </View>
             <Text style={styles.switchLoginScreenText}>
                 Don’t have an account? <Pressable onPress={() => navigation.navigate("Register")}><Text style={styles.switchLoginScreenLinkText}>Sign up</Text></Pressable>
             </Text>
@@ -57,6 +59,10 @@ const styles = StyleSheet.create({
         paddingVertical: 14,
         color: Colors.secondary,
         gap: 8,
+    },
+    customButton: {
+        width: '100%',
+        paddingHorizontal: 30,
     },
     switchLoginScreenText: {
         fontSize: 14,

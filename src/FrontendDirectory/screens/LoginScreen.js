@@ -33,7 +33,9 @@ function LoginScreen({navigation}) {
             <Pressable style={styles.inputBox}  onPress={() => navigation.navigate("ForgotPassword")}>
                 <Text style={styles.forgotPasswordLinkText}>Forgot password</Text>
             </Pressable>
-            <CustomButton onPress={() => navigation.navigate("Buttom")} buttonText={"Sign In"} />
+            <View style={styles.customButton}>
+                <CustomButton onPress={() => navigation.navigate("Buttom")} buttonText={"Sign In"} />
+            </View>
             <GoogleCustomButton buttonText={"Sign in with Google"} />
             <Text style={styles.switchLoginScreenText}>
                 Don’t have an account? <Text onPress={() => navigation.navigate("Register")} style={styles.switchLoginScreenLinkText}>Sign up</Text>
@@ -51,7 +53,8 @@ const styles = StyleSheet.create({
     signInContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 40
+        marginVertical: 40,
+        marginTop: 80,
     },
     headerBox: {
         display: 'flex',
@@ -59,9 +62,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     logo: {
-        width: 200,
-        height: 100,
-        marginRight: -20,
+        width: 120,
+        height: 110,
     },
     heading: {
         fontSize: 30,
@@ -89,6 +91,10 @@ const styles = StyleSheet.create({
         paddingVertical: 14,
         color: Colors.secondary,
         gap: 8,
+    },
+    customButton: {
+        width: '100%',
+        paddingHorizontal: 30,
     },
     switchLoginScreenText: {
         fontSize: 14,
