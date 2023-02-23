@@ -15,10 +15,16 @@ function HomeProducts() {
         {
             products.map((product) => (
                 <Pressable key={product._id} style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
-                    <View style={styles.imageBox}>
-                        <Image style={styles.image} source={{uri:product.image}} alt={product.name} />
-                        <Image style={styles.imageCartTag} source={require('../../data/images/Cart.png')} />
-                    </View>
+                    {
+                        product  ? (
+                        <View style={styles.imageBox}>
+                            <Image style={styles.image} resizeMode='stretch' source={{uri:product.images[0]}} alt={product.name} />
+                            <Image style={styles.imageCartTag} source={require('../../data/images/Cart.png')} />
+                        </View>
+                        ) : (
+                            <View style={styles.noImage}></View>
+                        )
+                    }
                     <View style={styles.productDetailsBox}>
                         <Text style={styles.productName}>{product.name}</Text>
                         <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
@@ -60,6 +66,12 @@ const styles = StyleSheet.create({
         width: 157,
         height: 200,
         borderRadius: 10,
+    },
+    noImage: {
+        width: 157,
+        height: 200,
+        borderRadius: 10,
+        backgroundColor: Colors.borderGray,
     },
     productDetailsBox: {
         paddingTop: 12,
