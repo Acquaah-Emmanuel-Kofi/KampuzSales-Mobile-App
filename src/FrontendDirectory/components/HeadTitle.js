@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal: 20,
-        marginTop: 20,
+        marginTop: Platform.OS === 'android' ? 50 : 20,
         marginBottom: 16,
     },
     title: {
