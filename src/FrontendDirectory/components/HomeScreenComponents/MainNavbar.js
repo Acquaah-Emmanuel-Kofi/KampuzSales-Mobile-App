@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Image, Platform, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -29,12 +29,11 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       paddingHorizontal: 20,
       paddingVertical: 20,
+      marginTop: Platform.OS === 'android' ? 20 : 0,
     },
     textLogo: {
-        width: 300, 
-        height: 100,
-        marginTop: -50,
-        marginRight: -20,
+        width: 200, 
+        height: 50,
     },
   });
 
