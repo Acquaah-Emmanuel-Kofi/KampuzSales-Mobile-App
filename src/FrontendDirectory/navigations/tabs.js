@@ -4,6 +4,7 @@ import LoginScreen from '../screens/LoginScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import ButtomNavigation from './BottomNavigation';
+import CreatePasswordScreen from '../screens/CreatePasswordScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,6 +20,7 @@ const Tabs = () => {
         >
             <Tab.Screen name='Login' component={LoginScreen}></Tab.Screen>
             <Tab.Screen name='Register' component={RegisterScreen}></Tab.Screen>
+            <Tab.Screen name='Password' component={CreatePasswordScreen}></Tab.Screen>
             <Tab.Screen name='ForgotPassword' component={ForgotPasswordScreen}></Tab.Screen>
             <Tab.Screen name='ResetPassword' component={ResetPasswordScreen}></Tab.Screen>
             <Tab.Screen name='Buttom' component={ButtomNavigation}></Tab.Screen>
