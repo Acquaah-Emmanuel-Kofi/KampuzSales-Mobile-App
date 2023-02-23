@@ -31,14 +31,12 @@ function PostScreen() {
                         <TextInput style={styles.textInput} placeholder="Brand" />
                     </View>
                     <View style={styles.textInputBox}>
-                        <KeyboardAvoidingView>
                             <TextInput 
                                 style={styles.descriptionTextInput}
                                 placeholder="Description" 
                                 // numberOfLines={5}
                                 multiline={true}
                             />
-                        </KeyboardAvoidingView>
                     </View>
                 </View>
                 <View style={styles.buttoms}>
