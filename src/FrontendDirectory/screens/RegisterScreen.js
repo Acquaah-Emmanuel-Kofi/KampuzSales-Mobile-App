@@ -21,6 +21,14 @@ function RegisterScreen({navigation}) {
                 />
             </View>
             <View style={styles.inputBox}>
+                <Text style={styles.label}>Email</Text>
+                <TextInput
+                    style={styles.textInputBox} 
+                    placeholderTextColor={Colors.secondary}
+                    placeholder="robert.sam@gmail.com" 
+                />
+            </View>
+            <View style={styles.inputBox}>
                 <Text style={styles.label}>Phone number*</Text>
                 <TextInput 
                     style={styles.textInputBox} 
@@ -29,25 +37,9 @@ function RegisterScreen({navigation}) {
                     placeholder="Eg. +233 XXX XXX XXX" 
                 />
             </View>
-            <View style={styles.inputBox}>
-                <Text style={styles.label}>Password</Text>
-                <TextInput
-                    style={styles.textInputBox} 
-                    secureTextEntry={true}
-                    placeholderTextColor={Colors.secondary}
-                    placeholder="*************" 
-                />
+            <View style={styles.customButton}>
+                <CustomButton onPress={() => navigation.navigate("Password")} buttonText={"Sign Up"} />
             </View>
-            <View style={styles.inputBox}>
-                <Text style={styles.label}>Confirm Password</Text>
-                <TextInput
-                    style={styles.textInputBox} 
-                    secureTextEntry={true}
-                    placeholderTextColor={Colors.secondary}
-                    placeholder="*************" 
-                />
-            </View>
-            <CustomButton buttonText={"Sign Up"} />
             <GoogleCustomButton buttonText={"Sign up with Google"} />
             <Text style={styles.switchLoginScreenText}>
                 Already have an account? <Text onPress={() => navigation.navigate("Login")} style={styles.switchLoginScreenLinkText}>Sign in</Text>
@@ -74,9 +66,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     logo: {
-        width: 200,
-        height: 100,
-        marginRight: -20,
+        width: 120,
+        height: 110,
     },
     heading: {
         fontSize: 30,
@@ -104,6 +95,10 @@ const styles = StyleSheet.create({
         paddingVertical: 14,
         color: Colors.secondary,
         gap: 8,
+    },
+    customButton: {
+        width: '100%',
+        paddingHorizontal: 30,
     },
     switchLoginScreenText: {
         fontSize: 14,
