@@ -3,12 +3,10 @@ import { Text, View } from 'react-native';
 import Colors from '../data/colors';
 import PostScreen from '../screens/PostScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import SearchScreen from '../screens/SearchScreen';
 import WishlistScreen from '../screens/WishlistScreen';
 import StackNavigation from './StackNavigation';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Icon from 'react-native-vector-icons/Ionicons';
-// import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import NotificationScreen from '../screens/NotificationScreen';
 
