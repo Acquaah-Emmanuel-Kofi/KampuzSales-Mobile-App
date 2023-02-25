@@ -1,23 +1,36 @@
-import React from "react";
-import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, Pressable, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import  Colors  from "../data/colors";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import HeadTitle from "../components/HeadTitle";
+import { auth, firestore } from "../../BackendDirectory/config";
 
 function ProfileScreen() {
+
+      const [userData, setuserData] = useState('');
+
+      useEffect(() => {
+        firestore.collection('users').doc(auth.currentUser.uid).get()
+        .then((snapshot) => {
+            if(snapshot.exists){
+                setuserData(snapshot.data())
+            }
+        })
+    }, [])
+
     return (
         <View style={styles.container}>
             <SafeAreaView>
               <HeadTitle title={"Profile"} />
             <View style={styles.profileDetails}>
               <View style={styles.imageContainer}>
-                <Image style={styles.image} source={require("../data/images/profile.png")} />
+                <Image style={styles.image} source={{uri: "https://png.pngtree.com/png-clipart/20210915/ourmid/pngtree-user-avatar-placeholder-white-blue-png-image_3918443.jpg"}} />
               </View>
               <View style={styles.details}>
-                <Text style={styles.userName}>Vanessa Shace</Text>
-                <Text style={styles.phoneNumber}>+233 559 045 947</Text>
+                <Text style={styles.userName}>{userData.username}</Text>
+                <Text style={styles.phoneNumber}>{userData.phoneNumber}</Text>
                 <Text style={styles.dateJoined}>Member Since: June 2023</Text>
               </View>
             </View>
@@ -61,7 +74,9 @@ function ProfileScreen() {
               <Pressable>
                 <View style={styles.optionsTab}>
                   <MaterialCommunityIcons style={styles.icon} name="logout" size={24} color={Colors.main} />
-                  <Text>Logout</Text>
+                  <TouchableOpacity onPress={() => {auth.signOut()}}>
+                    <Text>Logout</Text>
+                  </TouchableOpacity>
                 </View>
               </Pressable>
             </View>
