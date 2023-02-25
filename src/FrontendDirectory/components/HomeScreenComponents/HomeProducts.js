@@ -80,13 +80,11 @@ const styles = StyleSheet.create({
         color: Colors.labelGray,
         fontSize: 14,
         fontWeight: '400',
-        fontStyle: 'normal'
     },
     productPrice: {
         color: Colors.black,
         fontSize: 14,
         fontWeight: '600',
-        fontStyle: 'normal'
     }
   });
 
