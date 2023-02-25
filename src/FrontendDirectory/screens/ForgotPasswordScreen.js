@@ -19,7 +19,7 @@ function ForgotPasswordScreen({navigation}) {
                 <CustomButton onPress={() => navigation.navigate("ResetPassword")} buttonText={"Send reset link"} />
             </View>
             <Text style={styles.switchLoginScreenText}>
-                Don’t have an account? <Pressable onPress={() => navigation.navigate("Register")}><Text style={styles.switchLoginScreenLinkText}>Sign up</Text></Pressable>
+                Don’t have an account? <Text onPress={() => navigation.navigate("Register")} style={styles.switchLoginScreenLinkText}>Sign up</Text>
             </Text>
         </View>
     )
@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontSize: 30,
-        fontStyle: 'normal',
         fontWeight: '600',
         color: Colors.black,
         marginBottom: 20,
@@ -46,7 +45,6 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 14,
-        fonfontStyle: 'normal',
         color: Colors.labelGray,
         fontWeight: '500',
         marginBottom: 6,
