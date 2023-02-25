@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontSize: 30,
-        fontStyle: 'normal',
         fontWeight: '600',
         color: Colors.black,
         marginBottom: 20,
@@ -77,7 +76,6 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 14,
-        fonfontStyle: 'normal',
         color: Colors.labelGray,
         fontWeight: '500',
         marginBottom: 6,
