@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet ,Text, TextInput, View, ScrollView, Image } from "react-native";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
+import { loginUser } from "../../BackendDirectory/authentications/authentications";
 import { CustomButton, GoogleCustomButton } from "../components/buttons";
 import  Colors  from "../data/colors";
 
 function LoginScreen({navigation}) {
+
+    const [ email, setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
 
     return (
         <View style={styles.container}>
@@ -19,6 +23,10 @@ function LoginScreen({navigation}) {
                     style={styles.textInputBox} 
                     placeholderTextColor={Colors.secondary}
                     placeholder="robert.sam@gmail.com" 
+                    keyboardType="email-address"
+                    onChangeText={(email) => setEmail(email)}
+                    autoCapitalize="none"
+                    autoCorrect={false}
                 />
             </View>
             <View style={styles.inputBox}>
@@ -28,13 +36,16 @@ function LoginScreen({navigation}) {
                     secureTextEntry={true}
                     placeholderTextColor={Colors.secondary}
                     placeholder="*************" 
+                    onChangeText={(password) => setPassword(password)}
+                    autoCapitalize="none"
+                    autoCorrect={false}
                 />
             </View>
             <Pressable style={styles.inputBox}  onPress={() => navigation.navigate("ForgotPassword")}>
                 <Text style={styles.forgotPasswordLinkText}>Forgot password</Text>
             </Pressable>
             <View style={styles.customButton}>
-                <CustomButton onPress={() => navigation.navigate("Buttom")} buttonText={"Sign In"} />
+                <CustomButton onPress={() => loginUser(email, password)} buttonText={"Sign In"} />
             </View>
             <GoogleCustomButton buttonText={"Sign in with Google"} />
             <Text style={styles.switchLoginScreenText}>
@@ -67,7 +78,6 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontSize: 30,
-        fontStyle: 'normal',
         fontWeight: '600',
         color: Colors.black,
         marginBottom: 20,
@@ -78,7 +88,6 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 14,
-        fonfontStyle: 'normal',
         color: Colors.labelGray,
         fontWeight: '500',
         marginBottom: 6,
