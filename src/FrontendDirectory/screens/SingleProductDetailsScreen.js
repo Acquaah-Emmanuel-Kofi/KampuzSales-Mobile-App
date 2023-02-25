@@ -1,58 +1,125 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
-import { StyleSheet, Image, ScrollView, Text, View, Pressable, SafeAreaView } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Image, ScrollView, Text, View, Pressable, SafeAreaView, Platform, Dimensions } from "react-native";
 import { BackButton } from "../components/buttons";
 import CediSign from "../components/CediSign";
 import  Colors  from "../data/colors";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-function SingleProductDetailsScreen({route}) {
-    const navigation = useNavigation();
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
 
+function SingleProductDetailsScreen({route}) {
+    
+    const navigation = useNavigation();
 
     const product = route.params;
 
+    const [ activeImage, setActiveImage ] = useState(0);
+
+    const handleOnchange = (nativeEvent) => {
+        if(nativeEvent) {
+            const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width);
+            if(slide != activeImage) {
+                setActiveImage(slide);
+            }
+        }
+    }  
+
     return (
-        <View>
-            <SafeAreaView>
+            <SafeAreaView style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                <View>
+                <View style={styles.imageWrapper}>
                     <BackButton previousScreen={() => navigation.navigate("Home")} />
-                    <Image style={styles.productImage} source={{uri: product.image}} />
+                    <ScrollView
+                        onScroll={(event) => handleOnchange(event.nativeEvent)}
+                        showsHorizontalScrollIndicator={false}
+                        pagingEnabled
+                        horizontal
+                        style={styles.imageWrapper}
+                    >
+                   {
+                    product.images?.map((e, index) => 
+                        <View key={index}>
+                            <Image style={styles.imageWrapper} resizeMode='stretch' source={{uri: e}} />
+                        </View>
+                    )
+                   }
+                    </ScrollView>
+                    <View style={styles.imageWrapperNav}>
+                        {
+                            product.images?.map((e, index) => 
+                                <Text 
+                                    key={e}
+                                    style={activeImage == index ? styles.activeImageNav : styles.activeImage}
+                                ></Text>
+                            )
+                        }
+                    </View>
                 </View>
                     <View style={styles.productDetailesContainer}>
                         <Text style={styles.productName}>{product.name}</Text>
                         <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
                         <View style={styles.productDetailsRow}>
-                            <Text style={styles.productDescriptionName}>{product.condition ? "Condition: " : ""}</Text>
-                            <Text style={styles.productDescription}>{product.condition}</Text>
+                            {product.condition ? <Text style={styles.productDescriptionName}>Condition:</Text> : ""}
+                            {product.condition ? <Text style={styles.productDescription}>{product.condition}</Text> : ""}
                         </View>
-                        <View style={styles.productDetailsRow}>
-                            <Text style={styles.productDescriptionName}>{product.ram ? "Ram: " : ""}</Text>
-                            <Text style={styles.productDescription}>{product.ram}</Text>
-                        </View>
-                        <View style={styles.productDetailsRow}>
-                            <Text style={styles.productDescriptionName}>{product.storage ? "Storage: " : ""}</Text>
-                            <Text style={styles.productDescription}>{product.storage}</Text>
-                        </View>
-                        <View style={styles.productDetailsRow}>
-                            <Text style={styles.productDescriptionName}>{product.processor ? "Processor: " : ""}</Text>
-                            <Text style={styles.productDescription}>{product.processor}</Text>
-                        </View>
-                        <View style={styles.productDetailsRow}>
-                            <Text style={styles.productDescriptionName}>{product.displaySize ? "Display Size:" : ""}</Text>
-                            <Text style={styles.productDescription}>{product.displaySize}</Text>
-                        </View>
-                        <View style={styles.productDetailsRow}>
-                            <Text style={styles.productDescriptionName}>{product.location ? "Location:" : ""}</Text>
-                            <Text style={styles.productDescription}>{product.location}</Text>
-                        </View>
-                        <View style={styles.productDetailsRow}>
-                            <Text style={styles.productDescriptionName}>Description: </Text>
-                            <Text style={styles.productDescription}>
-                                {product.description}
-                            </Text>
-                        </View>
+                        {
+                            product.ram ? (
+                            <View style={styles.productDetailsRow}>
+                                {product.ram ? <Text style={styles.productDescriptionName}>Ram:</Text> : ""}
+                                {product.ram ? <Text style={styles.productDescription}>{product.ram}</Text> : ""}
+                            </View>
+                            ) : ""
+                        }
+                        {
+                            product.ram ? (
+                            <View style={styles.productDetailsRow}>
+                                {product.storage ? <Text style={styles.productDescriptionName}>Storage:</Text> : ""}
+                                {product.storage ? <Text style={styles.productDescription}>{product.storage}</Text> : ""}
+                            </View>
+                            ) : ""
+                        }
+                        {
+                            product.processor ? (
+                            <View style={styles.productDetailsRow}>
+                                {product.processor ? <Text style={styles.productDescriptionName}>Processor:</Text> : ""}
+                                {product.processor ? <Text style={styles.productDescription}>{product.processor}</Text> : ""}
+                            </View>
+                            ) : ""
+                        }
+                        {
+                            product.displaySize ? (
+                            <View style={styles.productDetailsRow}>
+                                {product.displaySize ? <Text style={styles.productDescriptionName}>Display Size:</Text> : ""}
+                                {product.displaySize ? <Text style={styles.productDescription}>{product.displaySize}</Text> : ""}
+                            </View>
+                            ) : ""
+                        }
+                        {
+                            product.location ? (
+                            <View style={styles.productDetailsRow}>
+                                {product.location ? <Text style={styles.productDescriptionName}>Location:</Text> : ""}
+                                {product.location ? <Text style={styles.productDescription}>{product.location}</Text> : ""}
+                            </View>
+                            ) : ""
+                        }
+                        {
+                            product.model ? (
+                            <View style={styles.productDetailsRow}>
+                                {product.model ? <Text style={styles.productDescriptionName}>Model:</Text> : ""}
+                                {product.model ? <Text style={styles.productDescription}>{product.model}</Text> : ""}
+                            </View>
+                            ) : ""
+                        }
+                        {
+                            product.description ? (
+                            <View style={styles.productDetailsRow}>
+                                {product.description ? <Text style={styles.productDescriptionName}>Description:</Text> : ""}
+                                {product.description ? <Text style={styles.productDescription}>{product.description}</Text> : ""}
+                            </View>
+                            ) : ""
+                        }
                     </View>
                     <View style={styles.productDetailesContactRow}>
                         <Pressable style={styles.productFavoriteIcon} onPress={() => alert("Added to favorites")}>
@@ -66,8 +133,7 @@ function SingleProductDetailsScreen({route}) {
                         </Pressable>
                     </View>
             </ScrollView>
-            </SafeAreaView>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -75,6 +141,31 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: Colors.white,
+      paddingTop: Platform.OS === "ios" ? 40 : 30,
+    },
+    imageWrapper: {
+        width: WIDTH,
+        height: HEIGHT * 0.50,
+    },
+    imageWrapperNav: {
+        position: 'absolute',
+        bottom: 27,
+        right: 27,
+        flexDirection: 'row',
+    },
+    activeImageNav: {
+        margin: 3, 
+        backgroundColor: Colors.main,
+        width: 30,
+        height: 4,
+        borderRadius: 50,
+    },
+    activeImage: {
+        margin: 3, 
+        backgroundColor: Colors.white,
+        width: 15,
+        height: 4,
+        borderRadius: 50,
     },
     productImage: {
         width: '100%',
@@ -126,10 +217,10 @@ const styles = StyleSheet.create({
         color: Colors.black,
         fontWeight: '700',
         fontSize: 14,
-        fontStyle: 'normal',
     },
     productDescription: {
         width: '50%',
+        textAlign: 'right'
     },
     productDetailesContactRow: {
         flexDirection: 'row',
