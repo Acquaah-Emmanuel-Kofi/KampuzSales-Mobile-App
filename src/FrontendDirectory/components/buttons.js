@@ -1,21 +1,21 @@
 import React from "react";
-import { StyleSheet, Text, Pressable } from "react-native";
+import { StyleSheet, Text, Pressable, TouchableOpacity } from "react-native";
 import  Colors  from "../data/colors";
 import Feather from "react-native-vector-icons/Feather"
 
 export function CustomButton({onPress, buttonText}) {
     return (
-        <Pressable style={styles.button} onPress={onPress}>
+        <TouchableOpacity style={styles.button} onPress={onPress}>
             <Text style={styles.buttonText}>{buttonText}</Text>
-        </Pressable>
+        </TouchableOpacity>
     )
 }
 
 export function GoogleCustomButton({buttonText}) {
     return (
-        <Pressable style={styles.googleButton}>
+        <TouchableOpacity style={styles.googleButton}>
             <Text style={styles.googleButtonText}>{buttonText}</Text>
-        </Pressable>
+        </TouchableOpacity>
     )
 }
 
