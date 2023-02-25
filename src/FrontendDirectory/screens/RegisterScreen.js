@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet ,Text, TextInput, View, ScrollView, Image } from "react-native";
+import { registerUser } from "../../BackendDirectory/authentications/authentications";
 import { CustomButton, GoogleCustomButton } from "../components/buttons";
 import  Colors  from "../data/colors";
 
+
 function RegisterScreen({navigation}) {
+
+    const [ username, setUsername ] = useState('');
+    const [ email, setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
+    const [ phoneNumber, setPhoneNumber ] = useState('');
 
     return (
         <View style={styles.container}>
@@ -18,6 +25,8 @@ function RegisterScreen({navigation}) {
                     style={styles.textInputBox} 
                     placeholderTextColor={Colors.secondary}
                     placeholder="Robert Sam" 
+                    onChangeText={(username) => setUsername(username)}
+                    autoCorrect={false}
                 />
             </View>
             <View style={styles.inputBox}>
@@ -26,6 +35,10 @@ function RegisterScreen({navigation}) {
                     style={styles.textInputBox} 
                     placeholderTextColor={Colors.secondary}
                     placeholder="robert.sam@gmail.com" 
+                    keyboardType="email-address"
+                    onChangeText={(email) => setEmail(email)}
+                    autoCapitalize="none"
+                    autoCorrect={false}
                 />
             </View>
             <View style={styles.inputBox}>
@@ -34,11 +47,25 @@ function RegisterScreen({navigation}) {
                     style={styles.textInputBox} 
                     keyboardType = 'numeric'
                     placeholderTextColor={Colors.secondary}
-                    placeholder="Eg. +233 XXX XXX XXX" 
+                    placeholder="Eg. +233 XXX XXX XXX"
+                    onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
+                    autoCorrect={false} 
+                />
+            </View>
+            <View style={styles.inputBox}>
+                <Text style={styles.label}>Password</Text>
+                <TextInput
+                    style={styles.textInputBox} 
+                    secureTextEntry={true}
+                    placeholderTextColor={Colors.secondary}
+                    placeholder="*************" 
+                    onChangeText={(password) => setPassword(password)}
+                    autoCapitalize="none"
+                    autoCorrect={false} 
                 />
             </View>
             <View style={styles.customButton}>
-                <CustomButton onPress={() => navigation.navigate("Password")} buttonText={"Sign Up"} />
+                <CustomButton onPress={() => registerUser(email, password, username, phoneNumber)} buttonText={"Sign Up"} />
             </View>
             <GoogleCustomButton buttonText={"Sign up with Google"} />
             <Text style={styles.switchLoginScreenText}>
@@ -71,7 +98,6 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontSize: 30,
-        fontStyle: 'normal',
         fontWeight: '600',
         color: Colors.black,
         marginBottom: 20,
@@ -82,7 +108,6 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 14,
-        fonfontStyle: 'normal',
         color: Colors.labelGray,
         fontWeight: '500',
         marginBottom: 6,
