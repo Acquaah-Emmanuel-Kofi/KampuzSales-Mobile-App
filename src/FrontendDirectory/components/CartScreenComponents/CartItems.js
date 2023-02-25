@@ -14,7 +14,7 @@ function CartItems() {
                 contentContainerStyle={styles.scrollViewContainer} 
                 showsVerticalScrollIndicator={false}>
             {
-                products.slice(0,3).map((product) => (
+                products.slice(0,4).map((product) => (
                     <Pressable key={product._id} style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
                         <View style={styles.imageBox}>
                             <Image style={styles.image} source={{uri:product.image}} alt={product.name} />
@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     container: {
         marginHorizontal: 30,
         marginVertical: 20,
+        marginTop: 30,
     },
     productBox: {
         flexDirection: 'row',
@@ -59,15 +60,13 @@ const styles = StyleSheet.create({
         color: Colors.deepGray,
         fontSize: 14,
         fontWeight: '400',
-        fontStyle: 'normal',
         marginBottom: 10
     },
     productPrice: {
         color: Colors.black,
         fontSize: 16,
         fontWeight: '600',
-        fontStyle: 'normal'
-    }
+    },
 });
 
 export default CartItems;
