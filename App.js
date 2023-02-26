@@ -4,14 +4,16 @@ import { auth }  from './src/BackendDirectory/config';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ButtomNavigation from './src/FrontendDirectory/navigations/BottomNavigation';
+import { ActivityIndicator } from 'react-native';
+import Colors from './src/FrontendDirectory/data/colors';
 
 
 const AppStack = createNativeStackNavigator();
 
 function App() {
 
-  const [ initializing, setInitializing ] = useState(true);
   const [ user, setUser ] = useState();
+  const [ initializing, setInitializing ] = useState(true);
 
   function onAuthStateChanged(user){
     setUser(user);
@@ -23,8 +25,14 @@ function App() {
     return subscriber;
   }, [])
 
-  if(initializing) return null;
+  if(initializing) return <ActivityIndicator style={{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }} size="large" color={Colors.main} />;
 
+
+  // Checking if user is not signed in
   if(!user){
     return (
       <Tabs />
