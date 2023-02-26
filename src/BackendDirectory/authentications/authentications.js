@@ -37,7 +37,27 @@ export const registerUser = async (email, password, username, phoneNumber) => {
         })
     })
     .catch((error) => {
-        alert("All fields are required!")
+        alert(error.message)
         console.log(error.message)
     })
 }
+
+export const resetPassword = (password) => {
+    auth.currentUser.updatePassword(password)
+    .then(() => {
+        alert("Password changed!")
+    })
+    .catch((error) => {
+        alert(error.message);
+    })
+} 
+
+export const sendPasswordResetLink = (email) => {
+    auth.sendPasswordResetEmail(email)
+    .then(() => {
+        alert("Password reset link sent!")
+    })
+    .catch((error) => {
+        alert(error.message)
+    })
+} 
