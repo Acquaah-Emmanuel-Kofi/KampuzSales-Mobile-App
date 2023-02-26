@@ -1,24 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import  Colors  from "../../data/colors";
 import  products  from "../../data/testProducts";
 import CediSign from "../CediSign";
+import { auth, firestore } from "../../../BackendDirectory/config";
 
 function HomeProducts() {
     const navigation = useNavigation();
+
+    let productData = [];
+
+    const [ user, setUser ] = useState(null);
+    const [ post, setPost ] = useState(null);
+    const [ loading, setLoading ] = useState(true);
+
+    const fetchProducts = async () => {
+        try {
+            await firestore.collection('products')
+            // .orderBy('postTime', 'desc')
+            .get()
+            .then((querySnapshot) => {
+                // console.log("Total Post", querySnapshot.size);
+
+                querySnapshot.forEach(doc => {
+                    const { productTitle, productImage, description, price} = doc.data();
+                    productData.push({
+                        id: doc.id,
+                        name: productTitle,
+                        image: productImage,
+                        description: description,
+                        price: price,
+                    })
+                })
+            })
+
+            setPost(productData);
+
+            if(loading) setLoading(false);
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
     return (
         <View style={styles.container}>
         <ScrollView 
             contentContainerStyle={styles.scrollViewContainer} 
             showsVerticalScrollIndicator={false}>
         {
-            products.map((product) => (
-                <Pressable key={product._id} style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
+            post && post.map((product) => (
+                <Pressable key={product.id} style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
                     {
                         product  ? (
                         <View style={styles.imageBox}>
-                            <Image style={styles.image} resizeMode='stretch' source={{uri:product.images[0]}} alt={product.name} />
+                            <Image style={styles.image} resizeMode='stretch' source={{uri: product.image}} alt={product.name} />
                             <Image style={styles.imageCartTag} source={require('../../data/images/Cart.png')} />
                         </View>
                         ) : (
@@ -28,6 +68,7 @@ function HomeProducts() {
                     <View style={styles.productDetailsBox}>
                         <Text style={styles.productName}>{product.name}</Text>
                         <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
+                        {auth.currentUser.uid === product.id ? <Text>Delete</Text> : null}
                     </View>
                 </Pressable>
             ))
