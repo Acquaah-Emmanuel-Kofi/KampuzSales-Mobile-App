@@ -1,9 +1,13 @@
-import React from "react";
-import { Pressable, StyleSheet ,Text, TextInput, View } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet ,Text, TextInput, View } from "react-native";
+import { sendPasswordResetLink } from "../../BackendDirectory/authentications/authentications";
 import { CustomButton } from "../components/buttons";
 import  Colors  from "../data/colors";
 
 function ForgotPasswordScreen({navigation}) {
+
+    const [ email, setEmail ] = useState('');
+
     return (
         <View style={styles.container}>
             <Text style={styles.heading}>Forgot Password</Text>
@@ -13,10 +17,17 @@ function ForgotPasswordScreen({navigation}) {
                     style={styles.textInputBox} 
                     placeholderTextColor={Colors.secondary}
                     placeholder="robert.sam@gmail.com" 
+                    onChangeText={(email) => setEmail(email)}
+                    autoCapitalize="none"
+                    autoCorrect={false}
                 />
             </View>
             <View style={styles.customButton}>
-                <CustomButton onPress={() => navigation.navigate("ResetPassword")} buttonText={"Send reset link"} />
+                <CustomButton onPress={() => {
+                    // navigation.navigate("ResetPassword")
+                    sendPasswordResetLink(email)
+                    // navigation.navigate("Login")
+                }} buttonText={"Send reset link"} />
             </View>
             <Text style={styles.switchLoginScreenText}>
                 Don’t have an account? <Text onPress={() => navigation.navigate("Register")} style={styles.switchLoginScreenLinkText}>Sign up</Text>
