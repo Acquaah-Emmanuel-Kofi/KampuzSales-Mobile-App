@@ -4,13 +4,13 @@ import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDWkJqc2hdi0ftkKBwb1yGFWh7mTnu-ZY0",
-  authDomain: "kampuzsales-mobile-app-90a08.firebaseapp.com",
-  projectId: "kampuzsales-mobile-app-90a08",
-  storageBucket: "kampuzsales-mobile-app-90a08.appspot.com",
-  messagingSenderId: "771399834179",
-  appId: "1:771399834179:web:b1879c8cd65a4d7ff392f6",
-  measurementId: "G-7BVM730DGF"
+  apiKey: "AIzaSyBr6FGXTfOz7HqbhfIVw4gcY_RJKIjNUac",
+  authDomain: "kampuzsales.firebaseapp.com",
+  projectId: "kampuzsales",
+  storageBucket: "kampuzsales.appspot.com",
+  messagingSenderId: "130055712803",
+  appId: "1:130055712803:web:93f3a3ab9f6e7aa794c196",
+  measurementId: "G-7S9KPCTD7D"
 };
 
 
