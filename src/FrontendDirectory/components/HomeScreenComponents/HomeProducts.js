@@ -1,38 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 import  Colors  from "../../data/colors";
-import  products  from "../../data/testProducts";
 import CediSign from "../CediSign";
-import { auth, firestore } from "../../../BackendDirectory/config";
+import { firestore, storage } from "../../../BackendDirectory/config";
 
 function HomeProducts() {
     const navigation = useNavigation();
 
-    let productData = [];
-
-    const [ user, setUser ] = useState(null);
     const [ post, setPost ] = useState(null);
     const [ loading, setLoading ] = useState(true);
+    const [ deleted, setDeleted ] = useState(false);
+    const [ refresh, setRefresh ] = useState(false);
+    const [ filterByCategory, setFilterByCategory ] = useState('');
 
+    
     const fetchProducts = async () => {
         try {
+            
+            let productData = [];
+
             await firestore.collection('products')
-            // .orderBy('postTime', 'desc')
+            .orderBy('postTime', 'desc')
             .get()
             .then((querySnapshot) => {
-                // console.log("Total Post", querySnapshot.size);
-
                 querySnapshot.forEach(doc => {
-                    const { productTitle, productImage, description, price} = doc.data();
+                    const { productTitle, productImage, description, category ,price, postTime, userId} = doc.data();
                     productData.push({
                         id: doc.id,
+                        userPostId: userId,
                         name: productTitle,
                         image: productImage,
                         description: description,
                         price: price,
+                        category: category,
+                        postTime: postTime,
                     })
+
+                    setFilterByCategory(category)
                 })
+            })
+            .catch((error) => {
+                alert("No data to show!");
             })
 
             setPost(productData);
@@ -44,19 +53,105 @@ function HomeProducts() {
         }
     }
 
+    const handleDeleteModal = (postId) => {
+        Alert.alert(
+            'Delete Post',
+            'Are you sure?',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Post'),
+                    style: 'cancel'
+                },
+                {
+                    text: 'Confirm',
+                    onPress: () => deletePost(postId),
+                }
+            ],
+            { cancelable: false}
+        )
+    }
+
+    const deletePost = (postId) => {
+        firestore.collection('products')
+        .doc(postId)
+        .get()
+        .then((documentSnapshot) => {
+            if(documentSnapshot.exists){
+                const {productImage} = documentSnapshot.data();
+
+                if (productImage !== null) {
+                    const storageRef = storage.refFromURL(productImage);
+                    const imageRef = storage.ref(storageRef.fullPath);
+
+                    imageRef
+                    .delete()
+                    .then(() => {
+                        deleteFirestoreData(postId);
+                        setDeleted(true)
+                    })
+                    .catch((error) => {
+                        console.log("Error deleting image", error);
+                    })
+                }
+
+                // if the post image is not available
+            } else{
+                deleteFirestoreData(postId);
+            }
+        })
+    }
+
+    const deleteFirestoreData = (postId) => {
+        firestore.collection('products')
+        .doc(postId)
+        .delete()
+        .then(() => {
+            Alert.alert(
+                'Posted Deleted!',
+                'Your post has been deleted succefully!'
+            )
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }
+    const pulledToRefresh = () => {
+        setRefresh(true);
+
+        setTimeout(() => {
+        setRefresh(false);
+        }, 2000)
+    }
+
     useEffect(() => {
         fetchProducts();
     }, []);
+
+    useEffect(() => {
+        fetchProducts();
+        setDeleted(false)
+    }, [deleted]);
+
+
+
     return (
         <View style={styles.container}>
         <ScrollView 
             contentContainerStyle={styles.scrollViewContainer} 
-            showsVerticalScrollIndicator={false}>
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+                <RefreshControl 
+                    refreshing={refresh}
+                    onRefresh={() => pulledToRefresh()}
+                />
+            }
+        >
         {
             post && post.map((product) => (
                 <Pressable key={product.id} style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
                     {
-                        product  ? (
+                        product.image ? (
                         <View style={styles.imageBox}>
                             <Image style={styles.image} resizeMode='stretch' source={{uri: product.image}} alt={product.name} />
                             <Image style={styles.imageCartTag} source={require('../../data/images/Cart.png')} />
@@ -68,7 +163,7 @@ function HomeProducts() {
                     <View style={styles.productDetailsBox}>
                         <Text style={styles.productName}>{product.name}</Text>
                         <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
-                        {auth.currentUser.uid === product.id ? <Text>Delete</Text> : null}
+                        {/* {auth.currentUser.uid === product.userPostId ? <Text onPress={() => handleDeleteModal(product.id)}>Delete</Text> : null} */}
                     </View>
                 </Pressable>
             ))
