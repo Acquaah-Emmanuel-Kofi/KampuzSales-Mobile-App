@@ -1,10 +1,15 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 import Colors from "../data/colors";
 
 function HeadTitle({title}) {
     return (
         <SafeAreaView>
+            <StatusBar
+                animated={true}
+                backgroundColor="#61dafb"
+                barStyle="dark-content"
+            />
             <View style={styles.titleWrapper}>
             <Text style={styles.title}>{title}</Text>
             </View>

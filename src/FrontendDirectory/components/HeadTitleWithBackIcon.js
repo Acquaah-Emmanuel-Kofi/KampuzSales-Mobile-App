@@ -1,11 +1,16 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import  Colors  from "../data/colors";
 
 function HeadTitleWithBackIcon({title, previousScreen}) {
     return (
         <SafeAreaView>
+            <StatusBar
+                animated={true}
+                backgroundColor="#61dafb"
+                barStyle="dark-content"
+            />
             <View style={styles.headWrapper}>
                 <Ionicons onPress={previousScreen} style={styles.searchBackIcon} name="chevron-back-sharp" size={30} color={Colors.black} />
                 <Text style={styles.title}>{title}</Text>
@@ -31,6 +36,9 @@ const styles = StyleSheet.create({
     searchRightSpace: {
         width: 30,
         height: 25,
+    },
+    searchBackIcon: {
+        zIndex: 999
     }
   });
 
