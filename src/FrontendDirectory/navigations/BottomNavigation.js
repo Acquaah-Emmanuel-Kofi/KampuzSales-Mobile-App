@@ -56,9 +56,7 @@ const ButtomNavigation = () => {
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
                         <View>
                             <AntDesign name="pluscircle" size={50} color={Colors.main} style={{marginTop: -40}} />
-
                         </View>
-                        {/* <Text style={{color: focused ? Colors.main : Colors.subBlack}}>Post</Text> */}
                     </View>
                 ),
             }}></Tab.Screen>
