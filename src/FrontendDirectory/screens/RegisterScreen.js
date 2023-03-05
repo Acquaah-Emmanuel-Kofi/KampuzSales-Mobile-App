@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet ,Text, TextInput, View, ScrollView, Image } from "react-native";
+import { StyleSheet ,Text, TextInput, View, ScrollView, Image, StatusBar } from "react-native";
 import { registerUser } from "../../BackendDirectory/authentications/authentications";
 import { CustomButton, GoogleCustomButton } from "../components/buttons";
 import  Colors  from "../data/colors";
@@ -11,16 +11,22 @@ function RegisterScreen({navigation}) {
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ phoneNumber, setPhoneNumber ] = useState('');
+    const [ loading, setLoading ] = useState(false);
 
     return (
         <View style={styles.container}>
+            <StatusBar
+                animated={true}
+                backgroundColor="#61dafb"
+                barStyle="dark-content"
+            />
             <ScrollView  contentContainerStyle={styles.signUpContainer}>
             <View style={styles.headerBox}>
                 <Image style={styles.logo} source={require("../data/images/KampuzSales-Logo.png")} />
                 <Text style={styles.heading}>Create New Account</Text>
             </View>
             <View style={styles.inputBox}>
-                <Text style={styles.label}>Name*</Text>
+                <Text style={styles.label}>Name</Text>
                 <TextInput 
                     style={styles.textInputBox} 
                     placeholderTextColor={Colors.secondary}
@@ -42,7 +48,7 @@ function RegisterScreen({navigation}) {
                 />
             </View>
             <View style={styles.inputBox}>
-                <Text style={styles.label}>Phone number*</Text>
+                <Text style={styles.label}>Phone number</Text>
                 <TextInput 
                     style={styles.textInputBox} 
                     keyboardType = 'numeric'
@@ -65,7 +71,10 @@ function RegisterScreen({navigation}) {
                 />
             </View>
             <View style={styles.customButton}>
-                <CustomButton onPress={() => registerUser(email, password, username, phoneNumber)} buttonText={"Sign Up"} />
+                <CustomButton onPress={() => {
+                    registerUser(email, password, username, phoneNumber)
+                    setLoading(true)
+                }} buttonText={loading ? "Signing up..." : "Sign Up"} />
             </View>
             <GoogleCustomButton buttonText={"Sign up with Google"} />
             <Text style={styles.switchLoginScreenText}>

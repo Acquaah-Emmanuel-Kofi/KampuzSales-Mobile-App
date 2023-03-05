@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet ,Text, TextInput, View, ScrollView, Image } from "react-native";
+import { StyleSheet ,Text, TextInput, View, ScrollView, Image, StatusBar } from "react-native";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 import { loginUser } from "../../BackendDirectory/authentications/authentications";
 import { CustomButton, GoogleCustomButton } from "../components/buttons";
@@ -9,9 +9,15 @@ function LoginScreen({navigation}) {
 
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
+    const [ loading, setLoading ] = useState(false);
 
     return (
         <View style={styles.container}>
+            <StatusBar
+                animated={true}
+                backgroundColor="#61dafb"
+                barStyle="dark-content"
+            />
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.signInContainer}>
             <View style={styles.headerBox}>
                 <Image style={styles.logo} source={require("../data/images/KampuzSales-Logo.png")} />
@@ -45,7 +51,10 @@ function LoginScreen({navigation}) {
                 <Text style={styles.forgotPasswordLinkText}>Forgot password</Text>
             </Pressable>
             <View style={styles.customButton}>
-                <CustomButton onPress={() => loginUser(email, password)} buttonText={"Sign In"} />
+                <CustomButton onPress={() => {
+                    loginUser(email, password)
+                    setLoading(true)
+                }} buttonText={loading ? "Signing in..." : "Sign In"} />
             </View>
             <GoogleCustomButton buttonText={"Sign in with Google"} />
             <Text style={styles.switchLoginScreenText}>

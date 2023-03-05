@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet ,Text, TextInput, View } from "react-native";
+import { StatusBar, StyleSheet ,Text, TextInput, View } from "react-native";
 import { sendPasswordResetLink } from "../../BackendDirectory/authentications/authentications";
 import { CustomButton } from "../components/buttons";
 import  Colors  from "../data/colors";
@@ -10,6 +10,11 @@ function ForgotPasswordScreen({navigation}) {
 
     return (
         <View style={styles.container}>
+            <StatusBar
+                animated={true}
+                backgroundColor="#61dafb"
+                barStyle="dark-content"
+            />
             <Text style={styles.heading}>Forgot Password</Text>
             <View style={styles.inputBox}>
                 <Text style={styles.label}>Email</Text>
