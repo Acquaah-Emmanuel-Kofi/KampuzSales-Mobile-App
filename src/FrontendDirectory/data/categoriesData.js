@@ -21,7 +21,7 @@ const categoriesData = [
     },
     {
         _id: "5",
-        name: "Games",
+        name: "Gaming",
         image: "games",
     },
 ]
