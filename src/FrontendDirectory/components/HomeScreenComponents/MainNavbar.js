@@ -1,5 +1,5 @@
-import React from "react";
-import { Image, Platform, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Button, Image, Platform, Pressable, SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -9,6 +9,11 @@ function MainNavbar() {
     const navigation = useNavigation();
     return (
         <SafeAreaView>
+            <StatusBar
+                animated={true}
+                backgroundColor="#61dafb"
+                barStyle="dark-content"
+            />
             <View style={styles.headerWrapper}>
                 <Pressable onPress={() => navigation.navigate("Search")}>
                     <Feather name="search" size={24} color={Colors.black} />
