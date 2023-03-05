@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View, TextInput, ScrollView, Pressable, Image, Platform, } from "react-native";
 import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
 import  Colors  from "../data/colors";
@@ -6,13 +6,61 @@ import Feather from "react-native-vector-icons/Feather";
 import products from "../data/testProducts"
 import { useNavigation } from "@react-navigation/native";
 import CediSign from "../components/CediSign";
+import { firestore } from "../../BackendDirectory/config";
 
 
 function SearchScreen() {
   
   const navigation = useNavigation();
 
-  const [ dataFromState, setData ] = useState(products);
+  const [ dataFromState, setDataFromState ] = useState([]);
+
+    const [ post, setPost ] = useState(null);
+    const [ loading, setLoading ] = useState(true);
+    const [ deleted, setDeleted ] = useState(false);
+
+    
+    const fetchProducts = async () => {
+        try {
+            
+            let productData = [];
+
+            await firestore.collection('products')
+            .orderBy('postTime', 'desc')
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach(doc => {
+                    const { productTitle, productImage, description, price, postTime, userId} = doc.data();
+                    productData.push({
+                        id: doc.id,
+                        userPostId: userId,
+                        name: productTitle,
+                        image: productImage,
+                        description: description,
+                        price: price,
+                        postTime: postTime,
+                    })
+                })
+            })
+
+            setPost(productData);
+            setDataFromState(productData);
+
+            if(loading) setLoading(false);
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
+
+    useEffect(() => {
+        fetchProducts();
+        setDeleted(false)
+    }, [deleted]);
 
   const searchValue = (input) => {
     if(input){
@@ -20,9 +68,9 @@ function SearchScreen() {
       let searchData = data.filter((item) => {
         return item.name.toLowerCase().includes(input.toLowerCase())
       })
-      setData(searchData)
+      setDataFromState(searchData)
     } else {
-      setData(products)
+      setDataFromState(dataFromState)
     }
   }
 
@@ -50,7 +98,7 @@ function SearchScreen() {
             showsVerticalScrollIndicator={false}>
         {
             dataFromState.map((product) => (
-                <Pressable key={product._id} style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
+                <Pressable key={product.id} style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
                     <View style={styles.imageBox}>
                         <Image style={styles.image} source={{uri: product.image}} alt={product.name} />
                         <Image style={styles.imageCartTag} source={require('../../FrontendDirectory/data/images/Cart.png')} />
