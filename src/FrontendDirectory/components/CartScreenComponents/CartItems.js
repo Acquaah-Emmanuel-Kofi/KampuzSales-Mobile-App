@@ -1,21 +1,151 @@
-import React from "react";
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, Image, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import products from "../../data/testProducts";
 import CediSign from "../CediSign";
 import Colors from "../../data/colors";
 import Fontisto from "react-native-vector-icons/Fontisto";
+import { auth, firestore, storage } from "../../../BackendDirectory/config";
 
 function CartItems() {
     const navigation = useNavigation();
+    const [ dataFromState, setDataFromState ] = useState([]);
+    const [ deleted, setDeleted ] = useState(false);
+    const [ refresh, setRefresh ] = useState(false);
+
+
+    const fetchProducts = async () => {
+        try {
+            
+            let productData = [];
+
+            await firestore.collection('cart')
+            .orderBy('postTime', 'desc')
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach(doc => {
+                    const { productTitle, productImage, description, price, postTime, userId} = doc.data();
+                    productData.push({
+                        id: doc.id,
+                        name: productTitle,
+                        image: productImage,
+                        description,
+                        price,
+                        postTime,
+                        userId
+                    })
+                })
+            })
+
+            setDataFromState(productData);
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+
+    const handleDeleteModal = (postId) => {
+        Alert.alert(
+            'Remove Product From Cart',
+            'Are you sure?',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log(""),
+                    style: 'cancel'
+                },
+                {
+                    text: 'Confirm',
+                    onPress: () => deletePost(postId),
+                }
+            ],
+            { cancelable: false}
+        )
+    }
+
+    const deletePost = (postId) => {
+        firestore.collection('cart')
+        .doc(postId)
+        .get()
+        .then((documentSnapshot) => {
+            if(documentSnapshot.exists){
+                const {productImage} = documentSnapshot.data();
+
+                if (productImage !== null) {
+                    const storageRef = storage.refFromURL(productImage);
+                    const imageRef = storage.ref(storageRef.fullPath);
+
+                    imageRef
+                    .delete()
+                    .then(() => {
+                        deleteFirestoreData(postId);
+                        setDeleted(true)
+                    })
+                    .catch((error) => {
+                        console.log("Error deleting image", error);
+                        if (error) deleteFirestoreData(postId);
+                    })
+                } else {
+                    deleteFirestoreData(postId);
+                }
+
+                // if the post image is not available
+            } else{
+                deleteFirestoreData(postId);
+            }
+        })
+    }
+
+    const deleteFirestoreData = (postId) => {
+        firestore.collection('cart')
+        .doc(postId)
+        .delete()
+        .then(() => {
+            Alert.alert(
+                'Product Removed!',
+                'Your product has been removed succefully!'
+            )
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }
+
+    useEffect(() => {
+        fetchProducts();
+    }, [deleted]);
+
+    useEffect(() => {
+        fetchProducts();
+        setDeleted(false)
+    }, [deleted]);
+
+    const pulledToRefresh = () => {
+      setRefresh(true);
+      fetchProducts();
+  
+      setTimeout(() => {
+        setRefresh(false);
+      }, 2000)
+    }
+
     return (
         <View style={styles.container}>
             <ScrollView 
                 contentContainerStyle={styles.scrollViewContainer} 
-                showsVerticalScrollIndicator={false}>
+                showsVerticalScrollIndicator={false}
+                contentInsetAdjustmentBehavior="automatic"
+                refreshControl={
+                  <RefreshControl 
+                    refreshing={refresh}
+                    onRefresh={() => pulledToRefresh()}
+                  />
+                }>
             {
-                products.slice(0,4).map((product) => (
-                    <Pressable key={product._id} style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
+                dataFromState && dataFromState.map((product) => (
+                    <View key={product.id}>
+                    {auth.currentUser.uid === product.userId ? 
+                    <Pressable style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
                         <View style={styles.imageBox}>
                             <Image style={styles.image} source={{uri:product.image}} alt={product.name} />
                         </View>
@@ -23,10 +153,12 @@ function CartItems() {
                             <Text style={styles.productName}>{product.name}</Text>
                             <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
                         </View>
-                        <Pressable>
+                        <Pressable onPress={() => handleDeleteModal(product.id)}>
                             <Fontisto name="close" size={24} color={Colors.black} />
                         </Pressable>
                     </Pressable>
+                    : null}
+                    </View>
                 ))
             }
             </ScrollView>
@@ -39,6 +171,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 30,
         marginVertical: 20,
         marginTop: 30,
+        flex: 1
     },
     productBox: {
         flexDirection: 'row',
