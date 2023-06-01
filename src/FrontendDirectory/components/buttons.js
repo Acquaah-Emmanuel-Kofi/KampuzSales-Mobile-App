@@ -41,6 +41,17 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.3,
+              shadowRadius: 2,
+            },
+            android: {
+              elevation: 5,
+            },
+        })
     },
     buttonText: {
         color: Colors.white,
@@ -82,8 +93,3 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
   });
-  
-
-  
-
-// export default CustomButton;
