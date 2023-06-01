@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, Pressable, StyleSheet, Text, View, Image } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import  Colors  from "../../data/colors";
 import categoriesData from "../../data/categoriesData";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -20,7 +20,7 @@ function HomeCategories() {
   }
     return (
         <View style={styles.container}>
-            <View>
+            <>
               <FlatList 
                 data={categoriesData}
                 renderItem={renderCategoryItem}
@@ -28,7 +28,7 @@ function HomeCategories() {
                 horizontal={true}
                 flashScrollIndicators={false}
                />
-            </View>
+            </>
         </View>
     )
 }
