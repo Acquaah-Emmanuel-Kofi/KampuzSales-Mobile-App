@@ -73,7 +73,7 @@ function RegisterScreen({navigation}) {
             <View style={styles.customButton}>
                 <CustomButton onPress={() => {
                     registerUser(email, password, username, phoneNumber)
-                    setLoading(true)
+                    if(email !== '' && password !== '') setLoading(true)
                 }} buttonText={loading ? "Signing up..." : "Sign Up"} />
             </View>
             <GoogleCustomButton buttonText={"Sign up with Google"} />

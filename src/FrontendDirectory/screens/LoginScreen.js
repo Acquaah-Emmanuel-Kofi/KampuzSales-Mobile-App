@@ -53,7 +53,7 @@ function LoginScreen({navigation}) {
             <View style={styles.customButton}>
                 <CustomButton onPress={() => {
                     loginUser(email, password)
-                    setLoading(true)
+                    if(email !== '' && password !== '') setLoading(true)
                 }} buttonText={loading ? "Signing in..." : "Sign In"} />
             </View>
             <GoogleCustomButton buttonText={"Sign in with Google"} />
