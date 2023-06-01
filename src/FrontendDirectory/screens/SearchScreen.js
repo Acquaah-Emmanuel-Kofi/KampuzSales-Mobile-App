@@ -3,7 +3,6 @@ import { SafeAreaView, StyleSheet, Text, View, TextInput, ScrollView, Pressable,
 import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
 import  Colors  from "../data/colors";
 import Feather from "react-native-vector-icons/Feather";
-import products from "../data/testProducts"
 import { useNavigation } from "@react-navigation/native";
 import CediSign from "../components/CediSign";
 import { firestore } from "../../BackendDirectory/config";
@@ -15,7 +14,6 @@ function SearchScreen() {
 
   const [ dataFromState, setDataFromState ] = useState([]);
 
-    const [ post, setPost ] = useState(null);
     const [ loading, setLoading ] = useState(true);
     const [ deleted, setDeleted ] = useState(false);
 
@@ -36,14 +34,13 @@ function SearchScreen() {
                         userPostId: userId,
                         name: productTitle,
                         image: productImage,
-                        description: description,
-                        price: price,
-                        postTime: postTime,
+                        description,
+                        price,
+                        postTime,
                     })
                 })
             })
 
-            setPost(productData);
             setDataFromState(productData);
 
             if(loading) setLoading(false);
@@ -98,7 +95,7 @@ function SearchScreen() {
             showsVerticalScrollIndicator={false}>
         {
             dataFromState.map((product) => (
-                <Pressable key={product.id} style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
+                <Pressable key={product.id} style={styles.productCard} onPress={() => navigation.navigate("Single", product)}>
                     <View style={styles.imageBox}>
                         <Image style={styles.image} source={{uri: product.image}} alt={product.name} />
                         <Image style={styles.imageCartTag} source={require('../../FrontendDirectory/data/images/Cart.png')} />
@@ -141,7 +138,19 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 40,
         borderRadius: 10,
-        width: '100%'
+        backgroundColor: Colors.white,
+        width: '100%',
+        ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.3,
+              shadowRadius: 2,
+            },
+            android: {
+              elevation: 5,
+            },
+        })
     },
     searchIcon: {
         position: 'absolute',
@@ -156,10 +165,22 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         paddingBottom: Platform.OS === 'ios' ? 150 : 200,
     },
-    productBox: {
+    productCard: {
         width: 157,
         height: 256,
         marginVertical: 5,
+        backgroundColor: 'Transparent',
+        ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.3,
+              shadowRadius: 2,
+            },
+            android: {
+              elevation: 5,
+            },
+        })
     },
     imageBox: {
         position: 'relative',
