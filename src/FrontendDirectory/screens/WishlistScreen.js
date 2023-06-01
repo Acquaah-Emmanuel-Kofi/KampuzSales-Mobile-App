@@ -3,12 +3,13 @@ import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import CartItems from "../components/CartScreenComponents/CartItems";
 import HeadTitle from "../components/HeadTitle";
 import  Colors  from "../data/colors";
+import FavoriteProducts from "../components/WishlistScreenComponents/WishlistProducts";
 
 function WishlistScreen() {
     return (
         <SafeAreaView style={styles.container}>
-            <HeadTitle title={"Favorites"} />
-            <CartItems />
+            <HeadTitle title={"Wishlist"} />
+            <FavoriteProducts />
         </SafeAreaView>
     )
 }
