@@ -47,7 +47,7 @@ const ButtomNavigation = () => {
                                 <Ionicons name="bookmark-outline" size={24} color={Colors.subBlack} />
                             )}
                         </View>
-                        <Text style={{color: focused ? Colors.main : Colors.subBlack, fontSize: 12}}>Favorites</Text>
+                        <Text style={{color: focused ? Colors.main : Colors.subBlack, fontSize: 12}}>Wishlist</Text>
                     </View>
                 ),
             }}></Tab.Screen>
@@ -70,7 +70,7 @@ const ButtomNavigation = () => {
                                 <Ionicons name="ios-notifications-outline" size={24} color={Colors.subBlack} />
                             )}
                         </View>
-                        <Text style={{color: focused ? Colors.main : Colors.subBlack, fontSize: 12}}>Notifications</Text>
+                        <Text style={{color: focused ? Colors.main : Colors.subBlack, fontSize: 12}}>Alerts</Text>
                     </View>
                 ),
                 tabBarBadge: 3
