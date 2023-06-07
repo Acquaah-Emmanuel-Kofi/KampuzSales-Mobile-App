@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import  Colors  from "../../data/colors";
+import  AppColors  from "../../data/Colors";
 import categoriesData from "../../data/categoriesData";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
@@ -11,7 +11,7 @@ function HomeCategories() {
       <View>
         <Pressable style={styles.navCategoryItems}>
           <View style={styles.navCategoryIcon}>
-            <MaterialIcons name={item.image} size={30} color={Colors.cartIconGray} />
+            <MaterialIcons name={item.image} size={30} color={AppColors.cartIconGray} />
           </View>
           <Text style={styles.navCategoryName}>{item.name}</Text>
         </Pressable>
@@ -36,7 +36,7 @@ function HomeCategories() {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
     navCategoryIcon: {
         borderWidth: 1,
         borderRadius: 8,
-        borderColor: Colors.favIconBg,
-        backgroundColor: Colors.favIconBg,
+        borderColor: AppColors.favIconBg,
+        backgroundColor: AppColors.favIconBg,
         width: 50,
         height: 50,
         display: 'flex',
