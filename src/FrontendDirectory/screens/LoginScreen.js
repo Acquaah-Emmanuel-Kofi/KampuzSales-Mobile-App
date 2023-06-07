@@ -3,7 +3,7 @@ import { StyleSheet ,Text, TextInput, View, ScrollView, Image, StatusBar } from 
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 import { loginUser } from "../../BackendDirectory/authentications/authentications";
 import { CustomButton, GoogleCustomButton } from "../components/buttons";
-import  Colors  from "../data/colors";
+import  AppColors  from "../data/Colors";
 
 function LoginScreen({navigation}) {
 
@@ -27,7 +27,7 @@ function LoginScreen({navigation}) {
                 <Text style={styles.label}>Email</Text>
                 <TextInput
                     style={styles.textInputBox} 
-                    placeholderTextColor={Colors.secondary}
+                    placeholderTextColor={AppColors.secondary}
                     placeholder="robert.sam@gmail.com" 
                     keyboardType="email-address"
                     onChangeText={(email) => setEmail(email)}
@@ -40,7 +40,7 @@ function LoginScreen({navigation}) {
                 <TextInput 
                     style={styles.textInputBox} 
                     secureTextEntry={true}
-                    placeholderTextColor={Colors.secondary}
+                    placeholderTextColor={AppColors.secondary}
                     placeholder="*************" 
                     onChangeText={(password) => setPassword(password)}
                     autoCapitalize="none"
@@ -68,7 +68,7 @@ function LoginScreen({navigation}) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
     },
     signInContainer: {
         alignItems: 'center',
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     heading: {
         fontSize: 30,
         fontWeight: '600',
-        color: Colors.black,
+        color: AppColors.black,
         marginBottom: 20,
     },
     inputBox: {
@@ -97,17 +97,17 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 14,
-        color: Colors.labelGray,
+        color: AppColors.labelGray,
         fontWeight: '500',
         marginBottom: 6,
     },
     textInputBox: {
         borderWidth: 1,
         borderRadius: 8,
-        borderColor: Colors.borderGray,
+        borderColor: AppColors.borderGray,
         paddingHorizontal: 10,
         paddingVertical: 14,
-        color: Colors.secondary,
+        color: AppColors.secondary,
         gap: 8,
     },
     customButton: {
@@ -117,14 +117,14 @@ const styles = StyleSheet.create({
     switchLoginScreenText: {
         fontSize: 14,
         fontWeight: '400',
-        color: Colors.secondary,
+        color: AppColors.secondary,
         marginVertical: 12,
     },
     switchLoginScreenLinkText: {
-        color: Colors.main,
+        color: AppColors.primary,
     },
     forgotPasswordLinkText: {
-        color: Colors.main,
+        color: AppColors.primary,
         fontSize: 14,
         fontWeight: '500',
         textAlign: 'right',

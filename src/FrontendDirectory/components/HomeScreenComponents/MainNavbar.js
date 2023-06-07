@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Button, Image, Platform, Pressable, SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import  Colors  from "../../data/colors";
+import  AppColors  from "../../data/Colors";
 import { auth, firestore } from "../../../BackendDirectory/config";
+import { Device } from 'expo-device';
 
 function MainNavbar() {
     const navigation = useNavigation();
@@ -56,11 +57,11 @@ function MainNavbar() {
             />
             <View style={styles.headerWrapper}>
                 <Pressable onPress={() => navigation.navigate("Search")}>
-                    <Feather name="search" size={24} color={Colors.black} />
+                    <Feather name="search" size={24} color={AppColors.black} />
                 </Pressable>
                 <Image style={styles.textLogo} source={require("../../data/images/TextLogo.png")} />
                 <Pressable onPress={() => navigation.navigate("Cart")}  style={styles.cartItems}>
-                    <AntDesign name="shoppingcart" size={24} color={Colors.black} />
+                    <AntDesign name="shoppingcart" size={24} color={AppColors.black} />
                     <View style={styles.badge}>
                         <Text style={styles.numOfItems}>{numOfCart && numOfCart.length}</Text>
                     </View>
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       paddingHorizontal: 20,
       paddingVertical: 20,
-      marginTop: Platform.OS === 'android' ? 20 : 0,
+      marginTop: Device === 'android' ? 20 : 0,
     },
     textLogo: {
         width: 200, 

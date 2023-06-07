@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ButtomNavigation from './src/FrontendDirectory/navigations/BottomNavigation';
 import { ActivityIndicator } from 'react-native';
-import Colors from './src/FrontendDirectory/data/colors';
+import AppColors from './src/FrontendDirectory/data/Colors';
 
 
 const AppStack = createNativeStackNavigator();
@@ -29,7 +29,7 @@ function App() {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  }} size="large" color={Colors.main} />;
+  }} size="large" color={AppColors.primary} />;
 
 
   // Checking if user is not signed in

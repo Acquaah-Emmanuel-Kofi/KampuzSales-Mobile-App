@@ -4,7 +4,7 @@ import { CustomButton } from "../components/buttons";
 import CartItems from "../components/CartScreenComponents/CartItems";
 import CediSign from "../components/CediSign";
 import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
-import  Colors  from "../data/colors";
+import  AppColors  from "../data/Colors";
 import { auth, firestore } from "../../BackendDirectory/config";
 
 
@@ -73,7 +73,7 @@ function CartScreen({navigation}) {
                     <Text style={styles.totalText}>Total</Text>
                 </View>
                 <View>
-                    <Text style={styles.totalAmount}><CediSign /> {totalAmount}</Text>
+                    <Text style={styles.totalAmount}><CediSign /> {totalAmount ? totalAmount : "0.00"}</Text>
                 </View>
                 </View>
                 <CustomButton onPress={() => alert("Checked all items out!")} buttonText={"Check out"}  />
@@ -85,7 +85,7 @@ function CartScreen({navigation}) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
     },
     totalMarginHorizontal: {
         marginHorizontal: 30,
@@ -101,12 +101,12 @@ const styles = StyleSheet.create({
     totalText: {
         fontSize: 20, 
         fontWeight: '700',
-        color: Colors.totalColor,
+        color: AppColors.totalColor,
     },
     totalAmount: {
         fontSize: 20, 
         fontWeight: '700',
-        color: Colors.totalAmountColor,
+        color: AppColors.totalAmountColor,
     },
   });
 

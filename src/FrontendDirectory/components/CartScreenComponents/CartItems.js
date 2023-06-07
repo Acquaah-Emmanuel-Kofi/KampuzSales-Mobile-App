@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Alert, Image, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import CediSign from "../CediSign";
-import Colors from "../../data/colors";
+import AppColors from "../../data/Colors";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import { auth, firestore, storage } from "../../../BackendDirectory/config";
 
@@ -154,7 +154,7 @@ function CartItems() {
                             <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
                         </View>
                         <Pressable onPress={() => handleDeleteModal(product.id)}>
-                            <Fontisto name="close" size={24} color={Colors.black} />
+                            <Fontisto name="close" size={24} color={AppColors.black} />
                         </Pressable>
                     </Pressable>
                     : null}
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         paddingBottom: 20,
         borderBottomWidth: 1,
-        borderColor: Colors.borderGray,
+        borderColor: AppColors.borderGray,
     },
     image: {
         width: 100,
@@ -190,13 +190,13 @@ const styles = StyleSheet.create({
         width: '55%'
     },
     productName: {
-        color: Colors.deepGray,
+        color: AppColors.deepGray,
         fontSize: 14,
         fontWeight: '400',
         marginBottom: 10
     },
     productPrice: {
-        color: Colors.black,
+        color: AppColors.black,
         fontSize: 16,
         fontWeight: '600',
     },

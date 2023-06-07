@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View, TextInput, ScrollView, Pressable, Image, Platform, } from "react-native";
 import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
-import  Colors  from "../data/colors";
+import  AppColors  from "../data/Colors";
 import Feather from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
 import CediSign from "../components/CediSign";
 import { firestore } from "../../BackendDirectory/config";
+import { Device } from 'expo-device';
 
 
 function SearchScreen() {
   
   const navigation = useNavigation();
 
-  const [ dataFromState, setDataFromState ] = useState([]);
-
+    const [ dataFromState, setDataFromState ] = useState([]);
     const [ loading, setLoading ] = useState(true);
     const [ deleted, setDeleted ] = useState(false);
 
@@ -78,7 +78,7 @@ function SearchScreen() {
               <View style={styles.searchArea}>
                 <View style={styles.seachBoxRow}> 
                     <View style={styles.seacrhBox}>
-                        <Feather style={styles.searchIcon} name="search" size={20} color={Colors.subBlack} />
+                        <Feather style={styles.searchIcon} name="search" size={20} color={AppColors.subBlack} />
                         <TextInput 
                           style={styles.textInput} 
                           placeholder="What are you looking for?"
@@ -134,11 +134,11 @@ const styles = StyleSheet.create({
     },
     textInput: {
         borderWidth: 1,
-        borderColor: Colors.labelGray,
+        borderColor: AppColors.labelGray,
         paddingVertical: 10,
         paddingHorizontal: 40,
         borderRadius: 10,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         width: '100%',
         ...Platform.select({
             ios: {
@@ -159,17 +159,17 @@ const styles = StyleSheet.create({
         zIndex: 1,
     },
     scrollViewContainer: {
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
-        paddingBottom: Platform.OS === 'ios' ? 150 : 200,
+        paddingBottom: Device === 'ios' ? 150 : 200,
     },
     productCard: {
         width: 157,
         height: 256,
         marginVertical: 5,
-        backgroundColor: 'Transparent',
+        backgroundColor: 'transparent',
         ...Platform.select({
             ios: {
               shadowColor: '#000',
@@ -201,12 +201,12 @@ const styles = StyleSheet.create({
         paddingTop: 12,
     },
     productName: {
-        color: Colors.labelGray,
+        color: AppColors.labelGray,
         fontSize: 14,
         fontWeight: '400',
     },
     productPrice: {
-        color: Colors.black,
+        color: AppColors.black,
         fontSize: 14,
         fontWeight: '600',
     }

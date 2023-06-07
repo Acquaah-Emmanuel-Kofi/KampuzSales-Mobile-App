@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, Pressable, TouchableOpacity } from "react-native";
-import  Colors  from "../data/colors";
+import  AppColors  from "../data/Colors";
 import Feather from "react-native-vector-icons/Feather"
 
 export function CustomButton({onPress, buttonText}) {
@@ -22,7 +22,7 @@ export function GoogleCustomButton({buttonText}) {
 export function BackButton({previousScreen, navigation}) {
     return (
         <Pressable style={styles.productBackButton} onPress={previousScreen}>
-            <Feather name="chevron-left" size={24} color={Colors.black} />
+            <Feather name="chevron-left" size={24} color={AppColors.black} />
         </Pressable>
     )
 }
@@ -31,8 +31,8 @@ const styles = StyleSheet.create({
     button: {
         borderWidth: 1,
         borderRadius: 8,
-        borderColor: Colors.main,
-        backgroundColor: Colors.main,
+        borderColor: AppColors.primary,
+        backgroundColor: AppColors.primary,
         paddingHorizontal: 10,
         paddingVertical: 14,
         gap: 8,
@@ -54,15 +54,15 @@ const styles = StyleSheet.create({
         })
     },
     buttonText: {
-        color: Colors.white,
+        color: AppColors.white,
         fontWeight: '500',
         fontSize: 16,
     },
     googleButton: {
         borderWidth: 1,
         borderRadius: 8,
-        borderColor: Colors.borderGray,
-        backgroundColor: Colors.white,
+        borderColor: AppColors.borderGray,
+        backgroundColor: AppColors.white,
         paddingHorizontal: 10,
         paddingVertical: 14,
         gap: 8,
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     googleButtonText: {
-        color: Colors.labelGray,
+        color: AppColors.labelGray,
         fontWeight: '500',
         fontSize: 16,
     },
@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
         zIndex: 999,
         borderWidth: 1,
         borderRadius: 8,
-        borderColor: Colors.favIconBg,
-        backgroundColor: Colors.favIconBg,
+        borderColor: AppColors.favIconBg,
+        backgroundColor: AppColors.favIconBg,
         width: 40,
         height: 40,
         display: 'flex',

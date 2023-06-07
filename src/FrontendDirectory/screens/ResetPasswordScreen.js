@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet ,Text, TextInput, View } from "react-native";
 import { CustomButton } from "../components/buttons";
-import  Colors  from "../data/colors";
+import  AppColors  from "../data/Colors";
 
 function ResetPasswordScreen({navigation}) {
     return (
@@ -12,7 +12,7 @@ function ResetPasswordScreen({navigation}) {
                 <TextInput 
                     style={styles.textInputBox} 
                     secureTextEntry={true}
-                    placeholderTextColor={Colors.secondary}
+                    placeholderTextColor={AppColors.secondary}
                     placeholder="*************" 
                 />
             </View>
@@ -21,7 +21,7 @@ function ResetPasswordScreen({navigation}) {
                 <TextInput 
                     style={styles.textInputBox} 
                     secureTextEntry={true}
-                    placeholderTextColor={Colors.secondary}
+                    placeholderTextColor={AppColors.secondary}
                     placeholder="*************" 
                 />
             </View>
@@ -38,14 +38,14 @@ function ResetPasswordScreen({navigation}) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       alignItems: 'center',
       justifyContent: 'center',
     },
     heading: {
         fontSize: 30,
         fontWeight: '600',
-        color: Colors.black,
+        color: AppColors.black,
         marginBottom: 20,
         letterSpacing: 2,
     },
@@ -55,17 +55,17 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 14,
-        color: Colors.labelGray,
+        color: AppColors.labelGray,
         fontWeight: '500',
         marginBottom: 6,
     },
     textInputBox: {
         borderWidth: 1,
         borderRadius: 8,
-        borderColor: Colors.borderGray,
+        borderColor: AppColors.borderGray,
         paddingHorizontal: 10,
         paddingVertical: 14,
-        color: Colors.secondary,
+        color: AppColors.secondary,
         gap: 8,
     },
     customButton: {
@@ -75,11 +75,11 @@ const styles = StyleSheet.create({
     switchLoginScreenText: {
         fontSize: 14,
         fontWeight: '400',
-        color: Colors.secondary,
+        color: AppColors.secondary,
         marginVertical: 12,
     },
     switchLoginScreenLinkText: {
-        color: Colors.main,
+        color: AppColors.primary,
     },
   });
 

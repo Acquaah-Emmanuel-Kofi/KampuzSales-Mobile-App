@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StatusBar, StyleSheet ,Text, TextInput, View } from "react-native";
 import { sendPasswordResetLink } from "../../BackendDirectory/authentications/authentications";
 import { CustomButton } from "../components/buttons";
-import  Colors  from "../data/colors";
+import  AppColors  from "../data/Colors";
 
 function ForgotPasswordScreen({navigation}) {
 
@@ -20,7 +20,7 @@ function ForgotPasswordScreen({navigation}) {
                 <Text style={styles.label}>Email</Text>
                 <TextInput 
                     style={styles.textInputBox} 
-                    placeholderTextColor={Colors.secondary}
+                    placeholderTextColor={AppColors.secondary}
                     placeholder="robert.sam@gmail.com" 
                     onChangeText={(email) => setEmail(email)}
                     autoCapitalize="none"
@@ -44,14 +44,14 @@ function ForgotPasswordScreen({navigation}) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       alignItems: 'center',
       justifyContent: 'center',
     },
     heading: {
         fontSize: 30,
         fontWeight: '600',
-        color: Colors.black,
+        color: AppColors.black,
         marginBottom: 20,
         letterSpacing: 2,
     },
@@ -61,17 +61,17 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 14,
-        color: Colors.labelGray,
+        color: AppColors.labelGray,
         fontWeight: '500',
         marginBottom: 6,
     },
     textInputBox: {
         borderWidth: 1,
         borderRadius: 8,
-        borderColor: Colors.borderGray,
+        borderColor: AppColors.borderGray,
         paddingHorizontal: 10,
         paddingVertical: 14,
-        color: Colors.secondary,
+        color: AppColors.secondary,
         gap: 8,
     },
     customButton: {
@@ -81,13 +81,13 @@ const styles = StyleSheet.create({
     switchLoginScreenText: {
         fontSize: 14,
         fontWeight: '400',
-        color: Colors.secondary,
+        color: AppColors.secondary,
         marginVertical: 12,
         display: 'flex',
         alignItems: 'center'
     },
     switchLoginScreenLinkText: {
-        color: Colors.main,
+        color: AppColors.primary,
         display: 'flex',
         alignItems: 'center'
     },

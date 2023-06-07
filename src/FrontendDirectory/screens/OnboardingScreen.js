@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Image } from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
-import Colors from '../data/colors';
+import AppColors from '../data/Colors';
 
 const skip = ({ ... props}) => {
     return(
@@ -25,7 +25,7 @@ const done = ({ ... props}) => {
     return(
         <Button 
             title='Done'
-            color={Colors.black}
+            color={AppColors.black}
             {...props}
         />
     );

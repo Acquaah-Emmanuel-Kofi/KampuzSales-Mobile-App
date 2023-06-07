@@ -1,5 +1,5 @@
-const Colors = {
-    main: "#1DA1F2",
+const AppColors = {
+    primary: "#1DA1F2",
     white: "#F5F5F5",
     black: "#2F2E41",
     subBlack: "#909090",
@@ -14,4 +14,4 @@ const Colors = {
     totalAmountColor: "#303030",
 };
 
-export default Colors;
+export default AppColors;

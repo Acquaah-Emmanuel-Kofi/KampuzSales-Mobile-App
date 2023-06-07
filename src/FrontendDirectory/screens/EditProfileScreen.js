@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Dimensions, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import  Colors  from "../data/colors";
+import  AppColors  from "../data/Colors";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -50,7 +50,7 @@ function EditProfileScreen({navigation}) {
             <SafeAreaView>
                 <View style={styles.profileDetails}>
                     <View style={styles.profileHeaderBox}>
-                        <Ionicons onPress={() => navigation.navigate("Profile")} style={styles.searchBackIcon} name="chevron-back-sharp" size={30} color={Colors.black} />
+                        <Ionicons onPress={() => navigation.navigate("Profile")} style={styles.searchBackIcon} name="chevron-back-sharp" size={30} color={AppColors.white} />
                         <View>
                             <Text style={styles.title}>Edit Profile</Text>
                         </View>
@@ -59,12 +59,13 @@ function EditProfileScreen({navigation}) {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.imageContainer}>
-                        <Icon name="ios-person" size={150} style={styles.image} color={Colors.main} />
+                        <Icon name="ios-person" size={150} style={styles.image} color={AppColors.primary} />
                         <TouchableOpacity style={styles.selectImage} onPress={() => alert("Upload Image")}>
-                            <MaterialCommunityIcons  name="image-edit" size={40} color={Colors.white} />
+                            <MaterialCommunityIcons  name="image-edit" size={40} color={AppColors.white} />
                         </TouchableOpacity>
                     </View>
                 </View>
+            </SafeAreaView>
                 <View style={styles.postDetails}>
                     <View style={styles.textInputBox}>
                         <TextInput 
@@ -126,7 +127,6 @@ function EditProfileScreen({navigation}) {
                         />
                     </View>
                 </View>
-            </SafeAreaView>
         </ScrollView>
     </View>
     )
@@ -147,29 +147,25 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 16,
-        color: Colors.white,
+        color: AppColors.white,
         fontWeight: '600',
     },
     titleText: {
         fontSize: 16,
         fontWeight: '600',
-        color: Colors.white,
-        // backgroundColor: Colors.white,
-        // paddingHorizontal: 8,
-        // paddingVertical: 5,
-        // borderRadius: 8
+        color: AppColors.white,
     },
     profileDetails: {
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: Colors.main,
+      backgroundColor: AppColors.primary,
       paddingHorizontal: 20,
       paddingVertical: 5,
       paddingBottom: 30
     },
     imageContainer: {
       borderRadius: 100,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       width: 200,
       height: 200,
       marginTop: 30,
@@ -190,7 +186,7 @@ const styles = StyleSheet.create({
     },
     textInput: {
         borderWidth: 1,
-        borderColor: Colors.borderGray,
+        borderColor: AppColors.borderGray,
         borderRadius: 8,
         paddingVertical: 10,
         paddingHorizontal: 10,
@@ -204,7 +200,7 @@ const styles = StyleSheet.create({
     },
     dropdown: {
         borderWidth: 1,
-        borderColor: Colors.borderGray,
+        borderColor: AppColors.borderGray,
         borderRadius: 8,
         paddingVertical: 2,
         paddingHorizontal: 10,
@@ -214,7 +210,7 @@ const styles = StyleSheet.create({
     },
     label: {
       position: 'absolute',
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.black,
       left: 22,
       top: 8,
       zIndex: 999,
@@ -223,7 +219,7 @@ const styles = StyleSheet.create({
     },
     placeholderStyle: {
       fontSize: 16,
-      color: Colors.borderGray
+      color: AppColors.borderGray
     },
     selectedTextStyle: {
       fontSize: 16,

@@ -1,5 +1,5 @@
 import { StyleSheet, Text } from "react-native";
-import  Colors  from "../data/colors";
+import  AppColors  from "../data/Colors";
 
 function CediSign({buttonText}) {
     return (
@@ -9,7 +9,7 @@ function CediSign({buttonText}) {
 
 const styles = StyleSheet.create({
     text: {
-        color: Colors.black
+        color: AppColors.black
     }
   });
 
