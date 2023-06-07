@@ -1,8 +1,7 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import CartItems from "../components/CartScreenComponents/CartItems";
+import { SafeAreaView, StyleSheet } from "react-native";
 import HeadTitle from "../components/HeadTitle";
-import  Colors  from "../data/colors";
+import  AppColors  from "../data/Colors";
 import FavoriteProducts from "../components/WishlistScreenComponents/WishlistProducts";
 
 function WishlistScreen() {
@@ -17,7 +16,7 @@ function WishlistScreen() {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
     },
   });
 
