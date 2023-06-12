@@ -4,6 +4,7 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SingleProductDetailsScreen from '../screens/SingleProductDetailsScreen';
+import VendorInformation from '../screens/VendorInformationScreen';
 
 const Tab = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ const StackNavigation = () => {
             <Tab.Screen name='Search' component={SearchScreen}></Tab.Screen>
             <Tab.Screen name='Cart' component={CartScreen}></Tab.Screen>
             <Tab.Screen name='EditProfile' component={EditProfileScreen}></Tab.Screen>
+            <Tab.Screen name='VendorInfo' component={VendorInformation}></Tab.Screen>
         </Tab.Navigator>
     );
 }
