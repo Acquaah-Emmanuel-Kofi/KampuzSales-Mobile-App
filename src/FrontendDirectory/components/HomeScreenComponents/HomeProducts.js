@@ -1,169 +1,63 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Alert, Image, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
-import  Colors  from "../../data/colors";
+import { FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import  AppColors  from "../../data/Colors";
 import CediSign from "../CediSign";
-import { firestore, storage } from "../../../BackendDirectory/config";
+import categoriesData from "../../data/categoriesData";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
-function HomeProducts() {
+function HomeProducts({products}) {
     const navigation = useNavigation();
 
-    const [ post, setPost ] = useState(null);
-    const [ loading, setLoading ] = useState(true);
-    const [ deleted, setDeleted ] = useState(false);
-    const [ refresh, setRefresh ] = useState(false);
-    const [ filterByCategory, setFilterByCategory ] = useState('');
-
-    
-    const fetchProducts = async () => {
-        try {
-            
-            let productData = [];
-
-            await firestore.collection('products')
-            .orderBy('postTime', 'desc')
-            .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach(doc => {
-                    const { productTitle, productImage, description, category ,price, postTime, userId} = doc.data();
-                    productData.push({
-                        id: doc.id,
-                        userPostId: userId,
-                        name: productTitle,
-                        image: productImage,
-                        description: description,
-                        price: price,
-                        category: category,
-                        postTime: postTime,
-                    })
-
-                    setFilterByCategory(category)
-                })
-            })
-            .catch((error) => {
-                alert("No data to show!");
-            })
-
-            setPost(productData);
-
-            if(loading) setLoading(false);
-
-        } catch (error) {
-            console.log(error.message);
-        }
-    }
-
-    const handleDeleteModal = (postId) => {
-        Alert.alert(
-            'Delete Post',
-            'Are you sure?',
-            [
-                {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Post'),
-                    style: 'cancel'
-                },
-                {
-                    text: 'Confirm',
-                    onPress: () => deletePost(postId),
-                }
-            ],
-            { cancelable: false}
-        )
-    }
-
-    const deletePost = (postId) => {
-        firestore.collection('products')
-        .doc(postId)
-        .get()
-        .then((documentSnapshot) => {
-            if(documentSnapshot.exists){
-                const {productImage} = documentSnapshot.data();
-
-                if (productImage !== null) {
-                    const storageRef = storage.refFromURL(productImage);
-                    const imageRef = storage.ref(storageRef.fullPath);
-
-                    imageRef
-                    .delete()
-                    .then(() => {
-                        deleteFirestoreData(postId);
-                        setDeleted(true)
-                    })
-                    .catch((error) => {
-                        console.log("Error deleting image", error);
-                    })
-                }
-
-                // if the post image is not available
-            } else{
-                deleteFirestoreData(postId);
-            }
-        })
-    }
-
-    const deleteFirestoreData = (postId) => {
-        firestore.collection('products')
-        .doc(postId)
-        .delete()
-        .then(() => {
-            Alert.alert(
-                'Posted Deleted!',
-                'Your post has been deleted succefully!'
-            )
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-    }
-    const pulledToRefresh = () => {
-        setRefresh(true);
-
-        setTimeout(() => {
-        setRefresh(false);
-        }, 2000)
-    }
-
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
-    useEffect(() => {
-        fetchProducts();
-        setDeleted(false)
-    }, [deleted]);
-
+    const renderCategoryItem = ({ item }) => {
+    return (
+      <View>
+        <Pressable style={styles.navCategoryItems} onPress={() => alert(item.name)}>
+          <View style={styles.navCategoryIcon}>
+            <MaterialIcons name={item.image} size={30} color={AppColors.cartIconGray} />
+          </View>
+          <Text style={styles.navCategoryName}>{item.name}</Text>
+        </Pressable>
+      </View>
+    )
+  }
 
 
     return (
         <View style={styles.container}>
+        <View style={styles.categories}>
+            <>
+              <FlatList 
+                data={categoriesData}
+                renderItem={renderCategoryItem}
+                keyExtractor={(item) => item._id}
+                horizontal={true}
+                flashScrollIndicators={false}
+               />
+            </>
+        </View>
         <ScrollView 
             contentContainerStyle={styles.scrollViewContainer} 
             showsVerticalScrollIndicator={false}
-            refreshControl={
-                <RefreshControl 
-                    refreshing={refresh}
-                    onRefresh={() => pulledToRefresh()}
-                />
-            }
         >
         {
-            post && post.map((product) => (
-                <Pressable key={product.id} style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
+            products && products.map((product) => (
+                <Pressable key={product.id} style={styles.productCard} onPress={() => navigation.navigate("Single", product)}>
                     {
-                        product.image ? (
+                        product?.image ? (
                         <View style={styles.imageBox}>
-                            <Image style={styles.image} resizeMode='stretch' source={{uri: product.image}} alt={product.name} />
+                            <Image style={styles.image} resizeMode='stretch' source={{uri: product?.image[0]}} alt={product.name} />
                             <Image style={styles.imageCartTag} source={require('../../data/images/Cart.png')} />
                         </View>
                         ) : (
-                            <View style={styles.noImage}></View>
+                            <View style={styles.noImage}>
+                              <MaterialIcons name={"broken-image"} size={50} color={AppColors.cartIconGray} />
+                            </View>
                         )
                     }
                     <View style={styles.productDetailsBox}>
                         <Text style={styles.productName}>{product.name}</Text>
                         <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
-                        {/* {auth.currentUser.uid === product.userPostId ? <Text onPress={() => handleDeleteModal(product.id)}>Delete</Text> : null} */}
                     </View>
                 </Pressable>
             ))
@@ -177,16 +71,73 @@ const styles = StyleSheet.create({
     container: {
         flex: 4,
     },
+    categories: {
+        flex: 1,
+        backgroundColor: AppColors.white,
+        alignItems: 'center',
+        justifyContent: 'center', 
+        ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.3,
+              shadowRadius: 2,
+            },
+            android: {
+              elevation: 5,
+            },
+        })
+    },
+    navCategoryItems: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingVertical: 20,
+      paddingHorizontal: 15,
+    },
+    navCategoryIcon: {
+        borderWidth: 1,
+        borderRadius: 8,
+        borderColor: AppColors.favIconBg,
+        backgroundColor: AppColors.favIconBg,
+        width: 50,
+        height: 50,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    navCategoryName: {
+      paddingTop: 10,
+    },
     scrollViewContainer: {
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
     },
-    productBox: {
-        width: 157,
+    productCard: {
+        // width: 157,
+        // height: 256,
+        width: 180,
         height: 256,
+        paddingVertical: 2,
+        paddingTop: 5,
+        paddingHorizontal: 5,
+        borderRadius: 5,
         marginVertical: 5,
+        backgroundColor: AppColors.white,
+        // backgroundColor: 'transparent',
+        ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.3,
+              shadowRadius: 2,
+            },
+            android: {
+              elevation: 5,
+            },
+        })
     },
     imageBox: {
         position: 'relative',
@@ -199,26 +150,28 @@ const styles = StyleSheet.create({
         right: 12,
     },
     image: {
-        width: 157,
+        width: 170,
         height: 200,
-        borderRadius: 10,
+        borderRadius: 5,
     },
     noImage: {
-        width: 157,
+        width: 170,
         height: 200,
-        borderRadius: 10,
-        backgroundColor: Colors.borderGray,
+        borderRadius: 5,
+        backgroundColor: AppColors.borderGray,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     productDetailsBox: {
         paddingTop: 12,
     },
     productName: {
-        color: Colors.labelGray,
+        color: AppColors.labelGray,
         fontSize: 14,
         fontWeight: '400',
     },
     productPrice: {
-        color: Colors.black,
+        color: AppColors.black,
         fontSize: 14,
         fontWeight: '600',
     }
