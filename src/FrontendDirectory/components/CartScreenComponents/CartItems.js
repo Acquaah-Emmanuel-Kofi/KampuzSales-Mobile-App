@@ -147,7 +147,7 @@ function CartItems() {
                     {auth.currentUser.uid === product.userId ? 
                     <Pressable style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
                         <View style={styles.imageBox}>
-                            <Image style={styles.image} source={{uri:product.image}} alt={product.name} />
+                            <Image style={styles.image} source={{uri:product.image[0]}} alt={product.name} />
                         </View>
                         <View style={styles.productDetailsBox}>
                             <Text style={styles.productName}>{product.name}</Text>
