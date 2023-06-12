@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet ,Text, TextInput, View, ScrollView, Image, StatusBar } from "react-native";
-import { registerUser } from "../../BackendDirectory/authentications/authentications";
+import { authLoading, registerUser } from "../../BackendDirectory/authentications/authentications";
 import { CustomButton, GoogleCustomButton } from "../components/buttons";
 import  AppColors  from "../data/Colors";
 
@@ -10,6 +10,7 @@ function RegisterScreen({navigation}) {
     const [ username, setUsername ] = useState('');
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
+    const [ confirmPassword, setConfirmPassword ] = useState('');
     const [ phoneNumber, setPhoneNumber ] = useState('');
     const [ loading, setLoading ] = useState(false);
 
@@ -70,11 +71,22 @@ function RegisterScreen({navigation}) {
                     autoCorrect={false} 
                 />
             </View>
+            <View style={styles.inputBox}>
+                <Text style={styles.label}>Confirm Password</Text>
+                <TextInput
+                    style={styles.textInputBox} 
+                    secureTextEntry={true}
+                    placeholderTextColor={AppColors.secondary}
+                    placeholder="*************" 
+                    onChangeText={(password) => setConfirmPassword(password)}
+                    autoCapitalize="none"
+                    autoCorrect={false} 
+                />
+            </View>
             <View style={styles.customButton}>
                 <CustomButton onPress={() => {
-                    registerUser(email, password, username, phoneNumber)
-                    if(email !== '' && password !== '') setLoading(true)
-                }} buttonText={loading ? "Signing up..." : "Sign Up"} />
+                    registerUser(email, password, confirmPassword ,username, phoneNumber)
+                }} buttonText={authLoading ? "Signing up..." : "Sign Up"} />
             </View>
             <GoogleCustomButton buttonText={"Sign up with Google"} />
             <Text style={styles.switchLoginScreenText}>
