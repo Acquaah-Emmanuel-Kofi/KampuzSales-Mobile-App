@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, Text, View, TextInput, ScrollView, Pressable, Image, Platform, } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View, TextInput, ScrollView, Pressable, Platform, } from "react-native";
 import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
 import  AppColors  from "../data/Colors";
 import Feather from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
-import CediSign from "../components/CediSign";
 import { firestore } from "../../BackendDirectory/config";
 import { Device } from 'expo-device';
+import ProductCard from "../components/ProductCard";
 
 
 function SearchScreen() {
@@ -14,9 +14,8 @@ function SearchScreen() {
   const navigation = useNavigation();
 
     const [ dataFromState, setDataFromState ] = useState([]);
-    const [ loading, setLoading ] = useState(true);
-    const [ deleted, setDeleted ] = useState(false);
-
+    const [ searchedTerm, setSearchedTerm ] = useState(null);
+    const [ valueClicked, setValueClicked ] = useState(false);
     
     const fetchProducts = async () => {
         try {
@@ -28,12 +27,12 @@ function SearchScreen() {
             .get()
             .then((querySnapshot) => {
                 querySnapshot.forEach(doc => {
-                    const { productTitle, productImage, description, price, postTime, userId} = doc.data();
+                    const { productTitle, productImages, description, price, postTime, userId} = doc.data();
                     productData.push({
                         id: doc.id,
                         userPostId: userId,
                         name: productTitle,
-                        image: productImage,
+                        image: productImages,
                         description,
                         price,
                         postTime,
@@ -43,33 +42,41 @@ function SearchScreen() {
 
             setDataFromState(productData);
 
-            if(loading) setLoading(false);
-
         } catch (error) {
             console.log(error.message);
         }
     }
 
+
+    const getItemsInData = (searchTerm) => {
+
+        let items = [];
+
+        let searchedData = dataFromState?.filter((item)=> {
+            return item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        })
+
+        searchedData?.map((e) => {
+            items.push(e.name)
+        })
+
+        setSearchedTerm(items);
+    }
+
+
+    const searchValue = (searchTerm) => {
+        setValueClicked(true);
+
+        let searchData = dataFromState?.filter((item) => {
+            return item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        })
+
+        setDataFromState(searchData)
+    }
+
     useEffect(() => {
         fetchProducts();
     }, []);
-
-    useEffect(() => {
-        fetchProducts();
-        setDeleted(false)
-    }, [deleted]);
-
-  const searchValue = (input) => {
-    if(input){
-      let data = dataFromState;
-      let searchData = data.filter((item) => {
-        return item.name.toLowerCase().includes(input.toLowerCase())
-      })
-      setDataFromState(searchData)
-    } else {
-      setDataFromState(dataFromState)
-    }
-  }
 
     return (
         <View style={styles.container}>
@@ -82,32 +89,36 @@ function SearchScreen() {
                         <TextInput 
                           style={styles.textInput} 
                           placeholder="What are you looking for?"
-                          onChangeText={(inputeValue) => {
-                            searchValue(inputeValue)
+                          onChangeText={(searchTerm) => {
+                            getItemsInData(searchTerm)
                           }} 
                         />
                     </View>
                 </View>
+                { valueClicked ? null :
+                (<View style={styles.searchedValues}>
+                    {searchedTerm?.map((value) => 
+                        <Pressable style={styles.texts} onPress={() => {
+                            searchValue(value)
+                        }}>
+                            <Text style={{fontSize: 15}}>{value}</Text>
+                        </Pressable>
+                    )}
+                </View>)}
               </View>
 
-        <ScrollView 
-            contentContainerStyle={styles.scrollViewContainer} 
-            showsVerticalScrollIndicator={false}>
-        {
-            dataFromState.map((product) => (
-                <Pressable key={product.id} style={styles.productCard} onPress={() => navigation.navigate("Single", product)}>
-                    <View style={styles.imageBox}>
-                        <Image style={styles.image} source={{uri: product.image}} alt={product.name} />
-                        <Image style={styles.imageCartTag} source={require('../../FrontendDirectory/data/images/Cart.png')} />
-                    </View>
-                    <View style={styles.productDetailsBox}>
-                        <Text style={styles.productName}>{product.name}</Text>
-                        <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
-                    </View>
-                </Pressable>
-            ))
-        }
-        </ScrollView>
+            { valueClicked ? 
+            (
+                <ScrollView 
+                    contentContainerStyle={styles.scrollViewContainer} 
+                    showsVerticalScrollIndicator={false}>
+                {
+                    dataFromState.map((product) => (
+                        <ProductCard product={product} />
+                    ))
+                }
+                </ScrollView>
+            ) : null}
             </SafeAreaView>
         </View>
     )
@@ -131,6 +142,16 @@ const styles = StyleSheet.create({
     seacrhBox: {
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    searchedValues: {
+        width: '100%',
+        // height: '100%',
+        backgroundColor: AppColors.white,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+    },
+    texts: {
+        marginVertical: 10,
     },
     textInput: {
         borderWidth: 1,
