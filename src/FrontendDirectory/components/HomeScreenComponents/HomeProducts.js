@@ -1,68 +1,29 @@
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
-import { FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, View, ActivityIndicator } from "react-native";
 import  AppColors  from "../../data/Colors";
-import CediSign from "../CediSign";
-import categoriesData from "../../data/categoriesData";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import ProductCard from "../cards/ProductCard";
 
-function HomeProducts({products}) {
-    const navigation = useNavigation();
-
-    const renderCategoryItem = ({ item }) => {
-    return (
-      <View>
-        <Pressable style={styles.navCategoryItems} onPress={() => alert(item.name)}>
-          <View style={styles.navCategoryIcon}>
-            <MaterialIcons name={item.image} size={30} color={AppColors.cartIconGray} />
-          </View>
-          <Text style={styles.navCategoryName}>{item.name}</Text>
-        </Pressable>
-      </View>
-    )
-  }
-
+function HomeProducts({products, loading}) {
 
     return (
         <View style={styles.container}>
-        <View style={styles.categories}>
-            <>
-              <FlatList 
-                data={categoriesData}
-                renderItem={renderCategoryItem}
-                keyExtractor={(item) => item._id}
-                horizontal={true}
-                flashScrollIndicators={false}
-               />
-            </>
-        </View>
+
+          {loading ? (
+            <View style={styles.activityIndicatorIcon}>
+                <ActivityIndicator size="large" color={AppColors.primary} />
+            </View>
+          ) : (
         <ScrollView 
             contentContainerStyle={styles.scrollViewContainer} 
             showsVerticalScrollIndicator={false}
         >
         {
             products && products.map((product) => (
-                <Pressable key={product.id} style={styles.productCard} onPress={() => navigation.navigate("Single", product)}>
-                    {
-                        product?.image ? (
-                        <View style={styles.imageBox}>
-                            <Image style={styles.image} resizeMode='stretch' source={{uri: product?.image[0]}} alt={product.name} />
-                            <Image style={styles.imageCartTag} source={require('../../data/images/Cart.png')} />
-                        </View>
-                        ) : (
-                            <View style={styles.noImage}>
-                              <MaterialIcons name={"broken-image"} size={50} color={AppColors.cartIconGray} />
-                            </View>
-                        )
-                    }
-                    <View style={styles.productDetailsBox}>
-                        <Text style={styles.productName}>{product.name}</Text>
-                        <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
-                    </View>
-                </Pressable>
+                <ProductCard product={product} />
             ))
         }
         </ScrollView>
+          )}
         </View>
     )
 }
@@ -174,6 +135,9 @@ const styles = StyleSheet.create({
         color: AppColors.black,
         fontSize: 14,
         fontWeight: '600',
+    },
+    activityIndicatorIcon:{
+      
     }
   });
 
