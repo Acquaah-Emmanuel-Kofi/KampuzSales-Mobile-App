@@ -6,7 +6,7 @@ import Feather from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
 import { firestore } from "../../BackendDirectory/config";
 import { Device } from 'expo-device';
-import ProductCard from "../components/ProductCard";
+import ProductCard from "../components/cards/ProductCard";
 
 
 function SearchScreen() {
