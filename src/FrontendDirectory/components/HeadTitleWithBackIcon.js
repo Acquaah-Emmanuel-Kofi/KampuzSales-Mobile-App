@@ -15,9 +15,7 @@ function HeadTitleWithBackIcon({title, previousScreen}) {
             <View style={styles.headWrapper}>
                 <Ionicons onPress={previousScreen} style={styles.searchBackIcon} name="chevron-back-sharp" size={30} color={AppColors.black} />
                 <Text style={styles.title}>{title}</Text>
-                <View style={styles.searchRightSpace}>
-                    <Text>deleted</Text>
-                </View>
+                <View style={styles.searchRightSpace}></View>
             </View>
         </SafeAreaView>
     )
