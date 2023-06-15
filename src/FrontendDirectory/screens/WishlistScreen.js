@@ -2,13 +2,13 @@ import React from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
 import HeadTitle from "../components/HeadTitle";
 import  AppColors  from "../data/Colors";
-import FavoriteProducts from "../components/WishlistScreenComponents/WishlistProducts";
+import WishlistProducts from "../components/WishlistScreenComponents/WishlistProducts";
 
 function WishlistScreen() {
     return (
         <SafeAreaView style={styles.container}>
             <HeadTitle title={"Wishlist"} />
-            <FavoriteProducts />
+            <WishlistProducts />
         </SafeAreaView>
     )
 }
