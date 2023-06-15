@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Image, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import CediSign from "../CediSign";
 import AppColors from "../../data/Colors";
-import Fontisto from "react-native-vector-icons/Fontisto";
 import { auth, firestore, storage } from "../../../BackendDirectory/config";
+import Fontisto from "react-native-vector-icons/Fontisto";
+import CediSign from "../CediSign";
 
 function CartItems() {
     const navigation = useNavigation();
+    
     const [ dataFromState, setDataFromState ] = useState([]);
     const [ deleted, setDeleted ] = useState(false);
     const [ refresh, setRefresh ] = useState(false);
@@ -75,8 +76,7 @@ function CartItems() {
                     const storageRef = storage.refFromURL(productImage);
                     const imageRef = storage.ref(storageRef.fullPath);
 
-                    imageRef
-                    .delete()
+                    imageRef.delete()
                     .then(() => {
                         deleteFirestoreData(postId);
                         setDeleted(true)
@@ -142,21 +142,21 @@ function CartItems() {
                   />
                 }>
             {
-                dataFromState && dataFromState.map((product) => (
-                    <View key={product.id}>
+                dataFromState && dataFromState.map((product, index) => (
+                    <View key={index}>
                     {auth.currentUser.uid === product.userId ? 
-                    <Pressable style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
-                        <View style={styles.imageBox}>
-                            <Image style={styles.image} source={{uri:product.image[0]}} alt={product.name} />
-                        </View>
-                        <View style={styles.productDetailsBox}>
-                            <Text style={styles.productName}>{product.name}</Text>
-                            <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
-                        </View>
-                        <Pressable onPress={() => handleDeleteModal(product.id)}>
-                            <Fontisto name="close" size={24} color={AppColors.black} />
+                        <Pressable style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
+                            <View style={styles.imageBox}>
+                                <Image style={styles.image} source={{uri: product.image}} alt={product.name} />
+                            </View>
+                            <View style={styles.productDetailsBox}>
+                                <Text style={styles.productName}>{product.name}</Text>
+                                <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
+                            </View>
+                            <Pressable onPress={() => handleDeleteModal(product.id)}>
+                                <Fontisto name="close" size={24} color={AppColors.black} />
+                            </Pressable>
                         </Pressable>
-                    </Pressable>
                     : null}
                     </View>
                 ))
