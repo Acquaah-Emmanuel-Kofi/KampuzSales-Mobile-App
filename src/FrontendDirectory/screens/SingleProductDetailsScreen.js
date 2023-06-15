@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Image, ScrollView, Text, View, Pressable, SafeAreaView, Platform, Dimensions, Alert } from "react-native";
+import { StyleSheet, Image, ScrollView, Text, View, Pressable, SafeAreaView, Platform, Dimensions, Alert, ActivityIndicator } from "react-native";
 import { BackButton } from "../components/buttons";
 import CediSign from "../components/CediSign";
 import  AppColors  from "../data/Colors";
@@ -8,6 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from "moment";
 import { firestore, firebase, auth, storage } from "../../BackendDirectory/config";
 import { Device } from 'expo-device';
+import { getCartProductIds, getWishlistProductIds, urlToBlob } from "../../BackendDirectory/functionalities/functions";
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -17,9 +18,11 @@ function SingleProductDetailsScreen({route}) {
     const navigation = useNavigation();
     
     const product = route.params;
-    
-    const [ ids, setIds ] = useState([]);
+
+    const [ cartIds, setCartIds ] = useState([]);
+    const [ wishlistIds, setWishlistIds ] = useState([]);
     const [ activeImage, setActiveImage ] = useState(0);
+    const [ uploading, setUploading ] = useState(false);
 
     const handleOnchange = (nativeEvent) => {
         if(nativeEvent) {
@@ -28,46 +31,37 @@ function SingleProductDetailsScreen({route}) {
                 setActiveImage(slide);
             }
         }
-    }  
+    } 
+    
 
-    const getProductIds = async () => {
+    // Function to generate a new download link for an image in a different folder
+    async function generateNewDownloadLink(imageURL, newFolder) {
         try {
-            
-            let productData = [];
-            let productIds = [];
-
-            await firestore.collection('cart')
-            .orderBy('postTime', 'desc')
-            .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach(doc => {
-                    const { productId, userId } = doc.data();
-                    productData.push({
-                        id: doc.id,
-                        productId,
-                        userId
-                    })
-                })
-            })
-
-            productData && productData.map((product) => {
-                {auth.currentUser.uid === product.userId ?
-                productIds.push(product.productId)
-                : null }
-            })
-
-            setIds(productIds);
-
+            // Convert the image URL to Blob
+            const blob = await urlToBlob(imageURL);
+    
+            // Create a reference to the new image in the new folder
+            const newImageRef = storage.ref().child(`${newFolder}/${new Date().getTime()}.jpg`);
+    
+            // Upload the blobbed image to the new folder
+            const snapshot = await newImageRef.put(blob);
+    
+            // Get the new download URL for the image in the new folder
+            const newDownloadURL = await snapshot.ref.getDownloadURL();
+    
+          return newDownloadURL;
 
         } catch (error) {
-            console.log(error.message);
+            setUploading(false);
+            console.error('Error adding image:', error);
+            Alert.alert(
+                'Failed Adding Product!',
+                error.message
+            )
         }
-    }
+      }
 
-    const addToCart = () => {
-        if(ids && ids.includes(product.id)){
-            alert("Item is already in cart!");
-        } else {
+    const cartDetails = (image) => {
             firestore.collection('cart')
             .add({
                 userId: auth.currentUser.uid,
@@ -75,7 +69,7 @@ function SingleProductDetailsScreen({route}) {
                 productTitle: product.name,
                 price: product.price,
                 category: product.category,
-                productImage: product.image,
+                productImage: image,
                 description: product.description,
                 popular: 'popular',
                 postTime: firebase.firestore.Timestamp.fromDate(new Date()),
@@ -89,15 +83,9 @@ function SingleProductDetailsScreen({route}) {
             .catch((error) => {
                 alert(error.message)
             })
-        }
-
-        navigation.navigate("Cart")
  }
 
- const addToWishlist = () => {
-    if(ids && ids.includes(product.id)){
-        alert("Item is already in your Wishlist!")
-    } else {
+ const wishlistDetails = (image) => {
         firestore.collection('wishlist')
         .add({
             userId: auth.currentUser.uid,
@@ -105,7 +93,7 @@ function SingleProductDetailsScreen({route}) {
             productTitle: product.name,
             price: product.price,
             category: product.category,
-            productImage: product.image,
+            productImage: image,
             description: product.description,
             popular: 'popular',
             postTime: firebase.firestore.Timestamp.fromDate(new Date()),
@@ -121,12 +109,56 @@ function SingleProductDetailsScreen({route}) {
         })
     }
 
-    navigation.navigate("WhishList")
+    const addToCart = async (originalUrl, newFolder) => {
+        setUploading(true);
+
+        if(cartIds && cartIds.includes(product.id)){
+            alert("Item is already in cart!");
+            setUploading(false);
+        } else {
+            setUploading(true);
+            let imagesUrl = [];
+            let imageUrl = await generateNewDownloadLink(originalUrl, newFolder);
+            imagesUrl.push(imageUrl);
+            
+            if(imagesUrl){
+                cartDetails(imagesUrl[0]);
+                setUploading(false)
+
+                navigation.navigate("Cart")
+            }
+        }
+    }
+
+    const addToWishlist = async (originalUrl, newFolder) => {
+        setUploading(true);
+
+        if(wishlistIds && wishlistIds.includes(product.id)){
+            alert("Item is already in your Wishlist!");
+            setUploading(false);
+        } else {
+            setUploading(true);
+            let imagesUrl = [];
+            let imageUrl = await generateNewDownloadLink(originalUrl, newFolder);
+            imagesUrl.push(imageUrl);
+            
+            if(imagesUrl){
+                wishlistDetails(imagesUrl[0]);
+                setUploading(false)
+
+                navigation.navigate("WhishList")
+            }
+        }
     }
 
 
-      useEffect(() => {
-        getProductIds();
+    useEffect(() => {
+        let cIds = getCartProductIds("cart");
+        console.log(cIds);
+        // setCartIds(cIds);
+        let wIds = getWishlistProductIds("wishlist");
+        console.log(wIds);
+        // setWishlistIds(wIds);
     }, []);
 
     return (
@@ -143,21 +175,28 @@ function SingleProductDetailsScreen({route}) {
                         style={styles.imageWrapper}
                     >
                    {
-                    product?.image && product?.image?.map((e, index) => 
+                    Array.isArray(product?.image) ?
+                    (product?.image?.map((e, index) => 
                         <View key={index}>
                             <Image style={styles.imageWrapper} resizeMode='stretch' source={{uri: e}} />
                         </View>
+                    )) : 
+                    (product?.image ?
+                        <View>
+                            <Image style={styles.imageWrapper} resizeMode='stretch' source={{uri: product.image}} />
+                        </View> : null
                     )
                    }
                     </ScrollView>
                     <View style={styles.imageWrapperNav}>
                         {
-                            product?.image && product?.image?.map((e, index) => 
+                            Array.isArray(product?.image) ?
+                            (product?.image?.map((e, index) => 
                                 <Text 
                                     key={e}
                                     style={activeImage == index ? styles.activeImageNav : styles.activeImage}
                                 ></Text>
-                            )
+                            )) : null
                         }
                     </View>
                     
@@ -180,11 +219,20 @@ function SingleProductDetailsScreen({route}) {
                         }
                     </View>
                     <View style={styles.productDetailesContactRow}>
-                        <Pressable style={ (ids && ids.includes(product.id)) ? styles.productFavoriteIconActive : styles.productFavoriteIcon} onPress={addToWishlist}>
-                            <Ionicons name="bookmark-outline" size={24} color={ (ids && ids.includes(product.id)) ? AppColors.white : AppColors.subBlack} />
+                        <Pressable 
+                            style={ (wishlistIds && wishlistIds.includes(product.id)) ? 
+                            styles.productFavoriteIconActive : 
+                            styles.productFavoriteIcon} 
+                            disabled={uploading ? true : false}
+                            onPress={() => addToWishlist(product?.image[0], "whislist")}>
+                            <Ionicons name="bookmark-outline" size={24} color={ (wishlistIds && wishlistIds.includes(product.id)) ? AppColors.white : AppColors.subBlack} />
                         </Pressable>
-                        <Pressable style={styles.addToCartButton} onPress={addToCart}>
-                            <Text style={styles.buttonText}>Add to cart</Text>
+                        <Pressable 
+                            style={styles.addToCartButton} 
+                            onPress={() => addToCart(product?.image[0], "cart")}
+                            disabled={uploading ? true : false} 
+                        >
+                            <Text style={styles.buttonText}>{uploading ? <ActivityIndicator size="large" color={AppColors.white} /> : "Add To Cart"}</Text>
                         </Pressable>
                     </View>
             </ScrollView>
