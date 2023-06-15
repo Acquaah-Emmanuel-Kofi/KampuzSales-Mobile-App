@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Pressable, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import  AppColors  from "../data/Colors";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -29,6 +29,25 @@ function ProfileScreen({navigation}) {
           alert(error.message);
         })
       }, [])
+
+      const handlePromptLogout = () => {
+        Alert.alert(
+          'Logout',
+          'Are you sure you want to logout?',
+          [
+              {
+                  text: 'Cancel',
+                  onPress: () => console.log(""),
+                  style: 'cancel'
+              },
+              {
+                  text: 'Confirm',
+                  onPress: () => auth.signOut(),
+              }
+          ],
+          { cancelable: false}
+        )
+      }
 
     return (
         <View style={styles.container}>
@@ -90,7 +109,7 @@ function ProfileScreen({navigation}) {
               <Pressable>
                 <View style={styles.optionsTab}>
                   <MaterialCommunityIcons style={styles.icon} name="logout" size={24} color={AppColors.primary} />
-                  <TouchableOpacity onPress={() => {auth.signOut()}}>
+                  <TouchableOpacity onPress={() => handlePromptLogout()}>
                     <Text>Logout</Text>
                   </TouchableOpacity>
                 </View>
