@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ActivityIndicator, Alert, Image, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import HeadTitle from "../components/HeadTitle";
 import  AppColors  from "../data/Colors";
@@ -8,7 +8,8 @@ import { Dropdown } from 'react-native-element-dropdown';
 import * as ImagePicker from 'expo-image-picker';
 import { auth, firebase, firestore, storage } from "../../BackendDirectory/config";
 import { useNavigation } from "@react-navigation/native";
-import { ProgressBar, MD3Colors } from 'react-native-paper';
+import CediSign from "../components/CediSign";
+import uploadImageToStorage from "../../BackendDirectory/functionalities/uploadImageToStorage";
 
   const data = [
     { label: 'Phones & Tablet', value: 'Phones' },
@@ -32,11 +33,12 @@ function PostScreen() {
      const [ category, setCategory ] = useState(null);
      const [ productTitle, setProducTitle ] = useState(null);
      const [ price, setPrice ] = useState(null);
+     const [ quantity, setQuantity ] = useState(null);
      const [ condition, setCondition ] = useState(null);
-     const [ discription, setDiscription ] = useState(null);
+     const [ description, setDescription ] = useState(null);
      const [ isFocus, setIsFocus ] = useState(false);
-     const [ selectedImages, setSelectedImages ] = useState(null);
-     const [ firstTimePost, setFirstTimePost ] = useState(null);
+     const [ selectedImages, setSelectedImages ] = useState(null); 
+
 
     const handleImageUpload = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -65,86 +67,74 @@ function PostScreen() {
 
       const submitPost = async () => {
 
-        if(image !== null || category !== null || productTitle !== null || price !== null || condition !== null || discription !== null){
+        if(image !== null || category !== null || productTitle !== null || price !== null || quantity !== null || condition !== null || description !== null){
         
-            let userId = auth.currentUser.uid;
-            setUploading(true);
+            const currentUser = auth.currentUser;
 
-            if (selectedImages && !selectedImages.canceled) {
-                const imageAssets = Array.isArray(selectedImages.assets) ? selectedImages.assets : [selectedImages.assets];
-                const imageFiles = [];
+            if (currentUser) {
+            const userRef = firestore.collection('users').doc(currentUser.uid);
+            const userDoc = await userRef.get();
             
-                try {
-                for (const asset of imageAssets) {
-                    const response = await fetch(asset.uri);
-                    const blob = await response.blob();
-                    imageFiles.push(blob);
-                }
-            
-
-                let imagesInAnArray = [];
-                //   let snapshots;
-
-                    for (const imageFile of imageFiles) {
-                        let response = await uploadImageToStorage(userId, imageFile);
-                        imagesInAnArray.push(response.downloadURL);
-                        // snapshots = response.snapshot;
-                    }
-
-                    // console.log(snapshots);
-
-                    // snapshots?.on('state_changed', taskSnapshot => {
-                    //     const progress = Math.round(
-                    //       (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100
-                    //     );
-                    //     console.log("progress: ", progress);
-                    
-                    //     // Check if the upload is complete
-                    //     if (progress === 100) {
-                    //       // Upload completed
-                    //       // Do something here, such as displaying a success message or redirecting the user
-                    //       console.log('Upload completed!');
-                    //     }
-                    //   });
-
-                    if(firstTimePost){
-                        Alert.alert(
-                            "First Time Posting?",
-                            "Please, provide your information to security purpose."
-                        )
-                        navigation.navigate("VendorInfo");
-                } else {
-
-                    // Upload product details to firestore
-                    postProductDetails(imagesInAnArray);
+            if (userDoc.exists) {
+                const userData = userDoc.data();
+                if (userData.firstPost === true) {
                     Alert.alert(
-                        'Product Posted!',
-                        'Your product is posted successfully!',
-                    );
-    
-                    setProducTitle(null);
-                    setPrice(null);
-                    setCategory(null);
-                    setDiscription(null);
-                    setUploading(false);
-                    setCondition(null);
-                    setImage(null);
+                        "First Time Posting?",
+                        "Please, provide your information for security purpose."
+                    )
+        
+                    navigation.navigate("VendorInfo");
+                } else {
+                    let userId = auth.currentUser.uid;
+                    setUploading(true);
 
+                    if (selectedImages && !selectedImages.canceled) {
+                        const imageAssets = Array.isArray(selectedImages.assets) ? selectedImages.assets : [selectedImages.assets];
+                        const imageFiles = [];
+                    
+                        try {
+                            for (const asset of imageAssets) {
+                                const response = await fetch(asset.uri);
+                                const blob = await response.blob();
+                                imageFiles.push(blob);
+                            }
+                        
+
+                            let imagesInAnArray = [];
+
+                            for (const imageFile of imageFiles) {
+                                let response = await uploadImageToStorage("products", userId, imageFile);
+                                imagesInAnArray.push(response.downloadURL);
+                            }
+                                // Upload product details to firestore
+                                postProductDetails(imagesInAnArray);
+                                Alert.alert(
+                                    'Product Posted!',
+                                    'Your product is posted successfully!',
+                                );
+                
+                                setProducTitle(null);
+                                setPrice(null);
+                                setCategory(null);
+                                setDescription(null);
+                                setUploading(false);
+                                setCondition(null);
+                                setImage(null);
+                                setQuantity(null);
+                    } catch (error) {
+
+                        setUploading(false);
+                        console.log(error.message);
+                        Alert.alert(
+                            'Product Not Posted!',
+                            error.message,
+                        );
+
+                    }
                 }
-
-
-
-            } catch (error) {
-
-                setUploading(false);
-                console.log(error.message);
-                Alert.alert(
-                    'Product Not Posted!',
-                    error.message,
-                );
-
+                }
             }
-          }
+            }
       } else {
         Alert.alert(
             "No Product Details!",
@@ -152,55 +142,29 @@ function PostScreen() {
         )
       }
     }
-    
-      const uploadImageToStorage = async (userId, imageFile) => {
-        try {
-          const storageRef = storage.ref();
-          const productRef = storageRef.child(`newProductImages/${userId}`);
-          
-          // Generate a unique filename for the image
-          const filename = `${Date.now()}_${userId}`;
-    
-          // Upload the image to the cart folder
-          const imageRef = productRef.child(filename);
-          const snapshot = await imageRef.put(imageFile);
-    
-          // Get the download URL of the uploaded image
-          const downloadURL = await snapshot.ref.getDownloadURL();
-          
-        return {
-            downloadURL: downloadURL,
-            // snapshot: snapshot,
-        };
-
-        } catch (error) {
-            setUploading(false);
-            console.error('Error uploading image:', error);
-            alert(error.message);
-        }
-
-      };
 
      const cancelPost = () => {
         setProducTitle(null);
         setPrice(null);
         setCategory(null);
-        setDiscription(null);
+        setDescription(null);
         setUploading(false);
         setCondition(null);
         setImage(null);
+        setQuantity(null);
      }
 
      const postProductDetails = (imageUrls) => {
             firestore.collection('products')
             .add({
                 userId: auth.currentUser.uid,
-                productTitle: productTitle,
-                price: price + ".00",
-                category: category,
-                condition: condition,
+                productTitle,
+                price: price.includes('.') ? price : price + ".00",
+                quantity,
+                category,
+                condition,
                 productImages: imageUrls,
-                description: discription,
+                description,
                 status: 'popular',
                 postTime: firebase.firestore.Timestamp.fromDate(new Date()),
             })
@@ -209,74 +173,28 @@ function PostScreen() {
                 setProducTitle(null);
                 setPrice(null);
                 setCategory(null);
-                setDiscription(null);
+                setDescription(null);
                 setUploading(false);
                 setCondition(null);
                 setImage(null);
+                setQuantity(null);
 
             })
             .catch((error) => {
                 alert(error.message)
             })
         }
-
-    //  const countUserPosts = async (userId) => {
-    //     try {
-    //       const postsSnapshot = await firebase.firestore()
-    //         .collection('products')
-    //         .where('userId', '==', userId)
-    //         .get();
-      
-    //       const postCount = postsSnapshot.size;
-      
-    //       console.log('User post count:', postCount);
-    //     } catch (error) {
-    //       console.log('Error counting user posts:', error);
-    //     }
-    //   };
-
-    //   countUserPosts(userId);
-
-    // Function to check if the user is posting for the first time
-const checkFirstPost = async () => {
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      const userRef = firestore.collection('users').doc(currentUser.uid);
-      const userDoc = await userRef.get();
-      
-      if (userDoc.exists) {
-        const userData = userDoc.data();
-        if (userData.firstPost === true) {
-          // User is posting for the first time
-          // Perform necessary actions or show a first-time post welcome message
-          setFirstTimePost(true);
-          
-          // Update the firstPost field to indicate that the user has made their first post
-        //   await userRef.update({ firstPost: false });
-        } else {
-          // User has posted before
-          setFirstTimePost(false);
-        }
-      }
-    }
-  };
-  
-  
-    useEffect(() => {
-        // Call the checkFirstPost function when the user attempts to make a post
-        checkFirstPost();
-    }, [image])
      
      
     return (
         <View style={styles.container}>
+            <HeadTitle title={"Post Product"} />
             <ScrollView 
                 contentContainerStyle={styles.innerContainer}
                 automaticallyAdjustKeyboardInsets={true}
                 alwaysBounceVertical={true}
                 automaticallyAdjustsScrollIndicatorInsets={true}
                 >
-                <HeadTitle title={"Post Product"} />
                 <View style={styles.postAndThumbnail}>
                     {image ? (
                     <View style={styles.thumbnail}>
@@ -297,11 +215,6 @@ const checkFirstPost = async () => {
                         )
                     }
                 </View>
-                { uploading ? (
-                <View style={styles.progressBar}>
-                    <ProgressBar progress={0.5} theme={{ colors: { primary: AppColors.primary } }}  />
-                    <Text>{processed}%</Text>
-                </View> ) : null }
                 <View style={styles.postDetails}>
                     <View style={styles.textInputBox}>
                     <Dropdown
@@ -335,13 +248,26 @@ const checkFirstPost = async () => {
                             onChangeText={(content) => setProducTitle(content)}
                         />
                     </View>
-                    <View style={styles.textInputBox}>
+                    <View style={styles.priceInputBox}>
+                        <View style={{flexDirection: 'row', width: '60%', justifyContent: 'space-between', alignItems: 'center'}}>
+                            <CediSign />
+                            <View style={styles.price}>
+                                <TextInput 
+                                    style={[styles.priceInput]}
+                                    placeholder="Price" 
+                                    keyboardType="numeric"
+                                    value={price}
+                                    onChangeText={(value) => setPrice(value)}
+                                />
+                                <Text style={{color: AppColors.borderGray}}>.00</Text>
+                            </View>
+                        </View>
                         <TextInput 
-                            style={[styles.textInput]}
-                            placeholder="Price" 
+                            style={styles.quantity}
+                            placeholder="Quantity" 
                             keyboardType="numeric"
-                            value={price}
-                            onChangeText={(value) => setPrice(value)}
+                            value={quantity}
+                            onChangeText={(value) => setQuantity(value)}
                         />
                     </View>
                     { category === 'Phones' || category === 'Laptops' ?
@@ -445,10 +371,10 @@ const checkFirstPost = async () => {
                             <TextInput 
                                 style={[styles.descriptionTextInput, isFocus && { borderColor: AppColors.primary }]}
                                 placeholder="Description" 
-                                numberOfLines={5}
+                                numberOfLines={10}
                                 multiline={true}
-                                value={discription}
-                                onChangeText={(content) => setDiscription(content)}
+                                value={description}
+                                onChangeText={(content) => setDescription(content)}
                             />
                     </View>
                 </View>
@@ -456,7 +382,6 @@ const checkFirstPost = async () => {
                     <TouchableOpacity style={styles.clearButtom} onPress={cancelPost}>
                         <Text style={styles.clearText}>Clear</Text>
                     </TouchableOpacity>
-                    {/* <TouchableOpacity style={styles.postButtom} onPress={() => navigation.navigate("VendorInfo")}> */}
                     <TouchableOpacity 
                         style={styles.postButtom} 
                         disabled={uploading ? true : false} 
@@ -464,7 +389,6 @@ const checkFirstPost = async () => {
                         <Text style={styles.postText}>{uploading ? 'Posting...' : 'Post'}</Text>
                     </TouchableOpacity>
                 </View>
-                {/* <Text>{processed} % completed</Text> */}
             </ScrollView>
         </View>
     )
@@ -486,8 +410,23 @@ const styles = StyleSheet.create({
         color: AppColors.white,
     },
     innerContainer: {
-        paddingBottom: 100,
-        marginHorizontal: 20
+        marginHorizontal: 10,
+        marginTop: 10,
+        borderRadius: 10,
+        paddingVertical: 20,
+        paddingHorizontal: 10,
+        backgroundColor: AppColors.white,
+        ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.3,
+              shadowRadius: 2,
+            },
+            android: {
+              elevation: 5,
+            },
+        })
     },
     postAndThumbnail: {
         flexDirection: 'row',
@@ -524,7 +463,6 @@ const styles = StyleSheet.create({
         width: '50%'
     },
     postIconView: {
-        // backgroundColor: 'transparent',
         backgroundColor: AppColors.white,
         borderRadius: 50,
         marginRight: 80,
@@ -553,6 +491,34 @@ const styles = StyleSheet.create({
     textInputBox: {
         marginVertical: 6,
     },
+    priceInputBox: {
+        marginVertical: 6,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    price: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: AppColors.borderGray,
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+    },
+    priceInput: {
+        width: '70%',
+    },
+    quantity: {
+        width: '35%',
+        borderWidth: 1,
+        borderColor: AppColors.borderGray,
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        fontSize: 14,
+    },
     textInput: {
         borderWidth: 1,
         borderColor: AppColors.borderGray,
@@ -576,6 +542,7 @@ const styles = StyleSheet.create({
     clearButtom: {
         borderWidth: 1,
         borderColor: AppColors.primary,
+        backgroundColor: AppColors.white,
         borderRadius: 8,
         width: 150,
         height: 40,
