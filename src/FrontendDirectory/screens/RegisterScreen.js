@@ -52,7 +52,9 @@ function RegisterScreen({navigation}) {
                 <Text style={styles.label}>Phone number</Text>
                 <TextInput 
                     style={styles.textInputBox} 
-                    keyboardType = 'numeric'
+                    autoCompleteType="tel"
+                    keyboardType="phone-pad"
+                    textContentType="telephoneNumber"
                     placeholderTextColor={AppColors.secondary}
                     placeholder="Eg. +233 XXX XXX XXX"
                     onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
