@@ -7,7 +7,7 @@ const ProductCard = ({product}) => {
     const navigation = useNavigation();
 
     return ( 
-        <Pressable key={product.id} style={styles.productCard} onPress={() => navigation.navigate("Single", product)}>
+        <Pressable key={product.id} id={product.id} style={styles.productCard} onPress={() => navigation.navigate("Single", product)}>
             <View style={styles.imageBox}>
                 <Image style={styles.image} source={{uri: product.image[0]}} alt={product.name} />
                 <Image style={styles.imageCartTag} source={require('../../data/images/Cart.png')} />
