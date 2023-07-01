@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Dimensions, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, Platform, Pressable, Image , SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, ActivityIndicator } from "react-native";
 import  AppColors  from "../data/Colors";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
-import HeadTitle from "../components/HeadTitle";
 import { auth, firestore } from "../../BackendDirectory/config";
-import moment from "moment/moment";
-import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
 import { Dropdown } from "react-native-element-dropdown";
+import * as ImagePicker from 'expo-image-picker';
+import uploadImageToStorage from "../../BackendDirectory/functionalities/uploadImageToStorage";
+import Spinner from "../components/spinner";
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -21,8 +20,103 @@ const HEIGHT = Dimensions.get('window').height;
 
 function EditProfileScreen({navigation}) {
 
-      const [userData, setuserData] = useState([]);
+      const [ userData, setUserData ] = useState([]);
+      const [ username, setUsername ] = useState(null);
+      const [ phoneNumber, setPhoneNumber ] = useState(null);
+      const [ image, setImage ] = useState(null);
+      const [ uploading, setUploading ] = useState(false);
 
+      const [newUserData, setNewUserData] = useState({
+        profileDisplay: '',
+        username: '',
+        phoneNumber: '',
+      });
+
+      const pickImage = async () => {
+         // no permission is rewuired
+         let result = await ImagePicker.launchImageLibraryAsync({
+             mediaTypes: ImagePicker.MediaTypeOptions.Images,
+             allowsEditing: true,
+             aspect: [4,3],
+             quality: 1
+         });
+ 
+         if (!result.canceled) {
+             const source = {uri: result.assets[0].uri};
+             setImage(source);
+         }
+ 
+      }
+
+      
+      const submitPost = async () => {
+
+        const user = auth.currentUser;
+
+        if(phoneNumber !== null || username !== null || image !== null){
+            setUploading(true);
+
+            const response = await fetch(image.uri);
+            const blob = await response.blob();
+            const imageUrl = await uploadImageToStorage("profileDisplays", user.uid, blob);
+    
+            let userDetails = {
+                profileDisplay: imageUrl && imageUrl.downloadURL,
+                username: username,
+                phoneNumber: phoneNumber,
+            }
+    
+            setNewUserData(userDetails);
+    
+            if(newUserData.phoneNumber !== null || newUserData.username !== null || newUserData.profileDisplay !== null){
+                
+                if(userData.firstPost === true){
+                    const documentRef = firestore.collection("users").doc(user.uid);
+                    await documentRef.update(newUserData)
+                    .then(() => {
+                        Alert.alert(
+                            "Update Successful!",
+                            "You've successfully updated your profile."
+                        )
+        
+                        setUploading(false);
+                        setImage(null);
+                        setUsername(null);
+                        setPhoneNumber(null);
+        
+                        navigation.navigate("Profile");
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                    })
+                }
+            } else {
+                const documentRef = firestore.collection("sellers").doc(user.uid);
+                await documentRef.update(newUserData)
+                .then(() => {
+                    Alert.alert(
+                        "Update Successful!",
+                        "You've successfully updated your profile."
+                    )
+    
+                    setUploading(false);
+                    setImage(null);
+                    setUsername(null);
+                    setPhoneNumber(null);
+    
+                    navigation.navigate("Profile");
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                })
+            }
+                
+        } else {
+            setUploading(false);
+            alert("Nothing is changed!")
+        }
+      }
+    
 
       useEffect(() => {
         firestore.collection('users')
@@ -30,11 +124,10 @@ function EditProfileScreen({navigation}) {
         .get()
         .then((snapshot) => {
             if(snapshot.exists){
-              setuserData(snapshot.data());
+              setUserData(snapshot.data());
             }
         })
         .catch((error) => {
-          console.log(error);
           alert(error.message);
         })
       }, [])
@@ -47,6 +140,9 @@ function EditProfileScreen({navigation}) {
             alwaysBounceVertical={true}
             automaticallyAdjustsScrollIndicatorInsets={true}
             >
+            {uploading ? (
+                <Spinner />
+            ): null}
             <SafeAreaView>
                 <View style={styles.profileDetails}>
                     <View style={styles.profileHeaderBox}>
@@ -54,62 +150,76 @@ function EditProfileScreen({navigation}) {
                         <View>
                             <Text style={styles.title}>Edit Profile</Text>
                         </View>
-                        <TouchableOpacity style={styles.save}>
+                        <TouchableOpacity 
+                            style={styles.save}
+                            disabled={uploading ? true : false}  
+                            onPress={() => submitPost()}>
                             <Text style={styles.titleText}>Save</Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.imageContainer}>
-                        <Icon name="ios-person" size={150} style={styles.image} color={AppColors.primary} />
-                        <TouchableOpacity style={styles.selectImage} onPress={() => alert("Upload Image")}>
-                            <MaterialCommunityIcons  name="image-edit" size={40} color={AppColors.white} />
-                        </TouchableOpacity>
-                    </View>
+                    { image ? 
+                    (
+                        <View style={styles.imageContainer}>
+                            <Image style={styles.profileDisplay} source={{uri: image.uri}} resizeMode='stretch' />
+                            <Pressable style={styles.selectImage} onPress={() => pickImage()}>
+                                <MaterialCommunityIcons  name="image-edit" size={20} color={AppColors.white} />
+                                <Text style={{color: AppColors.white}}>Edit</Text>
+                            </Pressable>
+                        </View>
+                    ) : 
+                    (
+                        <View style={styles.imageContainer}>
+                            <View style={styles.image}>
+                                <Icon name="ios-person" size={100} color={AppColors.primary} />
+                            </View>
+                            <Pressable style={styles.selectImage} onPress={() => pickImage()}>
+                                <MaterialCommunityIcons  name="image-edit" size={20} color={AppColors.white} />
+                                <Text style={{color: AppColors.white}}>Edit</Text>
+                            </Pressable>
+                        </View>
+                    )}
                 </View>
             </SafeAreaView>
                 <View style={styles.postDetails}>
                     <View style={styles.textInputBox}>
+                        <Text style={styles.textTitle}>Username</Text>
                         <TextInput 
                             style={[styles.textInput]}
-                            placeholder="Username" 
+                            placeholder={`${userData.username}`}
+                            value={username ? username : userData.username}
+                            onChangeText={(value) => {
+                                setUsername(value)
+                            }}
                         />
                     </View>
                     <View style={styles.textInputBox}>
+                        <Text style={styles.textTitle}>Phone Number</Text>
                         <TextInput 
                             style={[styles.textInput]}
-                            placeholder="email" 
+                            autoCompleteType="tel"
+                            keyboardType="phone-pad"
+                            textContentType="telephoneNumber"
+                            placeholder={`${userData.phoneNumber}`}
+                            value={phoneNumber ? phoneNumber : userData.phoneNumber}
+                            onChangeText={(value) => {
+                                setPhoneNumber(value)
+                            }}
                         />
                     </View>
                     <View style={styles.textInputBox}>
+                        <Text style={styles.textTitle}>Location</Text>
                         <TextInput 
                             style={[styles.textInput]}
-                            placeholder="Date of Birth" 
                         />
                     </View>
                     <View style={styles.textInputBox}>
+                        <Text style={styles.textTitle}>Digital Address</Text>
                         <TextInput 
                             style={[styles.textInput]}
-                            placeholder="Location" 
                         />
                     </View>
                     <View style={styles.textInputBox}>
-                        <TextInput 
-                            style={[styles.textInput]}
-                            placeholder="Postal Code" 
-                        />
-                    </View>
-                    <View style={styles.textInputBox}>
-                        <TextInput 
-                            style={[styles.textInput]}
-                            placeholder="Address Line 1" 
-                        />
-                    </View>
-                    <View style={styles.textInputBox}>
-                        <TextInput 
-                            style={[styles.textInput]}
-                            placeholder="Address Line 2" 
-                        />
-                    </View>
-                    <View style={styles.textInputBox}>
+                        <Text style={styles.textTitle}>Campus</Text>
                         <Dropdown
                         style={[styles.dropdown]}
                         placeholderStyle={styles.placeholderStyle}
@@ -122,7 +232,6 @@ function EditProfileScreen({navigation}) {
                         maxHeight={300}
                         labelField="label"
                         valueField="value"
-                        placeholder='Category'
                         searchPlaceholder="Search..."
                         />
                     </View>
@@ -137,7 +246,7 @@ const styles = StyleSheet.create({
       flex: 1,
     },
     innerContainer: {
-        paddingBottom: 100,
+        paddingBottom: 50,
     },
     profileHeaderBox: {
         flexDirection: 'row',
@@ -161,15 +270,44 @@ const styles = StyleSheet.create({
       backgroundColor: AppColors.primary,
       paddingHorizontal: 20,
       paddingVertical: 5,
-      paddingBottom: 30
+      paddingBottom: 20,
+      marginHorizontal: 10,
+      borderRadius: 10,
+      ...Platform.select({
+        ios: {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.3,
+          shadowRadius: 2,
+        },
+        android: {
+          elevation: 5,
+        },
+    })
     },
     imageContainer: {
-      borderRadius: 100,
+      borderRadius: 20,
       backgroundColor: AppColors.white,
-      width: 200,
-      height: 200,
+      width: 150,
+      height: 150,
       marginTop: 30,
       position: 'relative',
+      ...Platform.select({
+        ios: {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.3,
+          shadowRadius: 2,
+        },
+        android: {
+          elevation: 5,
+        },
+    })
+    },
+    profileDisplay: {
+        borderRadius: 20,
+        width: 150, 
+        height: 150,
     },
     image: {
         position: 'absolute',
@@ -178,11 +316,20 @@ const styles = StyleSheet.create({
     },
     selectImage: {
         position: 'absolute',
-        bottom: -5,
-        right: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        backgroundColor: AppColors.glassBlack,
+        width: '100%',
+        height: '100%',
+        borderRadius: 20,
     },
     textInputBox: {
         marginVertical: 6,
+    },
+    textTitle: {
+        marginBottom: 5,
+        marginLeft: 3,
     },
     textInput: {
         borderWidth: 1,
@@ -196,7 +343,22 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         marginHorizontal: 10,
         marginTop: 20,
-        marginBottom: 100
+        marginBottom: 50,
+        backgroundColor: AppColors.white,
+        padding: 10,
+        borderRadius: 10,
+        paddingVertical: 20,
+        ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.3,
+              shadowRadius: 2,
+            },
+            android: {
+              elevation: 5,
+            },
+        })
     },
     dropdown: {
         borderWidth: 1,
