@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     badge: {
-        backgroundColor: 'crimson',
+        backgroundColor: AppColors.danger,
         borderRadius: 50,
         width: 20,
         height: 20,
