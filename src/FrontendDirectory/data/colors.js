@@ -3,6 +3,7 @@ const AppColors = {
     white: "#F5F5F5",
     black: "#2F2E41",
     subBlack: "#909090",
+    glassBlack: "#00000080",
     secondary: "#667085",
     labelGray: "#344054",
     borderGray: "#D0D5DD",
@@ -12,6 +13,7 @@ const AppColors = {
     cartIconGray: "#334054",
     totalColor: "#808080",
     totalAmountColor: "#303030",
+    danger: "#dc143c",
 };
 
 export default AppColors;
