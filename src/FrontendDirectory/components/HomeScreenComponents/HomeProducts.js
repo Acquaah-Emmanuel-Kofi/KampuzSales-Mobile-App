@@ -7,7 +7,6 @@ function HomeProducts({products, loading}) {
 
     return (
         <View style={styles.container}>
-
           {loading ? (
             <View style={styles.activityIndicatorIcon}>
                 <ActivityIndicator size="large" color={AppColors.primary} />
@@ -19,7 +18,7 @@ function HomeProducts({products, loading}) {
         >
         {
             products && products.map((product) => (
-                <ProductCard product={product} />
+                <ProductCard key={product.id} product={product} />
             ))
         }
         </ScrollView>
