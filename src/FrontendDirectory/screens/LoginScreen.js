@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet ,Text, TextInput, View, ScrollView, Image, StatusBar } from "react-native";
-import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
+import { StyleSheet ,Text, TextInput, View, ScrollView, Image, StatusBar, Pressable } from "react-native";
 import { authLoading, loginUser } from "../../BackendDirectory/authentications/authentications";
 import { CustomButton, GoogleCustomButton } from "../components/buttons";
 import  AppColors  from "../data/Colors";
