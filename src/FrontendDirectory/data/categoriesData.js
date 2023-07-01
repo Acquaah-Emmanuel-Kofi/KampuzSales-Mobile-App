@@ -24,6 +24,16 @@ const categoriesData = [
         name: "Gaming",
         image: "games",
     },
+    {
+        _id: "6",
+        name: "Fashion",
+        image: "shopping-basket",
+    },
+    {
+        _id: "7",
+        name: "Electronics",
+        image: "memory",
+    },
 ]
 
 export default categoriesData;
