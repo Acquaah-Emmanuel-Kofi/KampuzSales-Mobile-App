@@ -1,7 +1,10 @@
-import { Image, Text, View, Pressable, StyleSheet } from 'react-native';
+import { Image, Text, View, Pressable, Dimensions, StyleSheet } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import AppColors from '../../data/Colors';
 import CediSign from '../CediSign';
+
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
 
 const ProductCard = ({product}) => {
     const navigation = useNavigation();
@@ -22,17 +25,13 @@ const ProductCard = ({product}) => {
 
 const styles = StyleSheet.create({
     productCard: {
-        // width: 157,
-        // height: 256,
-        width: 180,
-        height: 256,
+        width: WIDTH * 0.4,
         paddingVertical: 2,
         paddingTop: 5,
         paddingHorizontal: 5,
         borderRadius: 5,
         marginVertical: 5,
         backgroundColor: AppColors.white,
-        // backgroundColor: 'transparent',
         ...Platform.select({
             ios: {
               shadowColor: '#000',
@@ -56,13 +55,13 @@ const styles = StyleSheet.create({
         right: 12,
     },
     image: {
-        width: 170,
-        height: 200,
+        height: HEIGHT * 0.25,
         borderRadius: 5,
+        maxWidth: '100%',
     },
     noImage: {
-        width: 170,
-        height: 200,
+        width: WIDTH * 0.4,
+        height: HEIGHT * 0.25,
         borderRadius: 5,
         backgroundColor: AppColors.borderGray,
         justifyContent: 'center',
