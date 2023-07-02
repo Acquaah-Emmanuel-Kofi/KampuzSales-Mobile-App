@@ -5,7 +5,6 @@ import  AppColors  from "../data/Colors";
 import Feather from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
 import { firestore } from "../../BackendDirectory/config";
-import { Device } from 'expo-device';
 import ProductCard from "../components/cards/ProductCard";
 
 
@@ -184,7 +183,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
-        paddingBottom: Device === 'ios' ? 150 : 200,
+        paddingBottom: 150,
     },
     productCard: {
         width: 157,

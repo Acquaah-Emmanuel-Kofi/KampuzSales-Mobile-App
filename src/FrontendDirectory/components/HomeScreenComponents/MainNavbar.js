@@ -5,7 +5,6 @@ import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import  AppColors  from "../../data/Colors";
 import { auth, firestore } from "../../../BackendDirectory/config";
-import { Device } from 'expo-device';
 
 function MainNavbar() {
     const navigation = useNavigation();
@@ -78,7 +77,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       paddingHorizontal: 20,
       paddingVertical: 20,
-      marginTop: Device === 'android' ? 20 : 0,
+      marginTop: 0,
     },
     textLogo: {
         width: 200, 

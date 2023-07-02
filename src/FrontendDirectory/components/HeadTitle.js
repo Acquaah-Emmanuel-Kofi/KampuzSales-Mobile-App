@@ -1,7 +1,6 @@
 import React from "react";
 import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 import AppColors from "../data/Colors";
-import { Device } from 'expo-device';
 
 function HeadTitle({title}) {
     return (
@@ -24,8 +23,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal: 20,
-        marginTop: Device === 'android' ? 50 : 20,
         marginBottom: 16,
+        marginTop: 20,
     },
     title: {
         fontSize: 16,

@@ -2,7 +2,6 @@ import React from "react";
 import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import  AppColors  from "../data/Colors";
-import { Device } from 'expo-device';
 
 function HeadTitleWithBackIcon({title, previousScreen}) {
     return (
@@ -27,7 +26,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginHorizontal: 20,
-        marginTop: Device === 'android' ? 50 : 20,
+        marginTop: 20,
     },
     title: {
         fontSize: 16,
