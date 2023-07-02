@@ -1,87 +1,35 @@
-import { firestore } from "../config";
+import { Alert } from "react-native";
+import { storage } from "../config";
+import urlToBlob from "./urlToBlob";
 
-export const getCartProductIds = async (store) => {
-    let productData = [];
-    let productIds = [];
 
-    try {
-        await firestore.collection(store)
-        .orderBy('postTime', 'desc')
-        .get()
-        .then((querySnapshot) => {
-            querySnapshot.forEach(doc => {
-                const { userId, productId } = doc.data();
-                productData.push({
-                    id: doc.id,
-                    productId,
-                    userId
-                })
-            })
-        })
+export const isValidDigitalAddress = (address) => {
+// Regular expression for validating a custom digital address
+const addressRegex = /^[A-Za-z0-9\-_]+$/;
+return addressRegex.test(address);
+};
 
-        productData && productData.map((product) => {
-            {auth.currentUser.uid === product.userId ?
-            productIds.push(product.productId)
-            : null }
-        })
+    // Function to generate a new download link for an image in a different folder
+export const generateNewDownloadLink = async (imageURL, newFolder) => {
+try {
+    // Convert the image URL to Blob
+    const blob = await urlToBlob(imageURL);
 
-    } catch (error) {
-        console.log(error.message);
-    }
+    // Create a reference to the new image in the new folder
+    const newImageRef = storage.ref().child(`${newFolder}/${new Date().getTime()}.jpg`);
 
-    return productIds;
+    // Upload the blobbed image to the new folder
+    const snapshot = await newImageRef.put(blob);
+
+    // Get the new download URL for the image in the new folder
+    const newDownloadURL = await snapshot.ref.getDownloadURL();
+
+    return newDownloadURL;
+
+} catch (error) {
+    Alert.alert(
+        'Failed Adding Product!',
+        error.message
+    )
 }
-
-export const getWishlistProductIds = async (store) => {
-    let productData = [];
-    let productIds = [];
-    
-    try {
-        await firestore.collection(store)
-        .orderBy('postTime', 'desc')
-        .get()
-        .then((querySnapshot) => {
-            querySnapshot.forEach(doc => {
-                const { userId, productId } = doc.data();
-                productData.push({
-                    id: doc.id,
-                    productId,
-                    userId
-                })
-            })
-        })
-
-        productData && productData.map((product) => {
-            {auth.currentUser.uid === product.userId ?
-            productIds.push(product.productId)
-            : null }
-        })
-
-
-    } catch (error) {
-        console.log(error.message);
-    }
-
-    return productIds;
-}
-
-// Function to convert image URL to Blob
-export async function urlToBlob(url) {
-    return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onerror = reject;
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-            const blob = xhr.response;
-            resolve(blob);
-        } else {
-            reject(new Error(`Request failed with status ${xhr.status}`));
-        }
-        }
-    };
-    xhr.open('GET', url);
-    xhr.responseType = 'blob';
-    xhr.send();
-    });
 }
