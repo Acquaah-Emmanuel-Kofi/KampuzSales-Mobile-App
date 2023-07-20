@@ -68,15 +68,19 @@ function CartScreen({navigation}) {
             </View>
             <CartItems />
             <View style={styles.totalMarginHorizontal}>
-                <View style={styles.totalBox}>
-                <View>
-                    <Text style={styles.totalText}>Total</Text>
-                </View>
-                <View>
-                    <Text style={styles.totalAmount}><CediSign /> {totalAmount ? totalAmount : "0.00"}</Text>
-                </View>
-                </View>
-                <CustomButton onPress={() => alert("Checked all items out!")} buttonText={"Check out"}  />
+                { totalAmount ? (
+                    <>
+                    <View style={styles.totalBox}>
+                        <View>
+                            <Text style={styles.totalText}>Total</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.totalAmount}><CediSign /> {totalAmount ? totalAmount : "0.00"}</Text>
+                        </View>
+                    </View>
+                    <CustomButton onPress={() => alert("Checked all items out!")} buttonText={"Check out"}  />
+                    </>
+                ) : null}
             </View>
         </View>
     )
