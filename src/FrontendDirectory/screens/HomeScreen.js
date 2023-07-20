@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View, RefreshControl, FlatList, Pressable, Text } from "react-native";
+import { ScrollView, StyleSheet, View, RefreshControl, FlatList, SafeAreaView, Pressable, Text } from "react-native";
 import HomeNavbar from "../components/HomeScreenComponents/MainNavbar";
 import HomeProducts from "../components/HomeScreenComponents/HomeProducts";
 import  AppColors  from "../data/Colors";
 import { firestore } from "../../BackendDirectory/config";
-import categoriesData from "../data/categoriesData";
+import { quickCategoriesData } from "../data/categoriesData";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+
 
 function HomeScreen() {
 
   const [ refresh, setRefresh ] = useState(false);
   const [ posts, setPosts ] = useState([]);
+  const [ initialPosts, setInitialPosts ] = useState([]);
   const [ loading, setLoading ] = useState(false);
+  const [ activeCart, setActiveCart ] = useState("All");
 
   const fetchProducts = async () => {
     let productData = [];
@@ -39,6 +42,7 @@ function HomeScreen() {
     })
 
     setPosts(productData);
+    setInitialPosts(productData);
 }
 
   const pullToRefresh = () => {
@@ -52,27 +56,53 @@ function HomeScreen() {
 
   useEffect(() => {
     fetchProducts();
-}, []);
+  }, []);
 
       // Function to fetch and filter products by category
       const fetchProductsByCategory = async (category) => {
-        console.log(category);
-        setLoading(true);
+        setActiveCart(category);
         try {
+          setLoading(true);
           const productsRef = firestore.collection('products');
   
           // Apply the category filter
           const filteredProductsQuery = productsRef.where('category', '==', category);
   
-          // Execute the query
-          const querySnapshot = await filteredProductsQuery.get();
+          let filteredProducts = [];
+
+          await filteredProductsQuery.get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach(doc => {
+                // Extract the filtered products from the query snapshot
+
+                const { productTitle, productImages, description, category ,price, postTime, userId} = doc.data();
+                filteredProducts.push({
+                    id: doc.id,
+                    userPostId: userId,
+                    name: productTitle,
+                    image: productImages,
+                    description,
+                    price,
+                    category,
+                    postTime,
+                })
+            })
+        })
+        .catch((error) => {
+            return;
+        })
+
   
-          // Extract the filtered products from the query snapshot
-          const filteredProducts = querySnapshot.docs.map((doc) => doc.data());
-  
-          console.log(`${category}: `, filteredProducts);
-          (filteredProducts.length !== 0 ? setPosts(filteredProducts) : null)
-          setLoading(false);
+        if(filteredProducts.length !== 0){
+          setPosts(filteredProducts);
+        } else if (category === "All"){
+          setPosts(initialPosts);
+        } else {
+          return null;
+        }
+
+        setLoading(false);
+
         } catch (error) {
           setLoading(false);
           console.error('Error fetching and filtering products:', error);
@@ -81,22 +111,23 @@ function HomeScreen() {
 
   const renderCategoryItem = ({ item }) => {
     return (
-      <View id={item._id}>
-        <Pressable style={styles.navCategoryItems} onPress={() => fetchProductsByCategory(item.name)}>
-          <View style={styles.navCategoryIcon}>
-            <MaterialIcons name={item.image} size={30} color={AppColors.cartIconGray} />
-          </View>
+        <Pressable
+          id={item._id}
+          style={styles.navCategoryItems} 
+          onPress={() => fetchProductsByCategory(item.name)}>
+            <View style={[styles.navCategoryIcon, (item.name === activeCart ? {backgroundColor: AppColors.favIconBg} : null)]}>
+              <MaterialIcons name={item.image} size={30} color={AppColors.cartIconGray} />
+            </View>
           <Text style={styles.navCategoryName}>{item.name}</Text>
         </Pressable>
-      </View>
     )
   }
 
     return (
-        <View style={styles.container}>            
+        <SafeAreaView style={styles.container}>            
         <HomeNavbar />
             <ScrollView 
-              contentInsetAdjustmentBehavior="automatic"
+              showsVerticalScrollIndicator={false}
               refreshControl={
                 <RefreshControl 
                   refreshing={refresh}
@@ -104,20 +135,20 @@ function HomeScreen() {
                 />
               }
               >
-          <View style={styles.container}>
-            <>
-              <FlatList 
-                data={categoriesData}
-                renderItem={renderCategoryItem}
-                keyExtractor={(item) => item._id}
-                horizontal={true}
-                flashScrollIndicators={false}
-               />
-            </>
-          </View>
+            <View style={styles.container}>
+              <>
+                <FlatList
+                  data={quickCategoriesData}
+                  renderItem={renderCategoryItem}
+                  keyExtractor={(item) => item._id}
+                  horizontal={true}
+                  flashScrollIndicators={false}
+                />
+              </>
+            </View>
               <HomeProducts products={posts} loading={loading} />
             </ScrollView>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -154,7 +185,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 8,
         borderColor: AppColors.favIconBg,
-        backgroundColor: AppColors.favIconBg,
         width: 50,
         height: 50,
         display: 'flex',
