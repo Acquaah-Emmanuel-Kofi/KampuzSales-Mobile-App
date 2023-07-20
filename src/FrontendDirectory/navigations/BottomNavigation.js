@@ -3,19 +3,77 @@ import { Text, View } from 'react-native';
 import AppColors from '../data/Colors';
 import PostScreen from '../screens/PostScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import WishlistScreen from '../screens/WishlistScreen';
 import StackNavigation from './StackNavigation';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import NotificationScreen from '../screens/NotificationScreen';
+import { useState, useEffect } from 'react';
+import { auth, firestore } from '../../BackendDirectory/config';
+import RequestScreen from '../screens/RequestScreen';
 
 const Tab = createBottomTabNavigator();
 
 const ButtomNavigation = () => {
+
+    const [ numOfAlerts, setNomOfAlerts ] = useState(0);
+    const [ userData, setUserData ] = useState([]);
+    const [ sellerData, setSellerData ] = useState([]);
+  
+    const getNotifications = () => {
+      if(userData.firstPost == true) {
+        setNomOfAlerts(userData.notifications.length);
+      }
+  
+      if(userData.firstPost == false) {
+        setNomOfAlerts(sellerData.notifications.length);
+      }
+    }
+  
+  
+    const getUserDetails = async () => {
+      await firestore.collection('users')
+      .doc(auth.currentUser.uid)
+      .get()
+      .then((snapshot) => {
+        let data = snapshot.data();
+  
+        setUserData(data)
+      })
+      .catch((error) => {
+        alert(error.message);
+      })
+    }
+  
+    const getSellersDetails = async () => {
+      await firestore.collection('sellers')
+      .get()
+      .then((querySnapshot) => {
+          querySnapshot.forEach(doc => {
+  
+            let data = doc.data();
+  
+            if(auth.currentUser.uid === data.userId){
+              setSellerData(data);
+            }
+  
+          })
+      })
+      .catch((error) => {
+          return;
+      })
+  
+  }
+  
+  
+    useEffect(() => {
+      getUserDetails();
+      getSellersDetails();
+      getNotifications();
+    }, [sellerData])
+
     return(
         <Tab.Navigator
-            backBehavior='Major'
             initialRouteName='Major'
             screenOptions={{
                 tabBarShowLabel: false,
@@ -37,17 +95,17 @@ const ButtomNavigation = () => {
                     </View>
                 ),
             }}></Tab.Screen>
-            <Tab.Screen name='WhishList' component={WishlistScreen} options={{
+            <Tab.Screen name='Request' component={RequestScreen} options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
                         <View>
                             {focused ? (
-                                <Ionicons name="bookmark" size={24} color={AppColors.primary} />
+                                <AntDesign name="aliwangwang" size={24} color={AppColors.primary} />
                                 ) : ( 
-                                <Ionicons name="bookmark-outline" size={24} color={AppColors.subBlack} />
+                                <AntDesign name="aliwangwang-o1" size={24} color={AppColors.subBlack} />
                             )}
                         </View>
-                        <Text style={{color: focused ? AppColors.primary : AppColors.subBlack, fontSize: 12}}>Wishlist</Text>
+                        <Text style={{color: focused ? AppColors.primary : AppColors.subBlack, fontSize: 12}}>Requests</Text>
                     </View>
                 ),
             }}></Tab.Screen>
@@ -73,7 +131,7 @@ const ButtomNavigation = () => {
                         <Text style={{color: focused ? AppColors.primary : AppColors.subBlack, fontSize: 12}}>Alerts</Text>
                     </View>
                 ),
-                tabBarBadge: 3
+                tabBarBadge: numOfAlerts
             }}></Tab.Screen>
             <Tab.Screen name='Profile' component={ProfileScreen} options={{
                 tabBarIcon: ({focused}) => (
