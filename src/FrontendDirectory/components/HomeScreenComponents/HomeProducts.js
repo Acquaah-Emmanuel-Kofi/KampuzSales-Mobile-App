@@ -12,16 +12,15 @@ function HomeProducts({products, loading}) {
                 <ActivityIndicator size="large" color={AppColors.primary} />
             </View>
           ) : (
-        <ScrollView 
-            contentContainerStyle={styles.scrollViewContainer} 
-            showsVerticalScrollIndicator={false}
-        >
-        {
-            products && products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-            ))
-        }
-        </ScrollView>
+            <ScrollView 
+                contentContainerStyle={styles.scrollViewContainer} 
+                showsVerticalScrollIndicator={false}>
+                {
+                    products && products.map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                    ))
+                }
+            </ScrollView>
           )}
         </View>
     )
@@ -76,8 +75,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     productCard: {
-        // width: 157,
-        // height: 256,
         width: 180,
         height: 256,
         paddingVertical: 2,
@@ -86,7 +83,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginVertical: 5,
         backgroundColor: AppColors.white,
-        // backgroundColor: 'transparent',
         ...Platform.select({
             ios: {
               shadowColor: '#000',
@@ -136,7 +132,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     activityIndicatorIcon:{
-      
+        marginTop: '50%',
     }
   });
 
