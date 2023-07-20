@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Dimensions, Platform, Pressable, Image , SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, ActivityIndicator } from "react-native";
+import { Platform, Pressable, Image , SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, ActivityIndicator } from "react-native";
 import  AppColors  from "../data/Colors";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -10,8 +10,6 @@ import * as ImagePicker from 'expo-image-picker';
 import uploadImageToStorage from "../../BackendDirectory/functionalities/uploadImageToStorage";
 import Spinner from "../components/spinner";
 
-const WIDTH = Dimensions.get('window').width;
-const HEIGHT = Dimensions.get('window').height;
 
   const data = [
     { label: 'Takoradi Technical University', value: 'TTU' },
@@ -25,12 +23,8 @@ function EditProfileScreen({navigation}) {
       const [ phoneNumber, setPhoneNumber ] = useState(null);
       const [ image, setImage ] = useState(null);
       const [ uploading, setUploading ] = useState(false);
+      const [ sellerId, setSellerId ] = useState(null);
 
-      const [newUserData, setNewUserData] = useState({
-        profileDisplay: '',
-        username: '',
-        phoneNumber: '',
-      });
 
       const pickImage = async () => {
          // no permission is rewuired
@@ -59,14 +53,12 @@ function EditProfileScreen({navigation}) {
             const response = await fetch(image.uri);
             const blob = await response.blob();
             const imageUrl = await uploadImageToStorage("profileDisplays", user.uid, blob);
-    
-            let userDetails = {
-                profileDisplay: imageUrl && imageUrl.downloadURL,
-                username: username,
-                phoneNumber: phoneNumber,
-            }
-    
-            setNewUserData(userDetails);
+            
+            let newUserData = {
+                profileDisplay: imageUrl ? imageUrl.downloadURL : userData.profileDisplay,
+                username: username ? username : userData.username,
+                phoneNumber: phoneNumber ? phoneNumber : userData.phoneNumber,
+              }
     
             if(newUserData.phoneNumber !== null || newUserData.username !== null || newUserData.profileDisplay !== null){
                 
@@ -87,28 +79,37 @@ function EditProfileScreen({navigation}) {
                         navigation.navigate("Profile");
                     })
                     .catch((error) => {
-                        console.log(error.message);
+                        Alert.alert(
+                            "Update Not Successful!",
+                            error.message
+                        )
                     })
+                } else {
+                    if(sellerId !== null){
+                        const documentRef = firestore.collection("sellers").doc(sellerId);
+                        await documentRef.update(newUserData)
+                        .then(() => {
+                            Alert.alert(
+                                "Update Successful!",
+                                "You've successfully updated your profile."
+                            )
+            
+                            setUploading(false);
+                            setImage(null);
+                            setUsername(null);
+                            setPhoneNumber(null);
+            
+                            navigation.navigate("Profile");
+                        })
+                        .catch((error) => {
+                            console.log(error.message);
+                            Alert.alert(
+                                "Update Not Successful!",
+                                error.message
+                            )
+                        })
+                    }
                 }
-            } else {
-                const documentRef = firestore.collection("sellers").doc(user.uid);
-                await documentRef.update(newUserData)
-                .then(() => {
-                    Alert.alert(
-                        "Update Successful!",
-                        "You've successfully updated your profile."
-                    )
-    
-                    setUploading(false);
-                    setImage(null);
-                    setUsername(null);
-                    setPhoneNumber(null);
-    
-                    navigation.navigate("Profile");
-                })
-                .catch((error) => {
-                    console.log(error.message);
-                })
             }
                 
         } else {
@@ -128,35 +129,51 @@ function EditProfileScreen({navigation}) {
             }
         })
         .catch((error) => {
-          alert(error.message);
+            setUploading(false);
+            alert(error.message);
+        })
+
+        firestore.collection('sellers')
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach(doc => {
+                const { userId } = doc.data();
+                { auth.currentUser.uid === userId ? 
+                    setSellerId(doc.id)
+                : null}
+            })
+        })
+        .catch((error) => {
+            setUploading(false);
+            return;
         })
       }, [])
 
     return (
-        <View styles={styles.container}>
+        <SafeAreaView styles={styles.container}>
+        <View style={styles.profileHeaderBox}>
+            <Ionicons onPress={() => navigation.navigate("Profile")} style={styles.searchBackIcon} name="chevron-back-sharp" size={30} color={AppColors.black} />
+            <View>
+                <Text style={styles.title}>Edit Profile</Text>
+            </View>
+            <TouchableOpacity 
+                style={styles.save}
+                disabled={uploading ? true : false}  
+                onPress={() => submitPost()}>
+                <Text style={styles.saveText}>Save</Text>
+            </TouchableOpacity>
+        </View>
         <ScrollView 
             contentContainerStyle={styles.innerContainer}
             automaticallyAdjustKeyboardInsets={true}
             alwaysBounceVertical={true}
             automaticallyAdjustsScrollIndicatorInsets={true}
+            showsVerticalScrollIndicator={false}
             >
             {uploading ? (
                 <Spinner />
             ): null}
-            <SafeAreaView>
                 <View style={styles.profileDetails}>
-                    <View style={styles.profileHeaderBox}>
-                        <Ionicons onPress={() => navigation.navigate("Profile")} style={styles.searchBackIcon} name="chevron-back-sharp" size={30} color={AppColors.white} />
-                        <View>
-                            <Text style={styles.title}>Edit Profile</Text>
-                        </View>
-                        <TouchableOpacity 
-                            style={styles.save}
-                            disabled={uploading ? true : false}  
-                            onPress={() => submitPost()}>
-                            <Text style={styles.titleText}>Save</Text>
-                        </TouchableOpacity>
-                    </View>
                     { image ? 
                     (
                         <View style={styles.imageContainer}>
@@ -179,7 +196,7 @@ function EditProfileScreen({navigation}) {
                         </View>
                     )}
                 </View>
-            </SafeAreaView>
+            
                 <View style={styles.postDetails}>
                     <View style={styles.textInputBox}>
                         <Text style={styles.textTitle}>Username</Text>
@@ -237,7 +254,7 @@ function EditProfileScreen({navigation}) {
                     </View>
                 </View>
         </ScrollView>
-    </View>
+    </SafeAreaView>
     )
 }
 
@@ -252,17 +269,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        width: '100%'
+        marginHorizontal: 15,
+        paddingVertical: 10,
     },
     title: {
         fontSize: 16,
-        color: AppColors.white,
+        color: AppColors.black,
         fontWeight: '600',
     },
-    titleText: {
+    saveText: {
         fontSize: 16,
         fontWeight: '600',
-        color: AppColors.white,
+        color: AppColors.primary,
     },
     profileDetails: {
       justifyContent: 'center',
