@@ -1,4 +1,4 @@
-import { Pressable, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { SafeAreaView, Dimensions, Platform, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import  AppColors  from "../../data/Colors";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -8,8 +8,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Octicons from 'react-native-vector-icons/Octicons';
 import moment from "moment/moment";
-import { handleDeleteAccount, handleLogout } from "../../../BackendDirectory/authentications/authentications";
-import { Platform } from "react-native";
+import { handleLogout } from "../../../BackendDirectory/authentications/authentications";
+
+const HEIGHT = Dimensions.get('window').height;
 
 const BuyerProfile = ({userData}) => {
 
@@ -29,7 +30,7 @@ const BuyerProfile = ({userData}) => {
                 </View>
               )}
               <View style={styles.details}>
-                <Text style={styles.userName}>{userData.username ? userData.username : ". . .username"}</Text>
+                <Text style={styles.userName}>{userData.username}</Text>
                 <Text style={styles.phoneNumber}>{userData.phoneNumber}</Text>
                 { userData.joinedDate && <Text style={styles.dateJoined}>Member Since: {moment(userData.joinedDate.toDate()).format('LL')}</Text>}
                 <TouchableOpacity style={styles.editProfile} onPress={() => navigation.navigate("EditProfile")}>
@@ -45,7 +46,7 @@ const BuyerProfile = ({userData}) => {
             <TouchableOpacity onPress={() => alert('Friend Invited!')}>
               <View style={styles.inviteFriends}>
                 <Ionicons style={styles.icon} name="ios-person-add-outline" size={24} color={AppColors.primary} />
-                <Text>Invite Friends</Text>
+                <Text>Invite friends</Text>
               </View>
             </TouchableOpacity>
 
@@ -76,7 +77,7 @@ const BuyerProfile = ({userData}) => {
                 <TouchableOpacity onPress={() => navigation.navigate("VendorInfo")}>
                   <View style={styles.optionsTab}>
                     <MaterialCommunityIcons style={styles.icon} name="store-check-outline" size={24} color={AppColors.primary} />
-                    <Text>Become A Seller</Text>
+                    <Text style={{color: AppColors.primary, fontWeight: 600}}>Become A Seller</Text>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity>
@@ -106,24 +107,19 @@ const BuyerProfile = ({userData}) => {
                     <Text>FAQ</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => handleLogout()}>
                   <View style={styles.optionsTab}>
                     <MaterialCommunityIcons style={styles.icon} name="logout" size={24} color={AppColors.danger} />
-                    <TouchableOpacity onPress={() => handleLogout()}>
-                      <Text style={{color: AppColors.danger}}>Logout</Text>
-                    </TouchableOpacity>
+                    <Text style={{color: AppColors.danger}}>Logout</Text>
                   </View>
                 </TouchableOpacity>
               </View>
-              {/* <Pressable>
-                <View style={styles.optionsTab}>
-                  <AntDesign style={styles.icon} name="deleteuser" size={24} color={AppColors.primary} />
-                  <TouchableOpacity onPress={() => handleDeleteAccount()}>
-                    <Text>Delete Account</Text>
-                  </TouchableOpacity>
-                </View>
-              </Pressable> */}
             </View>
+            <Text style={{
+            color: AppColors.borderGray,
+            marginBottom: 50,
+            alignSelf: 'center'
+          }}>Release Version 1.0.0</Text>
         </>
     );
 }
@@ -135,10 +131,19 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       backgroundColor: AppColors.primary,
       paddingHorizontal: 20,
-      paddingVertical: 50,
-      marginTop: 10,
       marginHorizontal: 10,
+      height: HEIGHT * 0.3,
       borderRadius: 10,
+    },
+    details: {
+      ...Platform.select({
+        ios: {
+          width: '65%',
+        },
+        android: {
+          // elevation: 5,
+        },
+    })
     },
     imageContainer: {
       borderRadius: 10,
@@ -162,8 +167,8 @@ const styles = StyleSheet.create({
     },
     profileDisplay: {
       borderRadius: 10,
-      width: 100,
-      height: 100,
+      width: 95,
+      height: 95,
     },
     image: {
       width: '100%',
@@ -171,9 +176,6 @@ const styles = StyleSheet.create({
       position: 'absolute',
       top: 10,
       left: 10,
-    },
-    details: {
-      width: '65%'
     },
     userName: {
       color: AppColors.labelGray,
@@ -232,6 +234,8 @@ const styles = StyleSheet.create({
     options: {
       flexDirection: 'column',
       marginTop: 20,
+      marginTop: 20,
+      marginBottom: 30,
     },
     optionsTab: {
       flexDirection: 'row',

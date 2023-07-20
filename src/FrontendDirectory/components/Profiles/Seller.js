@@ -1,4 +1,4 @@
-import { Pressable, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { Dimensions, Platform, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import  AppColors  from "../../data/Colors";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -10,7 +10,8 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import moment from "moment/moment";
 import { handleLogout } from "../../../BackendDirectory/authentications/authentications";
-import { Platform } from "react-native";
+
+const HEIGHT = Dimensions.get('window').height;
 
 const SellerProfile = ({sellerData}) => {
 
@@ -18,7 +19,6 @@ const SellerProfile = ({sellerData}) => {
 
     return (
         <>
-            <SafeAreaView>
             <View style={styles.profileDetails}>
               { sellerData.profileDisplay ? 
               (
@@ -32,7 +32,7 @@ const SellerProfile = ({sellerData}) => {
                 </View>
               )}
               <View style={styles.details}>
-                <Text style={styles.userName}>{sellerData.username ? sellerData.username : ". . .username"}</Text>
+                <Text style={styles.userName}>{sellerData.username ? sellerData.username : ". . ."}</Text>
                 <Text style={styles.phoneNumber}>{sellerData.phoneNumber}</Text>
                 { sellerData.joinedDate && <Text style={styles.dateJoined}>Member Since: {moment(sellerData.joinedDate.toDate()).format('LL')}</Text>}
                 <TouchableOpacity style={styles.editProfile} onPress={() => navigation.navigate("EditProfile")}>
@@ -43,12 +43,11 @@ const SellerProfile = ({sellerData}) => {
                 </TouchableOpacity>
               </View>
             </View>
-            </SafeAreaView>
 
             <TouchableOpacity onPress={() => alert('Friend Invited!')}>
               <View style={styles.inviteFriends}>
                 <Ionicons style={styles.icon} name="ios-person-add-outline" size={24} color={AppColors.primary} />
-                <Text>Invite Friends</Text>
+                <Text>Invite friends</Text>
               </View>
             </TouchableOpacity>
 
@@ -64,7 +63,7 @@ const SellerProfile = ({sellerData}) => {
                 <TouchableOpacity onPress={() => navigation.navigate("PostedProducts")}>
                   <View style={styles.optionsTab}>
                     <Octicons style={styles.icon} name="list-unordered" size={24} color={AppColors.primary} />
-                    <Text>Products Posted</Text>
+                    <Text>Products Posted ({sellerData.numOfProductsPosted})</Text>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity>
@@ -88,7 +87,7 @@ const SellerProfile = ({sellerData}) => {
                     <Text>Credentials</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("AccountSettings")}>
                   <View style={styles.optionsTab}>
                     <Ionicons style={styles.icon} name="ios-settings-outline" size={24} color={AppColors.primary} />
                     <Text>Account Settings</Text>
@@ -115,24 +114,19 @@ const SellerProfile = ({sellerData}) => {
                     <Text>FAQ</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => handleLogout()}>
                   <View style={styles.optionsTab}>
                     <MaterialCommunityIcons style={styles.icon} name="logout" size={24} color={AppColors.danger} />
-                    <TouchableOpacity onPress={() => handleLogout()}>
-                      <Text style={{color: AppColors.danger}}>Logout</Text>
-                    </TouchableOpacity>
+                    <Text style={{color: AppColors.danger}}>Logout</Text>
                   </View>
                 </TouchableOpacity>
               </View>
-              {/* <TouchableOpacity>
-                <View style={styles.optionsTab}>
-                  <AntDesign style={styles.icon} name="deleteuser" size={24} color={AppColors.primary} />
-                  <TouchableOpacity onPress={() => handleDeleteAccount()}>
-                    <Text>Delete Account</Text>
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity> */}
             </View>
+          <Text style={{
+            color: AppColors.borderGray,
+            marginBottom: 50,
+            alignSelf: 'center'
+          }}>Release Version 1.0.0</Text>
         </>
     );
 }
@@ -144,10 +138,19 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       backgroundColor: AppColors.primary,
       paddingHorizontal: 20,
-      paddingVertical: 50,
-      marginTop: 10,
       marginHorizontal: 10,
+      height: HEIGHT * 0.3,
       borderRadius: 10,
+    },
+    details: {
+      ...Platform.select({
+        ios: {
+          width: '65%',
+        },
+        android: {
+          // elevation: 5,
+        },
+    })
     },
     imageContainer: {
       borderRadius: 10,
@@ -181,9 +184,6 @@ const styles = StyleSheet.create({
       top: 10,
       left: 10,
     },
-    details: {
-      width: '65%'
-    },
     userName: {
       color: AppColors.labelGray,
       fontSize: 24.6822,
@@ -206,13 +206,12 @@ const styles = StyleSheet.create({
       fontWeight: '400',
       marginTop: 10,
       flexDirection: 'row',
-      justifyContent: 'space-between',
       alignItems: 'center',
-      width: '43%',
     },
     editProfileText: {
       fontSize: 15,
       color: AppColors.white,
+      marginLeft: 10,
     },
     inviteFriends: {
       flexDirection: 'row',
@@ -241,14 +240,13 @@ const styles = StyleSheet.create({
     options: {
       flexDirection: 'column',
       marginTop: 20,
+      marginBottom: 30,
     },
     optionsTab: {
       flexDirection: 'row',
       alignItems: 'center',
       paddingHorizontal: 30,
       paddingVertical: 10,
-      // borderBottomColor: AppColors.borderGray,
-      // borderBottomWidth: 1,
     },
     optionsDivider: {
       paddingVertical: 10,
