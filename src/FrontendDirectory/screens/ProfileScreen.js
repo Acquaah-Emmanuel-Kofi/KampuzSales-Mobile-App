@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, SafeAreaView } from "react-native";
 import HeadTitle from "../components/HeadTitle";
 import { auth, firestore } from "../../BackendDirectory/config";
 import BuyerProfile from "../components/Profiles/Buyer";
@@ -9,7 +9,6 @@ function ProfileScreen() {
 
       const [ userData, setUserData ] = useState([]);
       const [ sellerData, setSellerData ] = useState([]);
-      const [ status, setStatus ] = useState(true);
 
       const getUserDetails = async () => {
         await firestore.collection('users')
@@ -19,9 +18,6 @@ function ProfileScreen() {
             if(snapshot.exists){
               setUserData(snapshot.data());
             }
-
-            let state = snapshot.data();
-            setStatus(state.firstPost);
         })
         .catch((error) => {
           alert(error.message);
@@ -48,18 +44,16 @@ function ProfileScreen() {
     
     }
 
-
       useEffect(() => {
         getUserDetails();
         getSellersDetails();
-      }, [status])
+      }, [userData])
 
 
     return (
-        <ScrollView 
-          contentContainerStyle={styles.container}
-          >
-            <HeadTitle title={"Profile"} />
+      <SafeAreaView style={styles.container}>
+        <HeadTitle title={"Profile"} />
+        <ScrollView showsVerticalScrollIndicator={false}>
 
             {userData.firstPost === true ? 
             (
@@ -67,13 +61,15 @@ function ProfileScreen() {
             ) : (
               <SellerProfile sellerData={sellerData} />
             )}
+
           </ScrollView>
+      </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-      paddingBottom: 100,
+      flex: 1,
     },
   });
 
