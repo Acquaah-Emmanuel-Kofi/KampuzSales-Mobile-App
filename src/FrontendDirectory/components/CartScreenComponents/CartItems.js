@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Image, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AppColors from "../../data/Colors";
 import { auth, firestore, storage } from "../../../BackendDirectory/config";
@@ -52,7 +52,6 @@ function CartItems() {
             [
                 {
                     text: 'Cancel',
-                    onPress: () => console.log(""),
                     style: 'cancel'
                 },
                 {
@@ -132,7 +131,6 @@ function CartItems() {
     return (
         <View style={styles.container}>
             <ScrollView 
-                contentContainerStyle={styles.scrollViewContainer} 
                 showsVerticalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 refreshControl={
@@ -187,7 +185,14 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     productDetailsBox: {
-        width: '55%'
+        ...Platform.select({
+            ios: {
+                width: '55%',
+            },
+            android: {
+                width: '45%',
+            },
+        })
     },
     productName: {
         color: AppColors.deepGray,
