@@ -129,7 +129,7 @@ function PostedProducts() {
   useEffect(() => {
     fetchProducts();
     setDeleted(false);
-  }, [deleted]);
+  }, [deleted, dataFromState]);
 
   const pulledToRefresh = () => {
     setRefresh(true);
