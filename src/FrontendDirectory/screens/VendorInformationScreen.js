@@ -1,45 +1,134 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { useEffect, useState } from "react";
+import { SafeAreaView, Platform, ScrollView, Alert, StyleSheet, TouchableHighlight, Text, TextInput, View, ActivityIndicator } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import HeadTitle from "../components/HeadTitle";
 import AppColors from "../data/Colors";
-import RadioGroup from 'react-native-radio-buttons-group';
-import { useState } from "react";
+import { auth, firestore } from "../../BackendDirectory/config";
+import { isValidDigitalAddress } from "../../BackendDirectory/functionalities/functions";
+import Spinner from "../components/spinner";
 
 const data = [
     { label: 'Takoradi Technical University', value: 'TTU' },
+    { label: 'BU - TAKORADI', value: 'BU' },
     { label: 'Others Loading...', value: '' },
   ];
 
-  const paymentMethod = [
+  const paymentMethodData = [
     { label: 'Bank', value: 'bank' },
     { label: 'PayStack', value: 'momo' },
     { label: 'Others Loading...', value: '' },
   ];
 
 
-  const radioButtonsData = [{
-    id: '1', // acts as primary key, should be unique and non-empty string
-    label: 'Bank',
-    value: 'bankservice',
-    color: '#1DA1F2',
-    selected: "true",
-}, {
-    id: '2',
-    label: 'Mobile Money',
-    value: 'momo',
-    color: '#1DA1F2',
-    selected: "true",
-}]
+function VendorInformation ({navigation}) {
 
-function VendorInformation () {
 
-    const [radioButtons, setRadioButtons] = useState(radioButtonsData);
+    const [ userData, setUserData ] = useState([]);
+    const [ campus, setCampus ] = useState(null);
+    const [ additionalPhoneNumber, setAdditionalPhoneNumber ] = useState(null);
+    const [ digitalAddress, setDigitalAddress ] = useState(null);
+    const [ ghCardNumber, setGhCardNumber ] = useState(null);
+    const [ paymentMethod, setPaymentMethod ] = useState(null);
+    const [ loading, setLoading ] = useState(false);
+    const [ spinning, setSpinning ] = useState(true);
 
-    function onPressRadioButton(radioButtonsArray) {
-        setRadioButtons(radioButtonsArray);
+
+    const getUserDetails = () => {
+        firestore.collection('users')
+        .doc(auth.currentUser.uid)
+        .get()
+        .then((snapshot) => {
+            if(snapshot.exists){
+              setUserData(snapshot.data());
+            }
+        })
+        .catch((error) => {
+          alert(error.message);
+        })
+      }
+
+      useEffect(() => {
+        getUserDetails();
+      }, [])
+
+
+    const submit = () => {
+        setLoading(true)
+
+        if(campus !== null || digitalAddress !== null || phoneNumber !== null || ghCardNumber !== null || paymentMethod !== null){
+            if (isValidDigitalAddress(digitalAddress)) {
+                // Alert.alert('Valid Digital Address', 'The digital address is valid.');
+                firestore.collection('sellers')
+                .add({
+                    userId: auth.currentUser.uid,
+                    ghCardNumber,
+                    additionalPhoneNumber,
+                    digitalAddress,
+                    paymentMethod, 
+                    campus,
+                    numOfProductsPosted: 0,
+                    notifications: userData.notifications,
+                    email: userData.email,
+                    joinedDate: userData.joinedDate,
+                    phoneNumber: userData.phoneNumber,
+                    username: userData.username,
+                    profileDisplay: userData.profileDisplay ? userData.profileDisplay : null,
+                })
+                .then(async () => {
+        
+                    setLoading(false);
+                    setGhCardNumber(null);
+                    setCampus(null);
+                    setAdditionalPhoneNumber(null);
+                    setDigitalAddress(null);
+                    setGhCardNumber(null);
+                    setPaymentMethod(null);
+        
+                    const currentUser = auth.currentUser;
+        
+                    if (currentUser) {
+                    const userRef = firestore.collection('users').doc(currentUser.uid);
+                    const userDoc = await userRef.get();
+                    
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        if (userData.firstPost === true) {
+                            
+                            await userRef.update({ firstPost: false });
+                            Alert.alert(
+                                'Successfully...',
+                                'You can now sell your products on this platform for free.'
+                            )
+        
+                            navigation.navigate("Post");
+                        }
+                    }
+                    }
+        
+                })
+                .catch((error) => {
+                    alert(error.message)
+                    setLoading(false);
+                })
+              } else {
+                setLoading(false);
+                Alert.alert('Invalid Digital Address', 'Please enter a valid digital address.');
+            }
+        }
     }
+
+    useEffect(() => {
+        setTimeout(() => {
+            setSpinning(false);
+        }, 1000);
+    }, []);
+    
+
     return (
         <View style={styles.container}>
+            <SafeAreaView>
+                <HeadTitle title={"BECOME A SELLER"} />
+            </SafeAreaView>
             <ScrollView 
             contentContainerStyle={styles.innerContainer}
             automaticallyAdjustKeyboardInsets={true}
@@ -47,29 +136,30 @@ function VendorInformation () {
             automaticallyAdjustsScrollIndicatorInsets={true}
             >
 
-                <SafeAreaView>
-                    <HeadTitle title={"VENDOR INFORMATION"} />
-                </SafeAreaView>
+                { spinning ? <Spinner /> : null}
+
                     <View style={styles.vendorInfo}>
                             <View style={styles.textInputBox}>
                                 <Text style={styles.textTitle}>User ID</Text>
                                 <TextInput 
+                                    editable={false}
                                     style={[styles.textInput]}
-                                    placeholder="user id" 
-                                />
-                            </View>
-                            <View style={styles.textInputBox}>
-                            <Text style={styles.textTitle}>Email</Text>
-                                <TextInput 
-                                    style={[styles.textInput]}
-                                    placeholder="robert.sam@gmail.com" 
+                                    placeholder={`${auth.currentUser.uid}`}
+                                    placeholderTextColor={AppColors.black} 
                                 />
                             </View>
                             <View style={styles.textInputBox}>
                                 <Text style={styles.textTitle}>Additional Phone Number</Text>
                                 <TextInput 
                                     style={[styles.textInput]}
-                                    placeholder="+233 559 045 947" 
+                                    autoCompleteType="tel"
+                                    keyboardType="phone-pad"
+                                    textContentType="telephoneNumber"
+                                    placeholder="055 904 5947"
+                                    value={additionalPhoneNumber}
+                                    onChangeText={(value) => {
+                                        setAdditionalPhoneNumber(value)
+                                    }}
                                 />
                             </View>
                             <View style={styles.textInputBox}>
@@ -86,22 +176,33 @@ function VendorInformation () {
                                 maxHeight={300}
                                 labelField="label"
                                 valueField="value"
-                                placeholder='Takoradi Technical University'
+                                label="Tertiary"
                                 searchPlaceholder="Search..."
+                                onChange={(value) => {
+                                    setCampus(value.value)
+                                }}
                                 />
                             </View>
                             <View style={styles.textInputBox}>
                                 <Text style={styles.textTitle}>Digital Address</Text>
                                 <TextInput 
                                     style={[styles.textInput]}
-                                    placeholder="WS-32-1567" 
+                                    placeholder="W-376434-GH"
+                                    value={digitalAddress}
+                                    onChangeText={(value) => {
+                                        setDigitalAddress(value)
+                                    }}
                                 />
                             </View>
                             <View style={styles.textInputBox}>
                                 <Text style={styles.textTitle}>Ghana Card Number</Text>
                                 <TextInput 
                                     style={[styles.textInput]}
-                                    placeholder="GHA-76573265-3" 
+                                    placeholder="GH-7239384-3"
+                                    value={ghCardNumber}
+                                    onChangeText={(value) => {
+                                        setGhCardNumber(value)
+                                    }}
                                 />
                             </View>
                             <View style={styles.textInputBox}>
@@ -113,15 +214,23 @@ function VendorInformation () {
                                 inputSearchStyle={styles.inputSearchStyle}
                                 iconStyle={styles.iconStyle}
                                 dropdownPosition='auto'
-                                data={paymentMethod}
+                                data={paymentMethodData}
                                 search
                                 maxHeight={300}
                                 labelField="label"
                                 valueField="value"
-                                placeholder='BANK'
                                 searchPlaceholder="Search..."
+                                onChange={(value) => {
+                                    setPaymentMethod(value.value)
+                                }}
                                 />
                             </View>
+                        <TouchableHighlight 
+                            style={styles.submitButton}
+                            disabled={loading ? true : false} 
+                            onPress={() => submit()}>
+                            <Text style={{color: AppColors.white}}>Submit</Text>
+                        </TouchableHighlight>
                         </View>
             </ScrollView>
         </View>
@@ -149,10 +258,24 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     vendorInfo: {
-        // marginVertical: 10,
         marginHorizontal: 10,
         marginTop: 20,
-        marginBottom: 100
+        marginBottom: 100,
+        backgroundColor: AppColors.white,
+        padding: 10,
+        borderRadius: 10,
+        paddingVertical: 20,
+        ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.3,
+              shadowRadius: 2,
+            },
+            android: {
+              elevation: 5,
+            },
+        })
     },
     dropdown: {
         borderWidth: 1,
@@ -188,10 +311,31 @@ const styles = StyleSheet.create({
       height: 40,
       fontSize: 14,
     },
-    paymentMethod: {},
     radioGroup: {
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    submitButton: {
+        backgroundColor: AppColors.primary,
+        borderWidth: 1,
+        borderColor: AppColors.primary,
+        borderRadius: 8,
+        marginTop: 20,
+        height: 50,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.3,
+              shadowRadius: 2,
+            },
+            android: {
+              elevation: 5,
+            },
+        })
     },
   });
 
