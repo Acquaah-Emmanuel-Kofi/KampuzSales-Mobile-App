@@ -1,35 +1,25 @@
 import { useEffect, useState } from "react";
-import { SafeAreaView, Platform, ScrollView, Alert, StyleSheet, TouchableHighlight, Text, TextInput, View, ActivityIndicator, TouchableOpacity } from "react-native";
+import { SafeAreaView, Platform, ScrollView, Alert, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import HeadTitle from "../components/HeadTitle";
 import AppColors from "../data/Colors";
 import { auth, firestore } from "../../BackendDirectory/config";
-import { isValidDigitalAddress } from "../../BackendDirectory/functionalities/functions";
 import Spinner from "../components/spinner";
 
 const data = [
     { label: 'Takoradi Technical University', value: 'TTU' },
     { label: 'BU - TAKORADI', value: 'BU' },
-    { label: 'Others Loading...', value: '' },
-  ];
-
-  const paymentMethodData = [
-    { label: 'Bank', value: 'bank' },
-    { label: 'PayStack', value: 'momo' },
-    { label: 'Others Loading...', value: '' },
-  ];
+];
 
 
-function BuyerInformationScreen ({navigation}) {
+function BuyerInformationScreen ({navigation, route}) {
 
+    const cartData = route.params;
 
     const [ userData, setUserData ] = useState([]);
     const [ campus, setCampus ] = useState(null);
     const [ additionalPhoneNumber, setAdditionalPhoneNumber ] = useState(null);
     const [ digitalAddress, setDigitalAddress ] = useState(null);
-    const [ ghCardNumber, setGhCardNumber ] = useState(null);
-    const [ paymentMethod, setPaymentMethod ] = useState(null);
-    const [ loading, setLoading ] = useState(false);
     const [ spinning, setSpinning ] = useState(true);
 
 
@@ -47,75 +37,13 @@ function BuyerInformationScreen ({navigation}) {
         })
       }
 
+      const handleCheckOut = async () => {
+        navigation.navigate("OrderSummary", cartData);
+    }
+
       useEffect(() => {
         getUserDetails();
       }, [])
-
-
-    const submit = () => {
-        setLoading(true)
-
-        if(campus !== null || digitalAddress !== null || phoneNumber !== null || ghCardNumber !== null || paymentMethod !== null){
-            if (isValidDigitalAddress(digitalAddress)) {
-                // Alert.alert('Valid Digital Address', 'The digital address is valid.');
-                firestore.collection('sellers')
-                .add({
-                    userId: auth.currentUser.uid,
-                    ghCardNumber,
-                    additionalPhoneNumber,
-                    digitalAddress,
-                    paymentMethod, 
-                    campus,
-                    numOfProductsPosted: 0,
-                    notifications: userData.notifications,
-                    email: userData.email,
-                    joinedDate: userData.joinedDate,
-                    phoneNumber: userData.phoneNumber,
-                    username: userData.username,
-                    profileDisplay: userData.profileDisplay ? userData.profileDisplay : null,
-                })
-                .then(async () => {
-        
-                    setLoading(false);
-                    setGhCardNumber(null);
-                    setCampus(null);
-                    setAdditionalPhoneNumber(null);
-                    setDigitalAddress(null);
-                    setGhCardNumber(null);
-                    setPaymentMethod(null);
-        
-                    const currentUser = auth.currentUser;
-        
-                    if (currentUser) {
-                    const userRef = firestore.collection('users').doc(currentUser.uid);
-                    const userDoc = await userRef.get();
-                    
-                    if (userDoc.exists) {
-                        const userData = userDoc.data();
-                        if (userData.firstTimePosting === true) {
-                            
-                            await userRef.update({ firstTimePosting: false });
-                            Alert.alert(
-                                'Successfully...',
-                                'You can now sell your products on this platform for free.'
-                            )
-        
-                            navigation.navigate("Post");
-                        }
-                    }
-                    }
-        
-                })
-                .catch((error) => {
-                    alert(error.message)
-                    setLoading(false);
-                })
-              } else {
-                setLoading(false);
-                Alert.alert('Invalid Digital Address', 'Please enter a valid digital address.');
-            }
-        }
-    }
 
     useEffect(() => {
         setTimeout(() => {
@@ -127,7 +55,7 @@ function BuyerInformationScreen ({navigation}) {
     return (
         <View style={styles.container}>
             <SafeAreaView>
-                <HeadTitle title={"Buyuer Information"} />
+                <HeadTitle title={"Buyer Information"} />
             </SafeAreaView>
             <ScrollView 
             automaticallyAdjustKeyboardInsets={true}
@@ -187,31 +115,32 @@ function BuyerInformationScreen ({navigation}) {
                             <View style={styles.textInputBox}>
                                 <Text style={styles.textTitle}>Campus</Text>
                                 <Dropdown
-                                style={[styles.dropdown]}
-                                placeholderStyle={styles.placeholderStyle}
-                                selectedTextStyle={styles.selectedTextStyle}
-                                inputSearchStyle={styles.inputSearchStyle}
-                                iconStyle={styles.iconStyle}
-                                dropdownPosition='auto'
-                                data={data}
-                                search
-                                maxHeight={300}
-                                labelField="label"
-                                valueField="value"
-                                label="Tertiary"
-                                searchPlaceholder="Search..."
-                                onChange={(value) => {
-                                    setCampus(value.value)
-                                }}
+                                    style={[styles.dropdown]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    inputSearchStyle={styles.inputSearchStyle}
+                                    iconStyle={styles.iconStyle}
+                                    dropdownPosition='auto'
+                                    data={data}
+                                    maxHeight={300}
+                                    labelField="label"
+                                    valueField="value"
+                                    placeholder="Takoradi Technical University"
+                                    onChange={(value) => {
+                                        setCampus(value.value)
+                                    }}
                                 />
                             </View>
                         </View>
                 <View style={styles.buttons}>
-                    <TouchableOpacity style={styles.backButtom}>
+                    <TouchableOpacity 
+                        style={styles.backButtom}
+                        onPress={() => navigation.goBack()} >
                         <Text style={styles.backText}>Back</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
-                        style={styles.nextButtom}>
+                        style={styles.nextButtom}
+                        onPress={() => handleCheckOut()}>
                         <Text style={styles.nextText}>Next</Text>
                     </TouchableOpacity>
                 </View>
@@ -272,8 +201,8 @@ const styles = StyleSheet.create({
         borderColor: AppColors.primary,
         backgroundColor: AppColors.white,
         borderRadius: 8,
-        width: 150,
-        height: 40,
+        paddingHorizontal: 50,
+        paddingVertical: 12,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -297,8 +226,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: AppColors.primary,
         borderRadius: 8,
-        width: 150,
-        height: 40,
+        paddingHorizontal: 50,
+        paddingVertical: 12,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
