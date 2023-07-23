@@ -12,7 +12,6 @@ function RegisterScreen({navigation}) {
     const [ password, setPassword ] = useState('');
     const [ confirmPassword, setConfirmPassword ] = useState('');
     const [ phoneNumber, setPhoneNumber ] = useState('');
-    const [ loading, setLoading ] = useState(false);
 
     return (
         <View style={styles.container}>
