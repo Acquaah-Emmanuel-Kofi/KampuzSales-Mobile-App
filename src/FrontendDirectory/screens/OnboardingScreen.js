@@ -42,7 +42,7 @@ const OnboardingScreen = ({navigation}) =>{
             pages={[
                 {
                 backgroundColor: '#fff',
-                image: <Image source={require('../data/images/TextLogo.png')} style={{width: 300, height: 100}} />,
+                image: <Image source={require('../../../assets/TextLogo.png')} style={{width: 300, height: 100}} />,
                 title: 'Onboarding1',
                 subtitle: 'Done with React Native Onboarding Swiper',
                 },
