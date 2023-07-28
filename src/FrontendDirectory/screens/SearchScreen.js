@@ -80,7 +80,7 @@ function SearchScreen() {
     return (
         <View style={styles.container}>
             <SafeAreaView>
-              <HeadTitleWithBackIcon previousScreen={() => navigation.navigate("Home")} title={'Search'} />
+              <HeadTitleWithBackIcon previousScreen={() => navigation.goBack()} title={'Search'} />
               <View style={styles.searchArea}>
                 <View style={styles.seachBoxRow}> 
                     <View style={styles.seacrhBox}>
@@ -96,8 +96,8 @@ function SearchScreen() {
                 </View>
                 { valueClicked ? null :
                 (<View style={styles.searchedValues}>
-                    {searchedTerm?.map((value) => 
-                        <Pressable style={styles.texts} onPress={() => {
+                    {searchedTerm?.map((value, index) => 
+                        <Pressable key={index} style={styles.texts} onPress={() => {
                             searchValue(value)
                         }}>
                             <Text style={{fontSize: 15}}>{value}</Text>
