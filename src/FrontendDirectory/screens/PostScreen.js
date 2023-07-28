@@ -1,27 +1,18 @@
-import React, { useState } from "react";
-import { ActivityIndicator, Alert, Image, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { ActivityIndicator, Alert, Image, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import HeadTitle from "../components/HeadTitle";
 import  AppColors  from "../data/Colors";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Entypo from "react-native-vector-icons/Entypo";
 import { Dropdown } from 'react-native-element-dropdown';
 import * as ImagePicker from 'expo-image-picker';
-import { auth, firebase, firestore, storage } from "../../BackendDirectory/config";
+import { auth, firebase, firestore } from "../../BackendDirectory/config";
 import { useNavigation } from "@react-navigation/native";
 import CediSign from "../components/CediSign";
 import uploadImageToStorage from "../../BackendDirectory/functionalities/uploadImageToStorage";
+import { categoriesData, electronicsCategories, fashionCategories, phonesCategories } from "../data/categoriesData";
+import { increasePostCount } from "../../BackendDirectory/functionalities/functions";
 
-  const data = [
-    { label: 'Phones & Tablet', value: 'Phones' },
-    { label: 'Laptops', value: 'Laptops' },
-    { label: 'Books', value: 'Books' },
-    { label: 'Food', value: 'Food' },
-    { label: 'Gaming', value: 'Gaming' },
-    { label: 'Clothing', value: 'Clothing' },
-    { label: 'Fashion', value: 'Fashion' },
-    { label: 'Electronics', value: 'Electronics' },
-  ];
-;
 
 function PostScreen() {
 
@@ -29,8 +20,9 @@ function PostScreen() {
 
      const [ image, setImage ] = useState([]);
      const [ uploading, setUploading ] = useState(false);
-     const [ processed, setProcessed ] = useState(0);
      const [ category, setCategory ] = useState(null);
+     const [ subCategory, setSubCategory ] = useState(null);
+     const [ subCategoryData, setSubCategoryData ] = useState(null);
      const [ productTitle, setProducTitle ] = useState(null);
      const [ price, setPrice ] = useState(null);
      const [ quantity, setQuantity ] = useState(null);
@@ -38,6 +30,27 @@ function PostScreen() {
      const [ description, setDescription ] = useState(null);
      const [ isFocus, setIsFocus ] = useState(false);
      const [ selectedImages, setSelectedImages ] = useState(null); 
+
+
+    useEffect(()=> {
+
+        const fetchSubCartegoriesData = () => {
+            if(category == 'Electronics'){
+                return electronicsCategories;
+            } else if (category == 'Fashion'){
+                return fashionCategories;
+            } else if (category == 'Phones'){
+                return phonesCategories;
+            } else {
+                return [];
+            }
+        }
+
+        let cartData = fetchSubCartegoriesData();
+
+        setSubCategoryData(cartData);
+
+    }, [category]);
 
 
     const handleImageUpload = async () => {
@@ -67,7 +80,7 @@ function PostScreen() {
 
       const submitPost = async () => {
 
-        if(image !== null || category !== null || productTitle !== null || price !== null || quantity !== null || condition !== null || description !== null){
+        if(image !== null || category !== null || subCategory !== null || productTitle !== null || price !== null || quantity !== null || condition !== null || description !== null){
         
             const currentUser = auth.currentUser;
 
@@ -77,10 +90,10 @@ function PostScreen() {
             
             if (userDoc.exists) {
                 const userData = userDoc.data();
-                if (userData.firstPost === true) {
+                if (userData.firstTimePosting === true) {
                     Alert.alert(
                         "First Time Posting?",
-                        "Please, provide your information for security purpose."
+                        "Please, provide your information to become a seller."
                     )
         
                     navigation.navigate("VendorInfo");
@@ -108,6 +121,8 @@ function PostScreen() {
                             }
                                 // Upload product details to firestore
                                 postProductDetails(imagesInAnArray);
+
+                                increasePostCount();
                                 Alert.alert(
                                     'Product Posted!',
                                     'Your product is posted successfully!',
@@ -116,6 +131,7 @@ function PostScreen() {
                                 setProducTitle(null);
                                 setPrice(null);
                                 setCategory(null);
+                                setSubCategory(null);
                                 setDescription(null);
                                 setUploading(false);
                                 setCondition(null);
@@ -147,6 +163,7 @@ function PostScreen() {
         setProducTitle(null);
         setPrice(null);
         setCategory(null);
+        setSubCategory(null);
         setDescription(null);
         setUploading(false);
         setCondition(null);
@@ -162,10 +179,11 @@ function PostScreen() {
                 price: price.includes('.') ? price : price + ".00",
                 quantity,
                 category,
+                subCategory,
                 condition,
                 productImages: imageUrls,
                 description,
-                status: 'popular',
+                isChecked: false,
                 postTime: firebase.firestore.Timestamp.fromDate(new Date()),
             })
             .then(() => {
@@ -173,6 +191,7 @@ function PostScreen() {
                 setProducTitle(null);
                 setPrice(null);
                 setCategory(null);
+                setSubCategory(null);
                 setDescription(null);
                 setUploading(false);
                 setCondition(null);
@@ -187,210 +206,236 @@ function PostScreen() {
      
      
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <HeadTitle title={"Post Product"} />
             <ScrollView 
-                contentContainerStyle={styles.innerContainer}
+                showsVerticalScrollIndicator={false}
                 automaticallyAdjustKeyboardInsets={true}
                 alwaysBounceVertical={true}
                 automaticallyAdjustsScrollIndicatorInsets={true}
-                >
-                <View style={styles.postAndThumbnail}>
-                    {image ? (
-                    <View style={styles.thumbnail}>
-                        { image && <Image source={{uri: image.uri}} resizeMode='stretch' style={styles.image} /> }
-                    </View> ) : (
-                    <View style={styles.thumbnail}>
-                        <Entypo name="images" size={70} color={AppColors.primary} />
-                    </View>)}
-                    { uploading ?
-                        (
-                            <View style={styles.activityIndicatorIcon}>
-                                <ActivityIndicator size="large" color={AppColors.primary} />
-                            </View>
-                        ) : (
-                            <TouchableOpacity style={styles.postIconView} onPress={() => handleImageUpload()}>
-                                <FontAwesome5 style={styles.postIcon} name="plus" size={30} color={AppColors.primary} />
-                            </TouchableOpacity>
-                        )
-                    }
-                </View>
-                <View style={styles.postDetails}>
-                    <View style={styles.textInputBox}>
-                    <Dropdown
-                        style={[styles.dropdown]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        iconStyle={styles.iconStyle}
-                        dropdownPosition='auto'
-                        data={data}
-                        search
-                        maxHeight={300}
-                        labelField="label"
-                        valueField="value"
-                        placeholder={!isFocus ? 'Category' : 'Select category'}
-                        searchPlaceholder="Search..."
-                        value={category}
-                        onFocus={() => setIsFocus(true)}
-                        onBlur={() => setIsFocus(false)}
-                        onChange={item => {
-                            setCategory(item.value);
-                            setIsFocus(false);
-                        }}
-                        />
+            >
+                <View style={styles.innerContainer}>
+                    <View style={styles.postAndThumbnail}>
+                        {image ? (
+                        <View style={styles.thumbnail}>
+                            { image && <Image source={{uri: image.uri}} resizeMode='stretch' style={styles.image} /> }
+                        </View> ) : (
+                        <View style={styles.thumbnail}>
+                            <Entypo name="images" size={70} color={AppColors.primary} />
+                        </View>)}
+                        { uploading ?
+                            (
+                                <View style={styles.activityIndicatorIcon}>
+                                    <ActivityIndicator size="large" color={AppColors.primary} />
+                                </View>
+                            ) : (
+                                <TouchableOpacity style={styles.postIconView} onPress={() => handleImageUpload()}>
+                                    <FontAwesome5 style={styles.postIcon} name="plus" size={30} color={AppColors.primary} />
+                                </TouchableOpacity>
+                            )
+                        }
                     </View>
-                    <View style={styles.textInputBox}>
-                        <TextInput 
-                            style={[styles.textInput]}
-                            placeholder="Title" 
-                            value={productTitle}
-                            onChangeText={(content) => setProducTitle(content)}
-                        />
-                    </View>
-                    <View style={styles.priceInputBox}>
-                        <View style={{flexDirection: 'row', width: '60%', justifyContent: 'space-between', alignItems: 'center'}}>
-                            <CediSign />
-                            <View style={styles.price}>
-                                <TextInput 
-                                    style={[styles.priceInput]}
-                                    placeholder="Price" 
-                                    keyboardType="numeric"
-                                    value={price}
-                                    onChangeText={(value) => setPrice(value)}
-                                />
-                                <Text style={{color: AppColors.borderGray}}>.00</Text>
-                            </View>
-                        </View>
-                        <TextInput 
-                            style={styles.quantity}
-                            placeholder="Quantity" 
-                            keyboardType="numeric"
-                            value={quantity}
-                            onChangeText={(value) => setQuantity(value)}
-                        />
-                    </View>
-                    { category === 'Phones' || category === 'Laptops' ?
-                        (
-                            <View style={styles.textInputBox}>
-                                <TextInput 
-                                    style={[styles.textInput]}
-                                    placeholder="Brand" 
-                                    value={condition}
-                                    onChangeText={(content) => setCondition(content)}
-                                />
-                            </View>
-                        ) : 
-                        (
-                            null
-                        )
-                    }
-                    { category === 'Phones' || category === 'Laptops' ?
-                        (
-                            <View style={styles.textInputBox}>
-                                <TextInput 
-                                    style={[styles.textInput]}
-                                    placeholder="Storage" 
-                                    value={condition}
-                                    onChangeText={(content) => setCondition(content)}
-                                />
-                            </View>
-                        ) : 
-                        (
-                            null
-                        )
-                    }
-                    { category === 'Phones' || category === 'Laptops' ?
-                        (
-                            <View style={styles.textInputBox}>
-                                <TextInput 
-                                    style={[styles.textInput]}
-                                    placeholder="RAM" 
-                                    value={condition}
-                                    onChangeText={(content) => setCondition(content)}
-                                />
-                            </View>
-                        ) : 
-                        (
-                            null
-                        )
-                    }
-                    { category === 'Food' ?
-                        (
-                            <View style={styles.textInputBox}>
-                                <TextInput 
-                                    style={[styles.textInput]}
-                                    placeholder="Food Type" 
-                                    value={condition}
-                                    onChangeText={(content) => setCondition(content)}
-                                />
-                            </View>
-                        ) : 
-                        (
-                            <View style={styles.textInputBox}>
-                                <TextInput 
-                                    style={[styles.textInput]}
-                                    placeholder="Condition" 
-                                    value={condition}
-                                    onChangeText={(content) => setCondition(content)}
-                                />
-                            </View>
-                        )
-                    }
-                    { category === 'Clothing' ?
-                        (
-                            <View style={styles.textInputBox}>
-                                <TextInput 
-                                    style={[styles.textInput]}
-                                    placeholder="Colour" 
-                                    value={condition}
-                                    onChangeText={(content) => setCondition(content)}
-                                />
-                            </View>
-                        ) : 
-                        (
-                            null
-                        )
-                    }
-                    { category === 'Clothing' ?
-                        (
-                            <View style={styles.textInputBox}>
-                                <TextInput 
-                                    style={[styles.textInput]}
-                                    placeholder="Brand" 
-                                    value={condition}
-                                    onChangeText={(content) => setCondition(content)}
-                                />
-                            </View>
-                        ) : 
-                        (
-                            null
-                        )
-                    }
-                    <View style={styles.textInputBox}>
-                            <TextInput 
-                                style={[styles.descriptionTextInput, isFocus && { borderColor: AppColors.primary }]}
-                                placeholder="Description" 
-                                numberOfLines={10}
-                                multiline={true}
-                                value={description}
-                                onChangeText={(content) => setDescription(content)}
+                    <View style={styles.postDetails}>
+                        <View style={styles.textInputBox}>
+                        <Dropdown
+                            style={[styles.dropdown]}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            inputSearchStyle={styles.inputSearchStyle}
+                            iconStyle={styles.iconStyle}
+                            dropdownPosition='auto'
+                            data={categoriesData}
+                            maxHeight={300}
+                            labelField="label"
+                            valueField="value"
+                            placeholder={'Category'}
+                            value={category}
+                            onFocus={() => setIsFocus(true)}
+                            onBlur={() => setIsFocus(false)}
+                            onChange={item => {
+                                setCategory(item.value);
+                                setIsFocus(false);
+                            }}
                             />
+                        </View>
+                        <View style={styles.textInputBox}>
+                        {
+                            subCategoryData?.length > 1 ? (
+                                <Dropdown
+                                    style={[styles.dropdown]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    inputSearchStyle={styles.inputSearchStyle}
+                                    iconStyle={styles.iconStyle}
+                                    dropdownPosition='auto'
+                                    data={subCategoryData === null ? categoriesData : subCategoryData}
+                                    maxHeight={300}
+                                    labelField="label"
+                                    valueField="value"
+                                    placeholder={!isFocus ? 'Sub Category' : 'Select sub category'}
+                                    value={subCategory}
+                                    onFocus={() => setIsFocus(true)}
+                                    onBlur={() => setIsFocus(false)}
+                                    onChange={item => {
+                                        setSubCategory(item.value);
+                                        setIsFocus(false);
+                                    }}
+                                    />
+                            ) : null
+                        }
+                        </View>
+                        <View style={styles.textInputBox}>
+                            <TextInput 
+                                style={[styles.textInput]}
+                                placeholder="Product Title" 
+                                value={productTitle}
+                                onChangeText={(content) => setProducTitle(content)}
+                            />
+                        </View>
+                        <View style={styles.priceInputBox}>
+                            <View style={{flexDirection: 'row', width: '60%', justifyContent: 'space-between', alignItems: 'center'}}>
+                                <CediSign />
+                                <View style={styles.price}>
+                                    <TextInput 
+                                        style={[styles.priceInput]}
+                                        placeholder="Price" 
+                                        keyboardType="numeric"
+                                        value={price}
+                                        onChangeText={(value) => setPrice(value)}
+                                    />
+                                    <Text style={{color: AppColors.borderGray}}>.00</Text>
+                                </View>
+                            </View>
+                            <TextInput 
+                                style={styles.quantity}
+                                placeholder="Quantity" 
+                                keyboardType="numeric"
+                                value={quantity}
+                                onChangeText={(value) => setQuantity(value)}
+                            />
+                        </View>
+                        { category === 'Phones' || category === 'Laptops' ?
+                            (
+                                <View style={styles.textInputBox}>
+                                    <TextInput 
+                                        style={[styles.textInput]}
+                                        placeholder="Brand" 
+                                        value={condition}
+                                        onChangeText={(content) => setCondition(content)}
+                                    />
+                                </View>
+                            ) : 
+                            (
+                                null
+                            )
+                        }
+                        { category === 'Phones' || category === 'Laptops' ?
+                            (
+                                <View style={styles.textInputBox}>
+                                    <TextInput 
+                                        style={[styles.textInput]}
+                                        placeholder="Storage" 
+                                        value={condition}
+                                        onChangeText={(content) => setCondition(content)}
+                                    />
+                                </View>
+                            ) : 
+                            (
+                                null
+                            )
+                        }
+                        { category === 'Phones' || category === 'Laptops' ?
+                            (
+                                <View style={styles.textInputBox}>
+                                    <TextInput 
+                                        style={[styles.textInput]}
+                                        placeholder="RAM" 
+                                        value={condition}
+                                        onChangeText={(content) => setCondition(content)}
+                                    />
+                                </View>
+                            ) : 
+                            (
+                                null
+                            )
+                        }
+                        { category === 'Food' ?
+                            (
+                                <View style={styles.textInputBox}>
+                                    <TextInput 
+                                        style={[styles.textInput]}
+                                        placeholder="Food Type" 
+                                        value={condition}
+                                        onChangeText={(content) => setCondition(content)}
+                                    />
+                                </View>
+                            ) : 
+                            (
+                                <View style={styles.textInputBox}>
+                                    <TextInput 
+                                        style={[styles.textInput]}
+                                        placeholder="Condition" 
+                                        value={condition}
+                                        onChangeText={(content) => setCondition(content)}
+                                    />
+                                </View>
+                            )
+                        }
+                        { category === 'Clothing' ?
+                            (
+                                <View style={styles.textInputBox}>
+                                    <TextInput 
+                                        style={[styles.textInput]}
+                                        placeholder="Colour" 
+                                        value={condition}
+                                        onChangeText={(content) => setCondition(content)}
+                                    />
+                                </View>
+                            ) : 
+                            (
+                                null
+                            )
+                        }
+                        { category === 'Clothing' ?
+                            (
+                                <View style={styles.textInputBox}>
+                                    <TextInput 
+                                        style={[styles.textInput]}
+                                        placeholder="Brand" 
+                                        value={condition}
+                                        onChangeText={(content) => setCondition(content)}
+                                    />
+                                </View>
+                            ) : 
+                            (
+                                null
+                            )
+                        }
+                        <View style={styles.textInputBox}>
+                                <TextInput 
+                                    style={[styles.descriptionTextInput]}
+                                    placeholder="Description" 
+                                    numberOfLines={10}
+                                    multiline={true}
+                                    value={description}
+                                    onChangeText={(content) => setDescription(content)}
+                                />
+                        </View>
                     </View>
                 </View>
-                <View style={styles.buttoms}>
-                    <TouchableOpacity style={styles.clearButtom} onPress={cancelPost}>
-                        <Text style={styles.clearText}>Clear</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={styles.postButtom} 
-                        disabled={uploading ? true : false} 
-                        onPress={() => submitPost()}>
-                        <Text style={styles.postText}>{uploading ? 'Posting...' : 'Post'}</Text>
-                    </TouchableOpacity>
-                </View>
+                    <View style={styles.buttons}>
+                        <TouchableOpacity style={styles.clearButtom} onPress={cancelPost}>
+                            <Text style={styles.clearText}>Clear</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            style={styles.postButtom} 
+                            disabled={uploading ? true : false} 
+                            onPress={() => submitPost()}>
+                            <Text style={styles.postText}>{uploading ? 'Posting...' : 'Post'}</Text>
+                        </TouchableOpacity>
+                    </View>
             </ScrollView>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -399,19 +444,10 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: AppColors.white,
     },
-    progressBar: {
-        // paddingVertical: 4,
-        marginTop: 30,
-    },
-    clearText: {
-        color: AppColors.primary,
-    },
-    postText: {
-        color: AppColors.white,
-    },
     innerContainer: {
         marginHorizontal: 10,
         marginTop: 10,
+        marginBottom: 40,
         borderRadius: 10,
         paddingVertical: 20,
         paddingHorizontal: 10,
@@ -419,14 +455,15 @@ const styles = StyleSheet.create({
         ...Platform.select({
             ios: {
               shadowColor: '#000',
-              shadowOffset: { width: 0, height: 1 },
+              shadowOffset: { width: 0, height: 0 },
               shadowOpacity: 0.3,
               shadowRadius: 2,
             },
             android: {
               elevation: 5,
+              marginBottom: 100,
             },
-        })
+        }),
     },
     postAndThumbnail: {
         flexDirection: 'row',
@@ -443,7 +480,7 @@ const styles = StyleSheet.create({
         ...Platform.select({
             ios: {
               shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
+              shadowOffset: { width: 0, height: 1 },
               shadowOpacity: 0.3,
               shadowRadius: 2,
             },
@@ -535,17 +572,20 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         height: 50,
     },
-    buttoms: {
+    buttons: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginHorizontal: 10,
+        paddingHorizontal: 10,
+        marginBottom: 100,
     },
     clearButtom: {
         borderWidth: 1,
         borderColor: AppColors.primary,
         backgroundColor: AppColors.white,
         borderRadius: 8,
-        width: 150,
-        height: 40,
+        paddingHorizontal: 50,
+        paddingVertical: 12,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -561,13 +601,16 @@ const styles = StyleSheet.create({
             },
         })
     },
+    clearText: {
+        color: AppColors.primary,
+    },
     postButtom: {
         backgroundColor: AppColors.primary,
         borderWidth: 1,
         borderColor: AppColors.primary,
         borderRadius: 8,
-        width: 150,
-        height: 40,
+        paddingHorizontal: 50,
+        paddingVertical: 12,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -582,6 +625,9 @@ const styles = StyleSheet.create({
               elevation: 5,
             },
         })
+    },
+    postText: {
+        color: AppColors.white,
     },
     dropdown: {
         borderWidth: 1,
