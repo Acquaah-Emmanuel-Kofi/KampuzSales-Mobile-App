@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet ,Text, TextInput, View, ScrollView, Image } from "react-native";
-import { CustomButton, GoogleCustomButton } from "../components/buttons";
+import { CustomButton, PlaneCustomButton } from "../components/buttons";
 import  AppColors  from "../data/Colors";
 
 function CreatePasswordScreen({navigation}) {
@@ -9,7 +9,7 @@ function CreatePasswordScreen({navigation}) {
         <View style={styles.container}>
             <ScrollView  contentContainerStyle={styles.signUpContainer}>
             <View style={styles.headerBox}>
-                <Image style={styles.logo} source={require("../data/images/KampuzSales-Logo.png")} />
+                <Image style={styles.logo} source={require("../../../assets/KampuzSales-Logo.png")} />
                 <Text style={styles.heading}>Create New Password</Text>
             </View>
             <View style={styles.inputBox}>
@@ -33,7 +33,7 @@ function CreatePasswordScreen({navigation}) {
             <View style={styles.customButton}>
                 <CustomButton onPress={() => navigation.navigate("Login")} buttonText={"Sign Up"} />
             </View>
-            <GoogleCustomButton buttonText={"Sign up with Google"} />
+            <PlaneCustomButton buttonText={"Sign up with Google"} />
             <Text style={styles.switchLoginScreenText}>
                 Already have an account? <Text onPress={() => navigation.navigate("Login")} style={styles.switchLoginScreenLinkText}>Sign in</Text>
             </Text>
