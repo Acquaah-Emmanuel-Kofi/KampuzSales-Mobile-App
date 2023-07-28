@@ -20,7 +20,7 @@ const data = [
   ];
 
 
-function VendorInformation ({navigation}) {
+function VendorInformationScreen ({navigation}) {
 
 
     const [ userData, setUserData ] = useState([]);
@@ -92,9 +92,9 @@ function VendorInformation ({navigation}) {
                     
                     if (userDoc.exists) {
                         const userData = userDoc.data();
-                        if (userData.firstPost === true) {
+                        if (userData.firstTimePosting === true) {
                             
-                            await userRef.update({ firstPost: false });
+                            await userRef.update({ firstTimePosting: false });
                             Alert.alert(
                                 'Successfully...',
                                 'You can now sell your products on this platform for free.'
@@ -339,4 +339,4 @@ const styles = StyleSheet.create({
     },
   });
 
-export default VendorInformation;
+export default VendorInformationScreen;
