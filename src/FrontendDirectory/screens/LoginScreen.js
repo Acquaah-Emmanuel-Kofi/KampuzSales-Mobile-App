@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet ,Text, TextInput, View, ScrollView, Image, StatusBar, Pressable } from "react-native";
 import { authLoading, loginUser } from "../../BackendDirectory/authentications/authentications";
-import { CustomButton, GoogleCustomButton } from "../components/buttons";
+import { CustomButton, CustomGoogleButton, PlaneCustomButton } from "../components/buttons";
 import  AppColors  from "../data/Colors";
 
 function LoginScreen({navigation}) {
@@ -16,9 +16,11 @@ function LoginScreen({navigation}) {
                 backgroundColor="#61dafb"
                 barStyle="dark-content"
             />
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.signInContainer}>
+            <ScrollView 
+                contentInsetAdjustmentBehavior="automatic" 
+                contentContainerStyle={styles.signInContainer}>
             <View style={styles.headerBox}>
-                <Image style={styles.logo} source={require("../data/images/KampuzSales-Logo.png")} />
+                <Image style={styles.logo} source={require("../../../assets/KampuzSales-Logo.png")} />
                 <Text style={styles.heading}>Welcome Back , Login</Text>
             </View>
             <View style={styles.inputBox}>
@@ -53,7 +55,8 @@ function LoginScreen({navigation}) {
                     loginUser(email, password)
                 }} buttonText={authLoading ? "Signing in..." : "Sign In"} />
             </View>
-            <GoogleCustomButton buttonText={"Sign in with Google"} />
+            <CustomGoogleButton />
+            <PlaneCustomButton buttonText={"Sign in with OTP"} onPress={() => navigation.navigate("OtpAuth")} />
             <Text style={styles.switchLoginScreenText}>
                 Don’t have an account? <Text onPress={() => navigation.navigate("Register")} style={styles.switchLoginScreenLinkText}>Sign up</Text>
             </Text>
@@ -116,6 +119,7 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         color: AppColors.secondary,
         marginVertical: 12,
+        marginBottom: 200
     },
     switchLoginScreenLinkText: {
         color: AppColors.primary,
