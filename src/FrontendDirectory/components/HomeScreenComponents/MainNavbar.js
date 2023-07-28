@@ -58,7 +58,7 @@ function MainNavbar() {
                 <Pressable onPress={() => navigation.navigate("Search")}>
                     <Feather name="search" size={24} color={AppColors.black} />
                 </Pressable>
-                <Image style={styles.textLogo} source={require("../../data/images/TextLogo.png")} />
+                <Image style={styles.textLogo} source={require("../../../../assets/TextLogo.png")} />
                 <Pressable onPress={() => navigation.navigate("Cart")}  style={styles.cartItems}>
                     <AntDesign name="shoppingcart" size={24} color={AppColors.black} />
                     <View style={styles.badge}>
