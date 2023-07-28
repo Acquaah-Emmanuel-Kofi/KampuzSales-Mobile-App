@@ -21,11 +21,11 @@ const ButtomNavigation = () => {
     const [ sellerData, setSellerData ] = useState([]);
   
     const getNotifications = () => {
-      if(userData.firstPost == true) {
+      if(userData.firstTimePosting == true) {
         setNomOfAlerts(userData.notifications.length);
       }
   
-      if(userData.firstPost == false) {
+      if(userData.firstTimePosting == false) {
         setNomOfAlerts(sellerData.notifications.length);
       }
     }
