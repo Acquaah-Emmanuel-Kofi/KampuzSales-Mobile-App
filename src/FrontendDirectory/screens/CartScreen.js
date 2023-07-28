@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Alert } from "react-native";
 import { CustomButton } from "../components/buttons";
 import CartItems from "../components/CartScreenComponents/CartItems";
 import CediSign from "../components/CediSign";
@@ -10,6 +10,7 @@ import { auth, firestore } from "../../BackendDirectory/config";
 
 function CartScreen({navigation}) {
 
+    const [ cartData, setCartData ] = useState([]);
     const [ totalAmount, setTotalAmount ] = useState(null);
     const [ deleted, setDeleted ] = useState(false);
 
@@ -17,30 +18,33 @@ function CartScreen({navigation}) {
         try {
             
             let productData = [];
-            let products = [];
+            let productsPrices = [];
 
             await firestore.collection('cart')
             .orderBy('postTime', 'desc')
             .get()
             .then((querySnapshot) => {
                 querySnapshot.forEach(doc => {
-                    const { price, userId } = doc.data();
+                    const { productTitle, price, userId } = doc.data();
                     productData.push({
                         id: doc.id,
+                        productTitle,
                         price,
                         userId,
                     })
                 })
             })
 
+            setCartData(productData);
+
             
             productData && productData.map((product) => {
                 {auth.currentUser.uid === product.userId ? 
-                products.push(product.price)
+                    productsPrices.push(product.price)
                 : null }
             })
             
-            let prices = products.reduce((accumulator, currentValue) => {
+            let prices = productsPrices.reduce((accumulator, currentValue) => {
                 const numericValue = parseFloat(currentValue);
                 return accumulator + numericValue;
             }, 0);
@@ -49,6 +53,29 @@ function CartScreen({navigation}) {
 
         } catch (error) {
             console.log(error.message);
+        }
+    }
+
+    const handleCheckOut = async () => {
+        const currentUser = auth.currentUser;
+
+        if (currentUser) {
+            const userRef = firestore.collection('users').doc(currentUser.uid);
+            const userDoc = await userRef.get();
+            
+            if (userDoc.exists) {
+                const userData = userDoc.data();
+                if (userData.firstTimeCheckingOut === true) {
+                    Alert.alert(
+                        "First Time Purchasing?",
+                        "Please, provide your information for a good service."
+                    )
+        
+                    navigation.navigate("BuyerInfo", cartData);
+                } else {
+                    alert("Checked all out")
+                }
+            }
         }
     }
 
@@ -64,7 +91,7 @@ function CartScreen({navigation}) {
     return (
         <View style={styles.container}>
             <View>
-                <HeadTitleWithBackIcon previousScreen={() => navigation.navigate("Home")} title={"Cart"} />
+                <HeadTitleWithBackIcon previousScreen={() => navigation.goBack()} title={"Cart"} />
             </View>
             <CartItems />
             <View style={styles.totalMarginHorizontal}>
@@ -78,7 +105,7 @@ function CartScreen({navigation}) {
                             <Text style={styles.totalAmount}><CediSign /> {totalAmount ? totalAmount : "0.00"}</Text>
                         </View>
                     </View>
-                    <CustomButton onPress={() => alert("Checked all items out!")} buttonText={"Check out"}  />
+                    <CustomButton onPress={() => handleCheckOut()} buttonText={"Check out"}  />
                     </>
                 ) : null}
             </View>
