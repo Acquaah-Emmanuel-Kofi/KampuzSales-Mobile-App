@@ -5,6 +5,7 @@ import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import CreatePasswordScreen from '../screens/CreatePasswordScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
+import OtpAuthScreen from '../screens/OtpAuthScreen';
 // import { useState, useEffect } from 'react';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -58,7 +59,7 @@ const Tabs = () => {
     
     return(
         <Tab.Navigator
-            initialRouteName='Login'
+            initialRouteName='OtpAuth'
             screenOptions={{
                 tabBarShowLabel: false,
                 headerShown: false,
@@ -66,6 +67,7 @@ const Tabs = () => {
             }}
         >
             <Tab.Screen name='Onboarding' component={OnboardingScreen}></Tab.Screen>
+            <Tab.Screen name='OtpAuth' component={OtpAuthScreen}></Tab.Screen>
             <Tab.Screen name='Login' component={LoginScreen}></Tab.Screen>
             <Tab.Screen name='Register' component={RegisterScreen}></Tab.Screen>
             <Tab.Screen name='Password' component={CreatePasswordScreen}></Tab.Screen>
