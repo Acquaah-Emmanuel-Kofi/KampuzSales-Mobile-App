@@ -53,3 +53,22 @@ export const increasePostCount = async () => {
       }
     });
   };
+
+  export const updateData = async (collection, productId, productTitle, newData) => {
+    const documentRef = firestore.collection(`${collection}`);
+  
+    documentRef.doc(productId).update(newData)
+    .then(() => {
+        Alert.alert(
+            "Update Successful!",
+            `You've successfully updated your product "${productTitle}" with an Id of "${productId}".`
+        )
+    })
+    .catch((error) => {
+      Alert.alert(
+        "Update Not Successful!",
+        error.message
+    )
+    })
+
+  };
