@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet ,Text, TextInput, View, ScrollView, Image, StatusBar } from "react-native";
 import { authLoading, registerUser } from "../../BackendDirectory/authentications/authentications";
-import { CustomButton, GoogleCustomButton } from "../components/buttons";
+import { CustomButton, PlaneCustomButton } from "../components/buttons";
 import  AppColors  from "../data/Colors";
 
 
@@ -22,7 +22,7 @@ function RegisterScreen({navigation}) {
             />
             <ScrollView  contentContainerStyle={styles.signUpContainer}>
             <View style={styles.headerBox}>
-                <Image style={styles.logo} source={require("../data/images/KampuzSales-Logo.png")} />
+                <Image style={styles.logo} source={require("../../../assets/KampuzSales-Logo.png")} />
                 <Text style={styles.heading}>Create New Account</Text>
             </View>
             <View style={styles.inputBox}>
@@ -89,7 +89,6 @@ function RegisterScreen({navigation}) {
                     registerUser(email, password, confirmPassword ,username, phoneNumber)
                 }} buttonText={authLoading ? "Signing up..." : "Sign Up"} />
             </View>
-            <GoogleCustomButton buttonText={"Sign up with Google"} />
             <Text style={styles.switchLoginScreenText}>
                 Already have an account? <Text onPress={() => navigation.navigate("Login")} style={styles.switchLoginScreenLinkText}>Sign in</Text>
             </Text>
