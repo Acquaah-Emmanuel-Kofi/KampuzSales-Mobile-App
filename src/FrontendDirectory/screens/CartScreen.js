@@ -86,13 +86,11 @@ function CartScreen({navigation}) {
     useEffect(() => {
         fetchProducts();
         setDeleted(false)
-    }, [deleted, totalAmount]);
+    }, [deleted, totalAmount, cartData]);
 
     return (
         <View style={styles.container}>
-            <View>
-                <HeadTitleWithBackIcon previousScreen={() => navigation.goBack()} title={"Cart"} />
-            </View>
+            <HeadTitleWithBackIcon previousScreen={() => navigation.goBack()} title={"Cart"} />
             <CartItems />
             <View style={styles.totalMarginHorizontal}>
                 { totalAmount ? (
