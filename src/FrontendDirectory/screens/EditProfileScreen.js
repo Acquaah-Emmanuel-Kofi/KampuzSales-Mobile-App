@@ -58,7 +58,7 @@ function EditProfileScreen({navigation}) {
                 profileDisplay: imageUrl ? imageUrl.downloadURL : userData.profileDisplay,
                 username: username ? username : userData.username,
                 phoneNumber: phoneNumber ? phoneNumber : userData.phoneNumber,
-              }
+            }
     
             if(newUserData.phoneNumber !== null || newUserData.username !== null || newUserData.profileDisplay !== null){
                 
@@ -102,7 +102,6 @@ function EditProfileScreen({navigation}) {
                             navigation.navigate("Profile");
                         })
                         .catch((error) => {
-                            console.log(error.message);
                             Alert.alert(
                                 "Update Not Successful!",
                                 error.message
@@ -144,7 +143,6 @@ function EditProfileScreen({navigation}) {
             })
         })
         .catch((error) => {
-            setUploading(false);
             return;
         })
       }, [])
