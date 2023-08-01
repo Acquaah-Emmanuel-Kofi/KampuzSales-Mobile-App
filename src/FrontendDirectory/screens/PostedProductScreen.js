@@ -1,13 +1,16 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, View, Text } from "react-native";
-import HeadTitle from "../components/HeadTitle";
+import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
 import AppColors from "../data/Colors";
 import PostedProducts from "../components/PostedProductsComponents/PostedProducts";
 
-function PostedProductScreen() {
+function PostedProductScreen({navigation}) {
     return (
         <SafeAreaView style={styles.container}>
-            <HeadTitle title={"Products Posted"} />
+            <HeadTitleWithBackIcon 
+                title={"Products Posted"}
+                previousScreen={() => navigation.goBack()}
+            />
             <View style={{
               justifyContent: 'center',
               alignItems: 'center',
