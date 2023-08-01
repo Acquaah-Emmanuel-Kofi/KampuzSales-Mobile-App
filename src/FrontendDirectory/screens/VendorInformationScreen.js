@@ -126,9 +126,7 @@ function VendorInformationScreen ({navigation}) {
 
     return (
         <View style={styles.container}>
-            <SafeAreaView>
                 <HeadTitle title={"BECOME A SELLER"} />
-            </SafeAreaView>
             <ScrollView 
             contentContainerStyle={styles.innerContainer}
             automaticallyAdjustKeyboardInsets={true}
