@@ -3,7 +3,7 @@ import { SafeAreaView, Platform, ScrollView, Alert, StyleSheet, Text, TextInput,
 import { Dropdown } from 'react-native-element-dropdown';
 import HeadTitle from "../components/HeadTitle";
 import AppColors from "../data/Colors";
-import { auth, firestore } from "../../BackendDirectory/config";
+import { auth } from "../../BackendDirectory/config";
 import CediSign from "../components/CediSign";
 import RadioGroup from 'react-native-radio-buttons-group';
 
@@ -86,9 +86,7 @@ function OrderSummaryScreen ({navigation, route}) {
 
     return (
         <View style={styles.container}>
-        <SafeAreaView>
-            <HeadTitle title={"Order Summary"} />
-        </SafeAreaView>
+        <HeadTitle title={"Order Summary"} />
         <ScrollView 
         automaticallyAdjustKeyboardInsets={true}
         alwaysBounceVertical={true}
@@ -100,20 +98,22 @@ function OrderSummaryScreen ({navigation, route}) {
                     { cartData?.map((data) => (
                         <View style={styles.flex} key={data.id}>
                             <Text>{data.productTitle}</Text>
-                            <Text>{data.price}</Text>
+                            <Text>{data.price}.00</Text>
                         </View>
                     ))}
-                    <View style={styles.flex}>
-                        <Text>VAT</Text>
-                        <Text>Price</Text>
-                    </View>
-                    <View style={[styles.flex, {marginVertical: 20}]}>
-                        <Text>Delivery Fee</Text>
-                        <Text>Price</Text>
+                    <View style={styles.borderLines}>
+                        <View style={styles.flex}>
+                            <Text>VAT</Text>
+                            <Text>15.00</Text>
+                        </View>
+                        <View style={styles.flex}>
+                            <Text>Delivery Fee</Text>
+                            <Text>25.00</Text>
+                        </View>
                     </View>
                     <View style={styles.flex}>
                         <Text style={{fontWeight: 600}}>Total (<CediSign />)</Text>
-                        <Text>{totalAmount ? totalAmount : "0.00"}</Text>
+                        <Text>{totalAmount}.00</Text>
                     </View>
                 </View>
             </View>
@@ -134,9 +134,9 @@ function OrderSummaryScreen ({navigation, route}) {
                         labelField="label"
                         valueField="value"
                         placeholder="Mobile Money"
-                        onChange={(value) => {
-                            setPayment(value.value)
-                        }}
+                        // onChange={(value) => {
+                        //     setPayment(value.value)
+                        // }}
                     />
                 { payment === "bank" ? (
                     <>
@@ -154,9 +154,9 @@ function OrderSummaryScreen ({navigation, route}) {
                             labelField="label"
                             valueField="value"
                             placeholder="Ecobank"
-                            onChange={(value) => {
-                                setCampus(value.value)
-                            }}
+                            // onChange={(value) => {
+                            //     setCampus(value.value)
+                            // }}
                         />
                     </View>
                     <View style={styles.textInputBox}>
@@ -165,9 +165,9 @@ function OrderSummaryScreen ({navigation, route}) {
                             style={[styles.textInput]}
                             keyboardType="phone-pad"
                             placeholder="xxxx xxxx xxxx xx"
-                            onChangeText={(value) => {
-                                setAdditionalPhoneNumber(value)
-                            }}
+                            // onChangeText={(value) => {
+                            //     setAdditionalPhoneNumber(value)
+                            // }}
                         />
                     </View>
                     <View style={{width: '45%',}}>
@@ -194,9 +194,9 @@ function OrderSummaryScreen ({navigation, route}) {
                             labelField="label"
                             valueField="value"
                             placeholder="MTN"
-                            onChange={(value) => {
-                                setCampus(value.value)
-                            }}
+                            // onChange={(value) => {
+                            //     setCampus(value.value)
+                            // }}
                         />
                     </View>
                     <View style={styles.textInputBox}>
@@ -207,9 +207,9 @@ function OrderSummaryScreen ({navigation, route}) {
                             keyboardType="phone-pad"
                             textContentType="telephoneNumber"
                             placeholder="+233 559-045-947"
-                            onChangeText={(value) => {
-                                setAdditionalPhoneNumber(value)
-                            }}
+                            // onChangeText={(value) => {
+                            //     setAdditionalPhoneNumber(value)
+                            // }}
                         />
                     </View>
                     <View style={{width: '45%',}}>
@@ -243,7 +243,6 @@ function OrderSummaryScreen ({navigation, route}) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: AppColors.white,
     },
     orderInfo: {
         marginHorizontal: 10,
@@ -275,6 +274,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginVertical: 5,
+    },
+    borderLines: {
+        marginVertical: 10, 
+        borderTopWidth: 1, 
+        borderBottomWidth: 1, 
+        paddingVertical: 10,
+        borderBottomColor: AppColors.borderGray, 
+        borderTopColor: AppColors.borderGray
     },
     textInputBox: {
         marginVertical: 6,
