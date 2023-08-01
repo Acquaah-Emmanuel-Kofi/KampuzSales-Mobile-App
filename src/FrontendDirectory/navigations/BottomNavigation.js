@@ -2,15 +2,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, View } from 'react-native';
 import AppColors from '../data/Colors';
 import PostScreen from '../screens/PostScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import StackNavigation from './StackNavigation';
+import HomeStackNavigation from './HomeStackNavigation';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import NotificationScreen from '../screens/NotificationScreen';
 import { useState, useEffect } from 'react';
 import { auth, firestore } from '../../BackendDirectory/config';
-import RequestScreen from '../screens/RequestScreen';
+import ProfileStackNavigation from './ProfileStackNavigation';
+import RequestStackNavigation from './RequestStackNavigation';
 
 const Tab = createBottomTabNavigator();
 
@@ -74,14 +74,13 @@ const ButtomNavigation = () => {
 
     return(
         <Tab.Navigator
-            initialRouteName='Major'
             screenOptions={{
                 tabBarShowLabel: false,
                 headerShown: false,
                 tabBarHideOnKeyboard: true,
             }}
         >
-            <Tab.Screen name='Major' component={StackNavigation} options={{
+            <Tab.Screen name='MainHome' component={HomeStackNavigation} options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
                         <View>
@@ -94,8 +93,8 @@ const ButtomNavigation = () => {
                         <Text style={{color: focused ? AppColors.primary : AppColors.subBlack, fontSize: 12}}>Home</Text>
                     </View>
                 ),
-            }}></Tab.Screen>
-            <Tab.Screen name='Request' component={RequestScreen} options={{
+            }} />
+            <Tab.Screen name='MainRequest' component={RequestStackNavigation} options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
                         <View>
@@ -108,7 +107,7 @@ const ButtomNavigation = () => {
                         <Text style={{color: focused ? AppColors.primary : AppColors.subBlack, fontSize: 12}}>Requests</Text>
                     </View>
                 ),
-            }}></Tab.Screen>
+            }} />
             <Tab.Screen name='Post' component={PostScreen} options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -117,7 +116,7 @@ const ButtomNavigation = () => {
                         </View>
                     </View>
                 ),
-            }}></Tab.Screen>
+            }} />
             <Tab.Screen name='Notification' component={NotificationScreen} options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -132,8 +131,8 @@ const ButtomNavigation = () => {
                     </View>
                 ),
                 tabBarBadge: numOfAlerts
-            }}></Tab.Screen>
-            <Tab.Screen name='Profile' component={ProfileScreen} options={{
+            }} />
+            <Tab.Screen name='MainProfile' component={ProfileStackNavigation} options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
                         <View>
@@ -146,7 +145,7 @@ const ButtomNavigation = () => {
                         <Text style={{color: focused ? AppColors.primary : AppColors.subBlack, fontSize: 12}}>Profile</Text>
                     </View>
                 ),
-            }}></Tab.Screen>
+            }} />
         </Tab.Navigator>
     );
 }
