@@ -16,12 +16,14 @@ function BuyerInformationScreen ({navigation, route}) {
 
     const cartData = route.params;
 
-    const [ userData, setUserData ] = useState([]);
+    const [ userData, setUserData ] = useState(null);
     const [ campus, setCampus ] = useState(null);
-    const [ additionalPhoneNumber, setAdditionalPhoneNumber ] = useState(null);
+    const [ userName, setUserName ] = useState(null);
+    const [ phoneNumber, setPhoneNumber ] = useState(null);
     const [ digitalAddress, setDigitalAddress ] = useState(null);
+    const [ additionalPhoneNumber, setAdditionalPhoneNumber ] = useState(null);
     const [ spinning, setSpinning ] = useState(true);
-
+    const [ sellerId, setSellerId ] = useState(null);
 
     const getUserDetails = () => {
         firestore.collection('users')
@@ -29,20 +31,103 @@ function BuyerInformationScreen ({navigation, route}) {
         .get()
         .then((snapshot) => {
             if(snapshot.exists){
-              setUserData(snapshot.data());
+
+                let data = snapshot.data();
+
+                setUserData(data);
             }
         })
         .catch((error) => {
           alert(error.message);
         })
+
       }
 
       const handleCheckOut = async () => {
-        navigation.navigate("OrderSummary", cartData);
+        
+        const user = auth.currentUser;
+
+        if(userData.phoneNumber !== null || userData.userName !== null || userData.campus !== null || userData.digitalAddress !== null){
+
+            let buyerInfoData = {
+                username: userName ? userName : userData.username,
+                digitalAddress: digitalAddress ? digitalAddress : userData.digitalAddress,
+                phoneNumber: phoneNumber ? phoneNumber : userData.phoneNumber,
+                additionalPhoneNumber: additionalPhoneNumber ? additionalPhoneNumber : userData.additionalPhoneNumber,
+                campus: campus ? campus : userData.campus,
+            }
+    
+            if(buyerInfoData.phoneNumber !== null || buyerInfoData.username !== null || buyerInfoData.campus !== null || buyerInfoData.digitalAddress !== null){
+                
+                if(userData.firstPost === true){
+                    const documentRef = firestore.collection("users").doc(user.uid);
+                    await documentRef.update(buyerInfoData)
+                    .then(() => {
+
+                        setDigitalAddress(null);
+                        setUserName(null);
+                        setPhoneNumber(null);
+                        setAdditionalPhoneNumber(null);
+                        setCampus(null);
+        
+                        navigation.navigate("OrderSummary", cartData);
+                    })
+                    .catch((error) => {
+                        Alert.alert(
+                            "Update Not Successful!",
+                            error.message
+                        )
+                    })
+                } else {
+                    if(sellerId !== null){
+                        const documentRef = firestore.collection("sellers").doc(sellerId);
+                        await documentRef.update(buyerInfoData)
+                        .then(() => {
+
+                            setDigitalAddress(null);
+                            setUserName(null);
+                            setPhoneNumber(null);
+                            setAdditionalPhoneNumber(null);
+                            setCampus(null);
+            
+                            navigation.navigate("OrderSummary", cartData);
+                        })
+                        .catch((error) => {
+                            Alert.alert(
+                                "Update Not Successful!",
+                                error.message
+                            )
+                        })
+                    }
+                }
+            }
+                
+        } else {
+            alert("Requied fields cannot be empty!")
+        }
+        
     }
 
       useEffect(() => {
         getUserDetails();
+
+        firestore.collection('sellers')
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach(doc => {
+                const data = doc.data();
+                { auth.currentUser.uid === data.userId ? 
+                    setSellerId(doc.id)
+                : null}
+
+                if(userData.firstPost === false){
+                    setUserData(data);
+                }
+            })
+        })
+        .catch((error) => {
+            return;
+        })
       }, [])
 
     useEffect(() => {
@@ -54,9 +139,7 @@ function BuyerInformationScreen ({navigation, route}) {
 
     return (
         <View style={styles.container}>
-            <SafeAreaView>
-                <HeadTitle title={"Buyer Information"} />
-            </SafeAreaView>
+            <HeadTitle title={"Buyer Information"} />
             <ScrollView 
             automaticallyAdjustKeyboardInsets={true}
             alwaysBounceVertical={true}
@@ -67,10 +150,15 @@ function BuyerInformationScreen ({navigation, route}) {
 
                     <View style={styles.sellerInfo}>
                             <View style={styles.textInputBox}>
-                                <Text style={styles.textTitle}>Name</Text>
+                                <Text style={styles.textTitle}>User Name</Text>
                                 <TextInput 
                                     style={[styles.textInput]}
                                     placeholder="Andrew Eshun"
+                                    editable={false}
+                                    value={userName ? userName : userData?.username}
+                                    onChangeText={(value) => {
+                                        setUserName(value)
+                                    }}
                                 />
                             </View>
                             <View style={styles.textInputBox}>
@@ -78,7 +166,7 @@ function BuyerInformationScreen ({navigation, route}) {
                                 <TextInput 
                                     style={[styles.textInput]}
                                     placeholder="W-376434-GH"
-                                    value={digitalAddress}
+                                    value={digitalAddress ? digitalAddress : userData?.digitalAddress}
                                     onChangeText={(value) => {
                                         setDigitalAddress(value)
                                     }}
@@ -92,9 +180,9 @@ function BuyerInformationScreen ({navigation, route}) {
                                     keyboardType="phone-pad"
                                     textContentType="telephoneNumber"
                                     placeholder="+233 559-045-947"
-                                    value={additionalPhoneNumber}
+                                    value={phoneNumber ? phoneNumber : userData?.phoneNumber}
                                     onChangeText={(value) => {
-                                        setAdditionalPhoneNumber(value)
+                                        setPhoneNumber(value)
                                     }}
                                 />
                             </View>
@@ -106,7 +194,7 @@ function BuyerInformationScreen ({navigation, route}) {
                                     keyboardType="phone-pad"
                                     textContentType="telephoneNumber"
                                     placeholder="+233 559-045-947"
-                                    value={additionalPhoneNumber}
+                                    value={additionalPhoneNumber ? additionalPhoneNumber : userData?.additionalPhoneNumber}
                                     onChangeText={(value) => {
                                         setAdditionalPhoneNumber(value)
                                     }}
@@ -126,6 +214,7 @@ function BuyerInformationScreen ({navigation, route}) {
                                     labelField="label"
                                     valueField="value"
                                     placeholder="Takoradi Technical University"
+                                    value={campus ? campus : userData?.campus}
                                     onChange={(value) => {
                                         setCampus(value.value)
                                     }}
