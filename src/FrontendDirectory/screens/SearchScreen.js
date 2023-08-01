@@ -79,7 +79,6 @@ function SearchScreen() {
 
     return (
         <View style={styles.container}>
-            <SafeAreaView>
               <HeadTitleWithBackIcon previousScreen={() => navigation.goBack()} title={'Search'} />
               <View style={styles.searchArea}>
                 <View style={styles.seachBoxRow}> 
@@ -113,12 +112,11 @@ function SearchScreen() {
                     showsVerticalScrollIndicator={false}>
                 {
                     dataFromState.map((product) => (
-                        <ProductCard product={product} />
+                        <ProductCard product={product} key={product.id}/>
                     ))
                 }
                 </ScrollView>
             ) : null}
-            </SafeAreaView>
         </View>
     )
 }
