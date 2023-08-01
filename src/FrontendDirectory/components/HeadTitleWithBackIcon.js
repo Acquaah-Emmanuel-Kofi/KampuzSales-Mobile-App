@@ -12,7 +12,7 @@ function HeadTitleWithBackIcon({title, previousScreen}) {
                 barStyle="dark-content"
             />
             <View style={styles.headWrapper}>
-                <Ionicons onPress={previousScreen} style={styles.searchBackIcon} name="chevron-back-sharp" size={30} color={AppColors.black} />
+                <Ionicons onPress={previousScreen} style={styles.backIcon} name="chevron-back-sharp" size={30} color={AppColors.black} />
                 <Text style={styles.title}>{title}</Text>
                 <View style={styles.searchRightSpace}></View>
             </View>
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         width: 30,
         height: 25,
     },
-    searchBackIcon: {
+    backIcon: {
         zIndex: 999
     }
   });
