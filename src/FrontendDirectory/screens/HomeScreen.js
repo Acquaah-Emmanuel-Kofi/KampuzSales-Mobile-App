@@ -143,6 +143,7 @@ function HomeScreen() {
                   keyExtractor={(item) => item._id}
                   horizontal={true}
                   flashScrollIndicators={false}
+                  showsHorizontalScrollIndicator={false}
                 />
               </>
             </View>
