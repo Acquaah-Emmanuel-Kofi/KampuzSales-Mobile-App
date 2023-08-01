@@ -48,13 +48,13 @@ const OnboardingScreen = ({navigation}) =>{
                 },
                 {
                 backgroundColor: '#ccc',
-                // image: <Image source={require('./images/circle.png')} />,
+                image: <Image source={require('../../../assets/TextLogo.png')} style={{width: 300, height: 100}} />,
                 title: 'Onboarding2',
                 subtitle: 'Done with React Native Onboarding Swiper',
                 },
                 {
                 backgroundColor: 'dodgerblue',
-                // image: <Image source={require('./images/circle.png')} />,
+                image: <Image source={require('../../../assets/TextLogo.png')} style={{width: 300, height: 100}} />,
                 title: 'Onboarding3',
                 subtitle: 'Done with React Native Onboarding Swiper',
                 },
