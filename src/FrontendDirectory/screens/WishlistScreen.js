@@ -1,13 +1,16 @@
 import React from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
-import HeadTitle from "../components/HeadTitle";
+import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
 import  AppColors  from "../data/Colors";
 import WishlistProducts from "../components/WishlistScreenComponents/WishlistProducts";
 
-function WishlistScreen() {
+function WishlistScreen({navigation}) {
     return (
         <SafeAreaView style={styles.container}>
-            <HeadTitle title={"Wishlist"} />
+            <HeadTitleWithBackIcon 
+                title={"Wishlist"}
+                previousScreen={() => navigation.goBack()}
+            />
             <WishlistProducts />
         </SafeAreaView>
     )
