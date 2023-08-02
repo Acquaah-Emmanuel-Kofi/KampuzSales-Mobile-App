@@ -1,9 +1,10 @@
 import React, { useState, useRef } from "react";
 import { StyleSheet ,Text, TextInput, View, ScrollView, Image, StatusBar, Alert } from "react-native";
 import { authLoading } from "../../BackendDirectory/authentications/authentications";
-import { CustomButton, CustomGoogleButton, PlaneCustomButton } from "../components/buttons";
+import { CustomButton, PlaneCustomButton } from "../components/buttons";
 import  AppColors  from "../data/Colors";
 import { auth, firebase } from "../../BackendDirectory/config";
+import CustomGoogleButton from "../../BackendDirectory/authentications/CustomGoogleButton";
 
 
 function OtpAuthScreen({navigation}) {
