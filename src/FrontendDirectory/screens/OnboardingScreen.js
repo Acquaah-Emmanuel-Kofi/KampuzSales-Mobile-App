@@ -37,8 +37,8 @@ const OnboardingScreen = ({navigation}) =>{
             SkipButtonComponent={skip}
             NextButtonComponent={next}
             DoneButtonComponent={done}
-            onSkip={() => navigation.navigate("Login")}
-            onDone={() => navigation.navigate("Login")}
+            onSkip={() => navigation.navigate("OtpAuth")}
+            onDone={() => navigation.navigate("OtpAuth")}
             pages={[
                 {
                 backgroundColor: '#fff',
