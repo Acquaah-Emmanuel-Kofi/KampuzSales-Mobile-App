@@ -33,13 +33,9 @@ const HomeStackNavigation = () => {
             <Tab.Screen name='Single' component={SingleProductDetailsScreen}></Tab.Screen>
             <Tab.Screen name='Search' component={SearchScreen}></Tab.Screen>
             <Tab.Screen name='Cart' component={CartScreen}></Tab.Screen>
-            <Tab.Screen name='Request' component={RequestScreen}></Tab.Screen>
-            <Tab.Screen name='AddRequest' component={AddRequestScreen}></Tab.Screen>
-            <Tab.Screen name='ViewRequest' component={ViewRequestScreen}></Tab.Screen>
             <Tab.Screen name='Alert' component={AlertScreen}></Tab.Screen>
             <Tab.Screen name='PostedProducts' component={PostedProductScreen}></Tab.Screen>
             <Tab.Screen name='EditProduct' component={EditProductDetails}></Tab.Screen>
-            <Tab.Screen name='EditProfile' component={EditProfileScreen}></Tab.Screen>
             <Tab.Screen name='AccountSettings' component={AccountSettingsScreen}></Tab.Screen>
             <Tab.Screen name='VendorInfo' component={VendorInformationScreen}></Tab.Screen>
             <Tab.Screen name='BuyerInfo' component={BuyerInformationScreen}></Tab.Screen>
