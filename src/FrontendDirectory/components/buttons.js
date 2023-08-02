@@ -2,8 +2,7 @@ import React from "react";
 import { StyleSheet, Text, Pressable, TouchableOpacity } from "react-native";
 import  AppColors  from "../data/Colors";
 import Feather from "react-native-vector-icons/Feather"
-import { Image } from "react-native";
-import { View } from "react-native";
+import { Platform } from "react-native";
 
 export function CustomButton({onPress, buttonText}) {
     return (
@@ -17,20 +16,6 @@ export function PlaneCustomButton({buttonText, onPress}) {
     return (
         <TouchableOpacity style={styles.googleButton} onPress={onPress}>
             <Text style={styles.googleButtonText}> {buttonText}</Text>
-        </TouchableOpacity>
-    )
-}
-
-export function CustomGoogleButton({onPress}) {
-    return (
-        <TouchableOpacity style={styles.googleButton}>
-            <View style={{
-                flexDirection:"row",
-                alignItems: 'center'
-            }}>
-                <Image style={{width: 20, height: 20}} source={require("../../../assets/google.png")} />
-                <Text style={styles.googleButtonText}> {"Sign in with Google"}</Text>
-            </View>
         </TouchableOpacity>
     )
 }
