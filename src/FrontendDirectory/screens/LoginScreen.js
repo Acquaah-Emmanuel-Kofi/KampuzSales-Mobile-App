@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet ,Text, TextInput, View, ScrollView, Image, StatusBar, Pressable } from "react-native";
 import { authLoading, loginUser } from "../../BackendDirectory/authentications/authentications";
-import { CustomButton, CustomGoogleButton, PlaneCustomButton } from "../components/buttons";
+import { CustomButton, PlaneCustomButton } from "../components/buttons";
 import  AppColors  from "../data/Colors";
+import CustomGoogleButton from "../../BackendDirectory/authentications/CustomGoogleButton";
 
 function LoginScreen({navigation}) {
 
