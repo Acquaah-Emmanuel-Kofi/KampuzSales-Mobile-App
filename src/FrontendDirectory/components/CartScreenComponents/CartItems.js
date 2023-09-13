@@ -130,7 +130,27 @@ function CartItems() {
 
     return (
         <View style={styles.container}>
-            <ScrollView 
+            { dataFromState.length == 0 ? 
+            (
+                <View style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: 70,
+                }}>
+                    <Image style={{width: 250, height: 250}} source={require("../../../../assets/online-shopping.png")} />
+                    <Text style={{
+                        marginTop: 20,
+                        fontSize: 18,
+                    }}>Your Cart is Empty!</Text>
+                    <Text style={{textAlign: 'center', marginVertical: 10}}>
+                        Looks like your cart is currently empty. 
+                        Start adding items to your cart by browsing the products from the homepage.
+                    </Text>
+                    <Text style={{fontSize: 12, color: AppColors.primary}}>Happy shopping!</Text>
+                </View>
+            ): 
+            (
+                <ScrollView 
                 showsVerticalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 refreshControl={
@@ -139,27 +159,28 @@ function CartItems() {
                     onRefresh={() => pulledToRefresh()}
                   />
                 }>
-            {
-                dataFromState && dataFromState.map((product, index) => (
-                    <View key={index}>
-                    {auth.currentUser.uid === product.userId ? 
-                        <Pressable style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
-                            <View style={styles.imageBox}>
-                                <Image style={styles.image} source={{uri: product.image}} alt={product.name} />
-                            </View>
-                            <View style={styles.productDetailsBox}>
-                                <Text style={styles.productName}>{product.name}</Text>
-                                <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
-                            </View>
-                            <Pressable onPress={() => handleDeleteModal(product.id)}>
-                                <Fontisto name="close" size={24} color={AppColors.black} />
+                {
+                    dataFromState && dataFromState.map((product, index) => (
+                        <View key={index}>
+                        {auth.currentUser.uid === product.userId ? 
+                            <Pressable style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
+                                <View style={styles.imageBox}>
+                                    <Image style={styles.image} source={{uri: product.image}} alt={product.name} />
+                                </View>
+                                <View style={styles.productDetailsBox}>
+                                    <Text style={styles.productName}>{product.name}</Text>
+                                    <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
+                                </View>
+                                <Pressable onPress={() => handleDeleteModal(product.id)}>
+                                    <Fontisto name="close" size={24} color={AppColors.black} />
+                                </Pressable>
                             </Pressable>
-                        </Pressable>
-                    : null}
-                    </View>
-                ))
-            }
-            </ScrollView>
+                        : null}
+                        </View>
+                    ))
+                }
+                </ScrollView>
+            )}
         </View>
     )
 }
