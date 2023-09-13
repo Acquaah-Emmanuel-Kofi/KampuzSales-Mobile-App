@@ -56,11 +56,15 @@ function LoginScreen({navigation}) {
                     loginUser(email, password)
                 }} buttonText={authLoading ? "Signing in..." : "Sign In"} />
             </View>
-            <CustomGoogleButton />
-            <PlaneCustomButton buttonText={"Sign in with OTP"} onPress={() => navigation.navigate("OtpAuth")} />
             <Text style={styles.switchLoginScreenText}>
                 Don’t have an account? <Text onPress={() => navigation.navigate("Register")} style={styles.switchLoginScreenLinkText}>Sign up</Text>
             </Text>
+            <Text style={{
+                color: AppColors.subBlack,
+                fontSize: 14,
+            }}>Or</Text>
+            <CustomGoogleButton />
+            <PlaneCustomButton buttonText={"Sign in with OTP"} onPress={() => navigation.navigate("OtpAuth")} />
             </ScrollView>
         </View>
     )
@@ -75,7 +79,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 40,
-        marginTop: 50,
     },
     headerBox: {
         display: 'flex',
@@ -120,7 +123,6 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         color: AppColors.secondary,
         marginVertical: 12,
-        marginBottom: 200
     },
     switchLoginScreenLinkText: {
         color: AppColors.primary,
