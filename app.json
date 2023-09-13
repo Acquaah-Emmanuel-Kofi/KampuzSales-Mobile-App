@@ -2,6 +2,10 @@
   "expo": {
     "name": "KampuzSales-Mobile-App",
     "slug": "KampuzSales-Mobile-App",
+    "plugins": [
+      "@react-native-google-signin/google-signin"
+    ],
+    "expoClientId": "1011601753885-0nk6ucrau0gh47bfj9045re15ee22bp7.apps.googleusercontent.com",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,16 +22,25 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kampuzsales.KampuzSalesMobileApp"
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.kampuzsales.KampuzSalesMobileApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "scheme": "KampuzSales-Mobile-App",
+    "extra": {
+      "eas": {
+        "projectId": "dabff93a-dfb9-428e-bdfd-33d343d5a8fa"
+      }
     }
   }
 }
