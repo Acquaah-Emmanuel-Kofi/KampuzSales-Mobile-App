@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Octicons from 'react-native-vector-icons/Octicons';
 import moment from "moment/moment";
@@ -37,13 +38,13 @@ const BuyerProfile = ({userData}) => {
                     <View style={styles.pencil}>
                       <FontAwesome5 name="pencil-alt" size={14} color={AppColors.white} />
                     </View>
-                    <Text style={styles.editProfileText}>Edit Profile  </Text>
+                    <Text style={styles.editProfileText}> Edit Profile  </Text>
                 </TouchableOpacity>
               </View>
             </View>
             </SafeAreaView>
 
-            <TouchableOpacity onPress={() => alert('Friend Invited!')}>
+            <TouchableOpacity onPress={() => navigation.navigate("ComingSoon")}>
               <View style={styles.inviteFriends}>
                 <Ionicons style={styles.icon} name="ios-person-add-outline" size={24} color={AppColors.primary} />
                 <Text>Invite friends</Text>
@@ -53,7 +54,7 @@ const BuyerProfile = ({userData}) => {
             <View style={styles.options}>
 
               <View style={styles.optionsDivider}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("ComingSoon")}>
                   <View style={styles.optionsTab}>
                     <Entypo style={styles.icon} name="address" size={24} color={AppColors.primary} />
                     <Text>Delivery Address</Text>
@@ -71,6 +72,12 @@ const BuyerProfile = ({userData}) => {
                     <Text>Wishlist</Text>
                   </View>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("RequestResponeded")}>
+                  <View style={styles.optionsTab}>
+                    <AntDesign style={styles.icon} name="aliwangwang-o1" size={24} color={AppColors.primary} />
+                    <Text>My Requests</Text>
+                  </View>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.optionsDivider}>
@@ -80,13 +87,13 @@ const BuyerProfile = ({userData}) => {
                     <Text style={{color: AppColors.primary, fontWeight: 600}}>Become A Seller</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("AccountSettings")}>
                   <View style={styles.optionsTab}>
                     <Ionicons style={styles.icon} name="ios-settings-outline" size={24} color={AppColors.primary} />
                     <Text>Account Settings</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("AboutKampuzSales")}>
                   <View style={styles.optionsTab}>
                     <Image style={[styles.icon, {width: 24, height: 24}]} source={require('../../../../assets/favicon.png')} />
                     <Text>About KampuzSales</Text>
@@ -95,7 +102,7 @@ const BuyerProfile = ({userData}) => {
               </View>
 
               <View style={styles.optionsDivider}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("ComingSoon")}>
                   <View style={styles.optionsTab}>
                     <MaterialCommunityIcons style={styles.icon} name="help-rhombus-outline" size={24} color={AppColors.primary} />
                     <Text>Help & Complaint</Text>

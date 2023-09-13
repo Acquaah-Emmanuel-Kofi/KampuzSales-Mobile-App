@@ -39,22 +39,22 @@ const SellerProfile = ({sellerData}) => {
                     <View style={styles.pencil}>
                       <FontAwesome5 name="pencil-alt" size={14} color={AppColors.white} />
                     </View>
-                    <Text style={styles.editProfileText}>Edit Profile</Text>
+                    <Text style={styles.editProfileText}> Edit Profile</Text>
                 </TouchableOpacity>
               </View>
             </View>
 
-            <TouchableOpacity onPress={() => alert('Friend Invited!')}>
+            <TouchableOpacity onPress={() => navigation.navigate("ComingSoon")}>
               <View style={styles.inviteFriends}>
-                <Ionicons style={styles.icon} name="ios-person-add-outline" size={24} color={AppColors.primary} />
-                <Text>Invite friends</Text>
+                <Ionicons style={styles.icon} name="share-social" size={24} color={AppColors.primary} />
+                <Text>Tell a Freind</Text>
               </View>
             </TouchableOpacity>
 
             <View style={styles.options}>
 
               <View style={styles.optionsDivider}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("ComingSoon")}>
                   <View style={styles.optionsTab}>
                     <Entypo style={styles.icon} name="address" size={24} color={AppColors.primary} />
                     <Text>Address</Text>
@@ -78,6 +78,12 @@ const SellerProfile = ({sellerData}) => {
                     <Text>Wishlist</Text>
                   </View>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("RequestResponeded")}>
+                  <View style={styles.optionsTab}>
+                    <AntDesign style={styles.icon} name="aliwangwang-o1" size={24} color={AppColors.primary} />
+                    <Text>My Requests</Text>
+                  </View>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.optionsDivider}>
@@ -93,7 +99,7 @@ const SellerProfile = ({sellerData}) => {
                     <Text>Account Settings</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("AboutKampuzSales")}>
                   <View style={styles.optionsTab}>
                     <Image style={[styles.icon, {width: 24, height: 24}]} source={require('../../../../assets/favicon.png')} />
                     <Text>About KampuzSales</Text>
@@ -102,7 +108,7 @@ const SellerProfile = ({sellerData}) => {
               </View>
 
               <View style={styles.optionsDivider}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("ComingSoon")}>
                   <View style={styles.optionsTab}>
                     <MaterialCommunityIcons style={styles.icon} name="help-rhombus-outline" size={24} color={AppColors.primary} />
                     <Text>Help & Complaint</Text>
