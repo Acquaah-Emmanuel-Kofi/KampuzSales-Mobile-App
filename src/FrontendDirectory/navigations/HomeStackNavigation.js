@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CartScreen from '../screens/CartScreen';
-import EditProfileScreen from '../screens/EditProfileScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SingleProductDetailsScreen from '../screens/SingleProductDetailsScreen';
@@ -10,12 +9,9 @@ import PostedProductScreen from '../screens/PostedProductScreen';
 import EditProductDetails from '../screens/EditProductDetails';
 import AccountSettingsScreen from '../screens/AccountSettingsScreen';
 import AlertScreen from '../components/NotificationComponent/AlertScreen';
-import RequestScreen from '../screens/RequestScreen';
 import BuyerInformationScreen from '../screens/BuyerInformationScreen';
 import OrderSummaryScreen from '../screens/OrderSummaryScreen';
 import OrderSuccessScreen from '../screens/OrderSuccessScreen';
-import AddRequestScreen from '../screens/AddRequestScreen';
-import ViewRequestScreen from '../screens/ViewRequestScreen';
 
 const Tab = createNativeStackNavigator();
 
@@ -31,6 +27,7 @@ const HomeStackNavigation = () => {
         >
             <Tab.Screen name='Home' component={HomeScreen}></Tab.Screen>
             <Tab.Screen name='Single' component={SingleProductDetailsScreen}></Tab.Screen>
+            <Tab.Screen name='Wishlist' component={WishlistScreen}></Tab.Screen>
             <Tab.Screen name='Search' component={SearchScreen}></Tab.Screen>
             <Tab.Screen name='Cart' component={CartScreen}></Tab.Screen>
             <Tab.Screen name='Alert' component={AlertScreen}></Tab.Screen>

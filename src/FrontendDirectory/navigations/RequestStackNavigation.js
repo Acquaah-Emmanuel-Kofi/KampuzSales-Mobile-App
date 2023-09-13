@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import RequestScreen from '../screens/RequestScreen';
 import AddRequestScreen from '../screens/AddRequestScreen';
 import ViewRequestScreen from '../screens/ViewRequestScreen';
+import RespondToRequestScreen from '../screens/RespondToRequestScreen';
 
 const Tab = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ const RequestStackNavigation = () => {
             }}
         >
             <Tab.Screen name='Request' component={RequestScreen}></Tab.Screen>
+            <Tab.Screen name='RespondToRequest' component={RespondToRequestScreen}></Tab.Screen>
             <Tab.Screen name='AddRequest' component={AddRequestScreen}></Tab.Screen>
             <Tab.Screen name='ViewRequest' component={ViewRequestScreen}></Tab.Screen>
         </Tab.Navigator>

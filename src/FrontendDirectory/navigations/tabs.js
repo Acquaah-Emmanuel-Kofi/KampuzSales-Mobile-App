@@ -2,7 +2,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import RegisterScreen from '../screens/RegisterScreen';
 import LoginScreen from '../screens/LoginScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
-import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import CreatePasswordScreen from '../screens/CreatePasswordScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import OtpAuthScreen from '../screens/OtpAuthScreen';
@@ -49,7 +48,6 @@ const Tabs = () => {
     //             <Tab.Screen name='Register' component={RegisterScreen}></Tab.Screen>
     //             <Tab.Screen name='Password' component={CreatePasswordScreen}></Tab.Screen>
     //             <Tab.Screen name='ForgotPassword' component={ForgotPasswordScreen}></Tab.Screen>
-    //             <Tab.Screen name='ResetPassword' component={ResetPasswordScreen}></Tab.Screen>
     //         </Tab.Navigator>
     //     );
     // } else {
@@ -72,7 +70,6 @@ const Tabs = () => {
             <Tab.Screen name='Register' component={RegisterScreen}></Tab.Screen>
             <Tab.Screen name='Password' component={CreatePasswordScreen}></Tab.Screen>
             <Tab.Screen name='ForgotPassword' component={ForgotPasswordScreen}></Tab.Screen>
-            <Tab.Screen name='ResetPassword' component={ResetPasswordScreen}></Tab.Screen>
         </Tab.Navigator>
     );
 }
