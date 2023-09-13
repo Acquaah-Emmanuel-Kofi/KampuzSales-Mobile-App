@@ -59,7 +59,7 @@ function EditProductDetails ({route, navigation}) {
     return (
         <SafeAreaView style={styles.container}>
                 <View style={styles.header}>
-                    <Ionicons onPress={() => navigation.goBack()} style={styles.searchBackIcon} name="chevron-back-sharp" size={30} color={AppColors.black} />
+                    <Ionicons onPress={() => navigation.goBack()} name="chevron-back-sharp" size={30} color={AppColors.black} />
                     <View>
                         <Text style={styles.title}>Edit Product Details</Text>
                     </View>
