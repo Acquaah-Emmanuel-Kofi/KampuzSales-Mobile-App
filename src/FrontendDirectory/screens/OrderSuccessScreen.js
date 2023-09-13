@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AppColors from "../data/Colors";
 
@@ -16,14 +16,10 @@ function OrderSuccessScreen({navigation}) {
             </View>
             <View style={styles.buttons}>
                 <TouchableOpacity 
-                    style={styles.backButtom}
-                    onPress={() => navigation.navigate("Home")} >
-                    <Text style={styles.backText}>HOME</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
                     style={styles.nextButtom}
-                    onPress={() => navigation.navigate("Cart")}>
-                    <Text style={styles.nextText}>EXIT</Text>
+                    onPress={() => navigation.navigate("Home")}>
+                        <Ionicons name="cart" size={20} color={AppColors.white} />
+                        <Text style={styles.nextText}>Continue shopping</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -46,7 +42,6 @@ const styles = StyleSheet.create({
     flexText: {
         flex: 2,
         flexDirection: 'row',
-        // alignItems: 'center',
     },
     buttons: {
         flexDirection: 'row',
@@ -82,12 +77,14 @@ const styles = StyleSheet.create({
         color: AppColors.primary,
     },
     nextButtom: {
+        flexDirection: 'row',
+        alignItems: 'center',
         backgroundColor: AppColors.primary,
         borderWidth: 1,
         borderColor: AppColors.primary,
         borderRadius: 8,
-        paddingHorizontal: 50,
-        paddingVertical: 12,
+        width: '100%',
+        height: 47,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -105,6 +102,8 @@ const styles = StyleSheet.create({
     },
     nextText: {
         color: AppColors.white,
+        marginLeft: 5,
+        fontWeight: 500,
     },
 })
 
