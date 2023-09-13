@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "290001315490",
+    "project_id": "expo-dfc73",
+    "storage_bucket": "expo-dfc73.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290001315490:android:319ec701ca96eb5ccb59fb",
+        "android_client_info": {
+          "package_name": "com.kampuzsales.KampuzSalesMobileApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "290001315490-9ckocvu37tvhto2unefli76d0g3itk9l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kampuzsales.KampuzSalesMobileApp",
+            "certificate_hash": "b9c287e4c6b9bf0273063503ba98abc52b700a1b"
+          }
+        },
+        {
+          "client_id": "290001315490-eiorhirdbrlvgi7eanijbu4objp12n7d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kampuzsales.KampuzSalesMobileApp",
+            "certificate_hash": "5e462e0a236a944c9f9477d1ee94a2987387c009"
+          }
+        },
+        {
+          "client_id": "290001315490-theejjgu4fil62nfvutf51tu6a8u9bjt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCx0BFZ3dqcWkW_G4yvHgZr_vD4JlWcNHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "290001315490-theejjgu4fil62nfvutf51tu6a8u9bjt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
