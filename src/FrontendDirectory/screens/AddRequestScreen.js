@@ -1,22 +1,49 @@
-import { ScrollView, View, StyleSheet, Text, TextInput, TouchableHighlight, Platform, Pressable } from "react-native";
+import { ScrollView, View, StyleSheet, Text, TextInput, TouchableOpacity, Platform, Pressable } from "react-native";
 import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
 import AppColors from "../data/Colors";
 import CediSign from "../components/CediSign";
-import { useState } from "react";
+import { Dropdown } from 'react-native-element-dropdown';
+import { useEffect, useState } from "react";
 import { auth, firestore, firebase } from "../../BackendDirectory/config";
 import { Alert } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Image } from "react-native";
 import uploadImageToStorage from "../../BackendDirectory/functionalities/uploadImageToStorage";
+import { categoriesData, electronicsCategories, fashionCategories, phonesCategories } from "../data/categoriesData";
 
 function AddRequestScreen({navigation}) {
 
     const [ productTitle, setProductTitle ] = useState(null);
+    const [ category, setCategory ] = useState(null);
+    const [ subCategory, setSubCategory ] = useState(null);
+    const [ subCategoryData, setSubCategoryData ] = useState(null);
     const [ description, setDescription ] = useState(null);
     const [ budget, setBudget ] = useState(null);
     const [ image, setImage ] = useState(null);
+    const [ isFocus, setIsFocus ] = useState(false);
     const [ loading, setLoading ] = useState(false);
+
+    useEffect(()=> {
+
+        const fetchSubCartegoriesData = () => {
+            if(category == 'Electronics'){
+                return electronicsCategories;
+            } else if (category == 'Fashion'){
+                return fashionCategories;
+            } else if (category == 'Phones'){
+                return phonesCategories;
+            } else {
+                return [];
+            }
+        }
+
+        let cartData = fetchSubCartegoriesData();
+
+        setSubCategoryData(cartData);
+
+    }, [category]);
 
     const handlePostRequest = async () => {
         setLoading(true)
@@ -113,8 +140,8 @@ function AddRequestScreen({navigation}) {
     return (
         <View style={styles.container}>
             <HeadTitleWithBackIcon 
-                title={"Add Request"}
                 previousScreen={() => navigation.goBack()}
+                title={"Add Request"}
             />
             <ScrollView 
             automaticallyAdjustKeyboardInsets={true}
@@ -126,18 +153,67 @@ function AddRequestScreen({navigation}) {
                     <Text style={styles.textTitle}>What do you want?</Text>
                     <TextInput 
                         style={[styles.textInput]}
-                        placeholder="iPhone..."
+                        placeholder="Product Title: Ex. iPhone 12 Pro Max"
                         value={productTitle}
                         onChangeText={(value) => setProductTitle(value)}
                     />
                 </View>
                 <View style={styles.textInputBox}>
+                    <Text style={styles.textTitle}>Add Category</Text>
+                    <Dropdown
+                        style={[styles.dropdown]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        dropdownPosition='auto'
+                        data={categoriesData}
+                        maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        placeholder={'Help sellers to filter easily.'}
+                        value={category}
+                        onFocus={() => setIsFocus(true)}
+                        onBlur={() => setIsFocus(false)}
+                        onChange={item => {
+                            setCategory(item.value);
+                            setIsFocus(false);
+                        }}
+                        />
+                </View>
+                <View style={styles.textInputBox}>
+                {
+                    subCategoryData?.length > 1 ? (
+                        <Dropdown
+                            style={[styles.dropdown]}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            inputSearchStyle={styles.inputSearchStyle}
+                            iconStyle={styles.iconStyle}
+                            dropdownPosition='auto'
+                            data={subCategoryData === null ? categoriesData : subCategoryData}
+                            maxHeight={300}
+                            labelField="label"
+                            valueField="value"
+                            placeholder={!isFocus ? 'Sub Category' : 'Select sub category'}
+                            value={subCategory}
+                            onFocus={() => setIsFocus(true)}
+                            onBlur={() => setIsFocus(false)}
+                            onChange={item => {
+                                setSubCategory(item.value);
+                                setIsFocus(false);
+                            }}
+                            />
+                    ) : null
+                }
+                </View>
+                <View style={styles.textInputBox}>
                     <Text style={styles.textTitle}>Description</Text>
                     <TextInput 
-                        style={[styles.textInput, {height: 200}]}
+                        style={[styles.textInput, {height: 100}]}
                         numberOfLines={100}
                         multiline={true}
-                        placeholder="iPhone..."
+                        placeholder="Product description: Ex. I want a gold colour with 256 storage..."
                         value={description}
                         onChangeText={(content) => setDescription(content)}
                     />
@@ -201,9 +277,17 @@ function AddRequestScreen({navigation}) {
                 </View>
             </View>
 
-            <TouchableHighlight style={styles.postButton} onPress={() => handlePostRequest()}>
-                <Text style={{color: AppColors.white, fontSize: 16, fontWeight: 400}}>{loading ? "Posting..." : "Post Request"}</Text>
-            </TouchableHighlight>
+            <TouchableOpacity style={styles.postButton} onPress={() => handlePostRequest()}>
+                <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 8,
+                }}>
+                    {loading ? null : <MaterialCommunityIcons name="arrange-send-to-back" size={20} color={AppColors.white} />}
+                    <Text style={{color: AppColors.white, fontSize: 16, fontWeight: 400}}>{loading ? "Posting..." : "Post Request"}</Text>
+                </View>
+            </TouchableOpacity>
             </ScrollView>
         </View>
     );
@@ -233,6 +317,40 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 10,
         fontSize: 14,
+    },
+    dropdown: {
+        borderWidth: 1,
+        borderColor: AppColors.borderGray,
+        borderRadius: 8,
+        paddingVertical: 2,
+        paddingHorizontal: 10,
+    },
+    icon: {
+      marginRight: 5,
+    },
+    label: {
+      position: 'absolute',
+      backgroundColor: AppColors.black,
+      left: 22,
+      top: 8,
+      zIndex: 999,
+      paddingHorizontal: 8,
+      fontSize: 14,
+    },
+    placeholderStyle: {
+      fontSize: 16,
+      color: AppColors.borderGray
+    },
+    selectedTextStyle: {
+      fontSize: 16,
+    },
+    iconStyle: {
+      width: 20,
+      height: 20,
+    },
+    inputSearchStyle: {
+      height: 40,
+      fontSize: 14,
     },
     postButton: {
         backgroundColor: AppColors.primary,
