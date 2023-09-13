@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, Text, View, TextInput, ScrollView, Pressable, Platform, } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View, TextInput, ScrollView, Pressable, Platform, StatusBar, TouchableOpacity } from "react-native";
 import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
 import  AppColors  from "../data/Colors";
 import Feather from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
 import { firestore } from "../../BackendDirectory/config";
 import ProductCard from "../components/cards/ProductCard";
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 function SearchScreen() {
   
@@ -79,7 +79,22 @@ function SearchScreen() {
 
     return (
         <View style={styles.container}>
-              <HeadTitleWithBackIcon previousScreen={() => navigation.goBack()} title={'Search'} />
+              <SafeAreaView>
+                <StatusBar
+                    animated={true}
+                    backgroundColor="#61dafb"
+                    barStyle="dark-content"
+                />
+                <View style={styles.header}>
+                        <Ionicons onPress={() => navigation.goBack()} name="chevron-back-sharp" size={30} color={AppColors.black} />
+                        <View>
+                            <Text style={styles.title}>Search</Text>
+                        </View>
+                        <TouchableOpacity>
+                            <Ionicons onPress={() => alert("Open Buttom Modal")} name="filter" size={30} color={AppColors.black} />
+                        </TouchableOpacity>
+                </View>  
+            </SafeAreaView>
               <View style={styles.searchArea}>
                 <View style={styles.seachBoxRow}> 
                     <View style={styles.seacrhBox}>
@@ -124,6 +139,18 @@ function SearchScreen() {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: 10,
+        marginTop: 20,
+    },
+    title: {
+        fontSize: 16,
+        color: AppColors.black,
+        fontWeight: '600',
     },
     searchArea: {
         marginHorizontal: 20,
