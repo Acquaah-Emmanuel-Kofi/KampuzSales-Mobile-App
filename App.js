@@ -4,9 +4,6 @@ import { auth }  from './src/BackendDirectory/config';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ButtomNavigation from './src/FrontendDirectory/navigations/BottomNavigation';
-import { ActivityIndicator } from 'react-native';
-import AppColors from './src/FrontendDirectory/data/Colors';
-
 
 const AppStack = createNativeStackNavigator();
 
@@ -25,11 +22,7 @@ function App() {
     return subscriber;
   }, [])
 
-  if(initializing) return <ActivityIndicator style={{
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  }} size="large" color={AppColors.primary} />;
+  if(initializing) return null;
 
 
   // Checking if user is not signed in
