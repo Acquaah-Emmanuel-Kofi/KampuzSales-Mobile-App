@@ -204,48 +204,70 @@ function WishlistProducts() {
 
     return (
         <View style={styles.container}>
-            <ScrollView 
-                contentContainerStyle={styles.scrollViewContainer} 
-                showsVerticalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="automatic"
-                refreshControl={
-                  <RefreshControl 
-                    refreshing={refresh}
-                    onRefresh={() => pulledToRefresh()}
-                  />
-                }>
-            {
-                dataFromState && dataFromState.map((product, index) => (
-                    <View key={index}>
-                    {auth.currentUser.uid === product.userId ? 
-                        <Pressable style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
-                            <View style={styles.imageBox}>
-                                <Image style={styles.image} source={{uri: product.image}} alt={product.productTitle} />
-                            </View>
-                            <View style={styles.productDetailsBox}>
-                                <Text style={styles.productName}>{product.productTitle}</Text>
-                                <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
-                            <Pressable 
-                                style={styles.addToCart}
-                                disabled={uploading ? true : false} 
-                                onPress={() => addToCart(product?.image, "cart", product.id)}>
-                                <Text style={{color: AppColors.white}}>{ uploading ? <ActivityIndicator size="small" color={AppColors.white} /> : "Add to Cart"}</Text>
-                            </Pressable>
-                            </View>
-                            <Pressable onPress={() => handleDeleteModal(product.id)}>
-                                <Fontisto name="close" size={24} color={AppColors.black} />
-                            </Pressable>
-                        </Pressable>
-                    : null}
-                    </View>
-                ))
-            }
-            </ScrollView>
-                <View style={styles.totalMarginHorizontal}>
-                    <CustomButton onPress={() => alert("Checked all items out!")} buttonText={"Add all to my cart"}  />
+            { dataFromState.length == 0 ? 
+            (
+                <View style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: 70,
+                }}>
+                    <Image style={{width: 300, height: 300}} source={require("../../../../assets/wish-list.png")} />
+                    <Text style={{
+                        marginTop: 20,
+                        fontSize: 18,
+                    }}>Your Wishlist is Empty!</Text>
+                    <Text style={{textAlign: 'center', marginVertical: 10}}>
+                        Start adding items you love by browsing through the products from the homepage and tapping the wishlist icon.
+                    </Text>
+                    <Text style={{fontSize: 12, color: AppColors.primary}}>Happy shopping!</Text>
                 </View>
-            {/* { dataFromState.length > 1 ? (
-            ) : null} */}
+            ) : 
+            (
+                <>
+                <ScrollView 
+                    contentContainerStyle={styles.scrollViewContainer} 
+                    showsVerticalScrollIndicator={false}
+                    contentInsetAdjustmentBehavior="automatic"
+                    refreshControl={
+                    <RefreshControl 
+                        refreshing={refresh}
+                        onRefresh={() => pulledToRefresh()}
+                    />
+                    }>
+                {
+                    dataFromState && dataFromState.map((product, index) => (
+                        <View key={index}>
+                        {auth.currentUser.uid === product.userId ? 
+                            <Pressable style={styles.productBox} onPress={() => navigation.navigate("Single", product)}>
+                                <View style={styles.imageBox}>
+                                    <Image style={styles.image} source={{uri: product.image}} alt={product.productTitle} />
+                                </View>
+                                <View style={styles.productDetailsBox}>
+                                    <Text style={styles.productName}>{product.productTitle}</Text>
+                                    <Text style={styles.productPrice}><CediSign /> {product.price}</Text>
+                                <Pressable 
+                                    style={styles.addToCart}
+                                    disabled={uploading ? true : false} 
+                                    onPress={() => addToCart(product?.image, "cart", product.id)}>
+                                    <Text style={{color: AppColors.white}}>{ uploading ? <ActivityIndicator size="small" color={AppColors.white} /> : "Add to Cart"}</Text>
+                                </Pressable>
+                                </View>
+                                <Pressable onPress={() => handleDeleteModal(product.id)}>
+                                    <Fontisto name="close" size={24} color={AppColors.black} />
+                                </Pressable>
+                            </Pressable>
+                        : null}
+                        </View>
+                    ))
+                }
+                </ScrollView>
+                { dataFromState.length >= 1 ? (
+                    <View style={styles.totalMarginHorizontal}>
+                        <CustomButton onPress={() => alert("Checked all items out!")} buttonText={"Add all to my cart"}  />
+                    </View>
+                ) : null}
+                </>
+            )}
         </View>
     )
 }
