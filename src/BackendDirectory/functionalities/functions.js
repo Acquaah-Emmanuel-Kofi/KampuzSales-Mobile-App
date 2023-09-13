@@ -1,4 +1,4 @@
-import { Alert } from "react-native";
+import { Alert, Linking } from "react-native";
 import { auth, firestore, storage } from "../config";
 import urlToBlob from "./urlToBlob";
 // import { useNavigation } from "@react-navigation/native";
@@ -71,4 +71,18 @@ export const increasePostCount = async () => {
     )
     })
 
+  };
+
+  export const openWebLink = async (url) => {
+    try {
+      const supported = await Linking.canOpenURL(url);
+  
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        console.error(`Cannot open URL: ${url}`);
+      }
+    } catch (error) {
+      console.error('Error opening URL:', error);
+    }
   };
