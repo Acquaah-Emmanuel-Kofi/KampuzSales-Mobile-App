@@ -10,13 +10,11 @@ import Spinner from "../components/spinner";
 const data = [
     { label: 'Takoradi Technical University', value: 'TTU' },
     { label: 'BU - TAKORADI', value: 'BU' },
-    { label: 'Others Loading...', value: '' },
   ];
 
   const paymentMethodData = [
     { label: 'Bank', value: 'bank' },
     { label: 'PayStack', value: 'momo' },
-    { label: 'Others Loading...', value: '' },
   ];
 
 
@@ -170,12 +168,10 @@ function VendorInformationScreen ({navigation}) {
                                 iconStyle={styles.iconStyle}
                                 dropdownPosition='auto'
                                 data={data}
-                                search
                                 maxHeight={300}
                                 labelField="label"
                                 valueField="value"
                                 label="Tertiary"
-                                searchPlaceholder="Search..."
                                 onChange={(value) => {
                                     setCampus(value.value)
                                 }}
@@ -185,7 +181,7 @@ function VendorInformationScreen ({navigation}) {
                                 <Text style={styles.textTitle}>Digital Address</Text>
                                 <TextInput 
                                     style={[styles.textInput]}
-                                    placeholder="W-376434-GH"
+                                    placeholder="WS-324-4354"
                                     value={digitalAddress}
                                     onChangeText={(value) => {
                                         setDigitalAddress(value)
@@ -213,11 +209,9 @@ function VendorInformationScreen ({navigation}) {
                                 iconStyle={styles.iconStyle}
                                 dropdownPosition='auto'
                                 data={paymentMethodData}
-                                search
                                 maxHeight={300}
                                 labelField="label"
                                 valueField="value"
-                                searchPlaceholder="Search..."
                                 onChange={(value) => {
                                     setPaymentMethod(value.value)
                                 }}

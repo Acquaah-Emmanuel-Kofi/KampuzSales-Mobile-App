@@ -24,7 +24,7 @@ function HomeScreen() {
     .get()
     .then((querySnapshot) => {
         querySnapshot.forEach(doc => {
-            const { productTitle, productImages, description, category ,price, postTime, userId} = doc.data();
+            const { productTitle, productImages, description, category, condition, price, postTime, userId} = doc.data();
             productData.push({
                 id: doc.id,
                 userPostId: userId,
@@ -33,6 +33,7 @@ function HomeScreen() {
                 description,
                 price,
                 category,
+                condition,
                 postTime,
             })
         })

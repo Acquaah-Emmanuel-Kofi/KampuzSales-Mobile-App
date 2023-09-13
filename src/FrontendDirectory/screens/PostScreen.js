@@ -461,7 +461,7 @@ const styles = StyleSheet.create({
             },
             android: {
               elevation: 5,
-              marginBottom: 100,
+              marginBottom: 50,
             },
         }),
     },

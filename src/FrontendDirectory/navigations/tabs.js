@@ -59,7 +59,7 @@ const Tabs = () => {
     
     return(
         <Tab.Navigator
-            initialRouteName='OtpAuth'
+            initialRouteName='Onboarding'
             screenOptions={{
                 tabBarShowLabel: false,
                 headerShown: false,

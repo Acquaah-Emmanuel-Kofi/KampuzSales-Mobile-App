@@ -5,6 +5,7 @@ import { BackButton } from "../components/buttons";
 import CediSign from "../components/CediSign";
 import  AppColors  from "../data/Colors";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import moment from "moment";
 import { firestore, firebase, auth } from "../../BackendDirectory/config";
 import { generateNewDownloadLink } from "../../BackendDirectory/functionalities/functions";
@@ -209,18 +210,20 @@ function SingleProductDetailsScreen({route}) {
                         <Text style={styles.productName}>{product?.name}</Text>
                         <Text style={styles.productPrice}><CediSign /> {product?.price}</Text>
                         { product?.postTime && <Text style={styles.postedTime}>Posted: {moment(product?.postTime.toDate()).fromNow()}</Text>}
-                        <View style={styles.productDetailsRow}>
-                            {product?.condition ? <Text style={styles.productDescriptionName}>Condition:</Text> : null}
-                            {product?.condition ? <Text style={styles.productDescription}>{product?.condition}</Text> : null}
-                        </View>
-                        {
-                            product?.description ? (
+                        
+                        {product?.condition ? (
+                            <View style={styles.productDetailsRow}>
+                                {product?.condition ? <Text style={styles.productDescriptionName}>Condition:</Text> : null}
+                                {product?.condition ? <Text style={styles.productDescription}>{product?.condition}</Text> : null}
+                            </View>
+                        ): null}
+
+                        {product?.description ? (
                             <View style={styles.productDetailsRow}>
                                 {product?.description ? <Text style={styles.productDescriptionName}>Description:</Text> : null}
                                 {product?.description ? <Text style={styles.productDescription}>{product?.description}</Text> : ""}
                             </View>
-                            ) : null
-                        }
+                        ) : null}
                     </View>
                     <View style={styles.productDetailesContactRow}>
                         <Pressable 
@@ -236,7 +239,14 @@ function SingleProductDetailsScreen({route}) {
                             onPress={() => addToCart(product?.image[0], "cart")}
                             disabled={uploading ? true : false} 
                         >
-                            <Text style={styles.buttonText}>{uploading ? <ActivityIndicator size="small" color={AppColors.white} /> : "Add To Cart"}</Text>
+                            <View style={{
+                                flexDirection:'row',
+                                alignItems: 'center',
+                                gap: 8,
+                            }}>
+                                {uploading ? null : <FontAwesome5 name="cart-plus" size={20} color={AppColors.white}/>}
+                                <Text style={styles.buttonText}>{uploading ? <ActivityIndicator size="small" color={AppColors.white} /> : "Add To Cart"}</Text>
+                            </View>
                         </Pressable>
                     </View>
             </ScrollView>
@@ -316,7 +326,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     postedTime: {
-        fontSize: 14
+        fontSize: 14,
+        marginBottom: 10,
     },
     productDetailsRow: {
         flexDirection: 'row',
@@ -347,29 +358,18 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: AppColors.favIconBg,
-        ...Platform.select({
-            ios: {
-              shadowColor: AppColors.black,
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.3,
-              shadowRadius: 2,
-            },
-            android: {
-              elevation: 5,
-            },
-        })
+        backgroundColor: 'transparent',
     },
     productFavoriteIconActive: {
         borderWidth: 1,
         borderRadius: 8,
-        borderColor: AppColors.primary,
+        borderColor: AppColors.borderGray,
         width: 56,
         height: 56,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.borderGray,
         ...Platform.select({
             ios: {
               shadowColor: AppColors.black,
@@ -389,10 +389,8 @@ const styles = StyleSheet.create({
         backgroundColor: AppColors.primary,
         paddingHorizontal: 10,
         paddingVertical: 14,
-        gap: 8,
         marginVertical: 12,
         width: '70%',
-        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         height: 56,

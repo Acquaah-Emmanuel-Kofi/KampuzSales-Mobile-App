@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, View, StyleSheet, Text, TextInput, Image } from "react-native";
+import { ScrollView, View, StyleSheet, Text, Image, Platform } from "react-native";
 import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
 import AppColors from "../data/Colors";
 import CediSign from "../components/CediSign";
@@ -7,7 +7,7 @@ import { firestore } from "../../BackendDirectory/config";
 import { useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
 
-function ViewRequestScreen() {
+function ViewRequestScreen({navigation}) {
 
     const [ refresh, setRefresh ] = useState(false);
     const [ dataFromState, setDataFromState ] = useState([]);
@@ -19,7 +19,7 @@ function ViewRequestScreen() {
             let productData = [];
 
             await firestore.collection('requests')
-            // .orderBy('postTime', 'desc')
+            .orderBy('postTime', 'desc')
             .get()
             .then((querySnapshot) => {
                 querySnapshot.forEach(doc => {
@@ -94,8 +94,8 @@ function ViewRequestScreen() {
                             </View>
                         </View>
                         <View style={[styles.content, {marginTop: 10, alignItems: 'center'}]}>
-                            <TouchableOpacity style={styles.button} onPress={() => alert("Applied")}>
-                                <Text style={{color: AppColors.white, fontWeight: 600}}>Apply</Text>
+                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("RespondToRequest")}>
+                                <Text style={{color: AppColors.white, fontWeight: 600}}>Responed</Text>
                             </TouchableOpacity>
                             <Text style={{fontSize: 16, fontWeight: 600}}>Budget: <CediSign /> {request.budget}</Text>
                         </View>
@@ -138,11 +138,11 @@ const styles = StyleSheet.create({
             ios: {
               shadowColor: '#000',
               shadowOffset: { width: 0, height: 0 },
-              shadowOpacity: 0.3,
+              shadowOpacity: 0.1,
               shadowRadius: 2,
             },
             android: {
-              elevation: 5,
+              elevation: 1,
             },
         }),
     },

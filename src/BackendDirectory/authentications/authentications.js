@@ -85,6 +85,8 @@ export const registerUser = async (email, password, confirmPassword, username, p
                                 email: email,
                                 phoneNumber: phoneNumber,
                                 firstPost: true,
+                                firstRequestPosting: true,
+                                firstRequestViewing: true,
                                 joinedDate: firebase.firestore.Timestamp.fromDate(new Date()),
                             })
                         })

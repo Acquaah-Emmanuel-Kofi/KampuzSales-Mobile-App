@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { SafeAreaView, Platform, ScrollView, Alert, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import HeadTitle from "../components/HeadTitle";
 import AppColors from "../data/Colors";
@@ -123,7 +123,7 @@ function OrderSummaryScreen ({navigation, route}) {
                 <View style={styles.orderInfo}>
                     <Text style={styles.textTitle}>Payment Method</Text>
                     <Dropdown
-                        style={[styles.dropdown]}
+                        style={styles.dropdown}
                         placeholderStyle={styles.placeholderStyle}
                         selectedTextStyle={styles.selectedTextStyle}
                         inputSearchStyle={styles.inputSearchStyle}
@@ -143,7 +143,7 @@ function OrderSummaryScreen ({navigation, route}) {
                     <View style={styles.textInputBox}>
                         <Text style={styles.textTitle}>Name of Bank</Text>
                         <Dropdown
-                            style={[styles.dropdown]}
+                            style={styles.dropdown}
                             placeholderStyle={styles.placeholderStyle}
                             selectedTextStyle={styles.selectedTextStyle}
                             inputSearchStyle={styles.inputSearchStyle}
@@ -162,7 +162,7 @@ function OrderSummaryScreen ({navigation, route}) {
                     <View style={styles.textInputBox}>
                         <Text style={styles.textTitle}>Account Number</Text>
                         <TextInput 
-                            style={[styles.textInput]}
+                            style={styles.textInput}
                             keyboardType="phone-pad"
                             placeholder="xxxx xxxx xxxx xx"
                             // onChangeText={(value) => {
@@ -183,7 +183,7 @@ function OrderSummaryScreen ({navigation, route}) {
                     <View style={styles.textInputBox}>
                         <Text style={styles.textTitle}>Momo Network</Text>
                         <Dropdown
-                            style={[styles.dropdown]}
+                            style={styles.dropdown}
                             placeholderStyle={styles.placeholderStyle}
                             selectedTextStyle={styles.selectedTextStyle}
                             inputSearchStyle={styles.inputSearchStyle}
@@ -202,7 +202,7 @@ function OrderSummaryScreen ({navigation, route}) {
                     <View style={styles.textInputBox}>
                         <Text style={styles.textTitle}>Momo Number</Text>
                         <TextInput 
-                            style={[styles.textInput]}
+                            style={styles.textInput}
                             autoCompleteType="tel"
                             keyboardType="phone-pad"
                             textContentType="telephoneNumber"

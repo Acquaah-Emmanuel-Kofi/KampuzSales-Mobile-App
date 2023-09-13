@@ -20,6 +20,7 @@ function PostedProductScreen({navigation}) {
               paddingHorizontal: 10,
               paddingVertical: 10,
               borderRadius: 8,
+              marginTop: 5,
             }}>
               <Text style={{color: AppColors.white}}>Check all products that are still available at your end.</Text>
             </View>

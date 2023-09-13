@@ -13,6 +13,7 @@ import { auth, firestore, storage } from "../../../BackendDirectory/config";
 import { TouchableOpacity } from "react-native";
 import ProductItem from "./PostedProductItem";
 import Spinner from "../spinner";
+import { Platform } from "react-native";
 
 function PostedProducts() {
   const [dataFromState, setDataFromState] = useState([]);
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
     borderColor: AppColors.primary,
     backgroundColor: AppColors.white,
     borderRadius: 8,
-    width: 150,
+    paddingHorizontal: 20,
     height: 40,
     display: "flex",
     justifyContent: "center",
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: AppColors.primary,
     borderRadius: 8,
-    width: 150,
+    paddingHorizontal: 20,
     height: 40,
     display: "flex",
     justifyContent: "center",
