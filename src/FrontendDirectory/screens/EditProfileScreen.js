@@ -13,15 +13,18 @@ import Spinner from "../components/spinner";
 
   const data = [
     { label: 'Takoradi Technical University', value: 'TTU' },
-    { label: 'Others Loading...', value: '' },
+    { label: 'BU - Takoradi', value: 'BU' },
   ];
 
 function EditProfileScreen({navigation}) {
 
       const [ userData, setUserData ] = useState([]);
+      const [ image, setImage ] = useState(null);
       const [ username, setUsername ] = useState(null);
       const [ phoneNumber, setPhoneNumber ] = useState(null);
-      const [ image, setImage ] = useState(null);
+      const [ location, SetLocation ] = useState(null);
+      const [ digitalAddress, setDigitalAddress ] = useState(null);
+      const [ campus, setCampus ] = useState(null);
       const [ uploading, setUploading ] = useState(false);
       const [ sellerId, setSellerId ] = useState(null);
 
@@ -47,7 +50,7 @@ function EditProfileScreen({navigation}) {
 
         const user = auth.currentUser;
 
-        if(phoneNumber !== null || username !== null || image !== null){
+        if(phoneNumber !== null || username !== null || image !== null || location !== null || digitalAddress !== null || campus !== null){
             setUploading(true);
 
             const response = await fetch(image.uri);
@@ -58,9 +61,12 @@ function EditProfileScreen({navigation}) {
                 profileDisplay: imageUrl ? imageUrl.downloadURL : userData.profileDisplay,
                 username: username ? username : userData.username,
                 phoneNumber: phoneNumber ? phoneNumber : userData.phoneNumber,
+                location: location ? location : userData.location,
+                digitalAddress: digitalAddress ? digitalAddress : userData.digitalAddress,
+                campus: campus ? campus : userData.campus,
             }
     
-            if(newUserData.phoneNumber !== null || newUserData.username !== null || newUserData.profileDisplay !== null){
+            if(newUserData.phoneNumber !== null || newUserData.username !== null || newUserData.location !== null || newUserData.digitalAddress !== null || newUserData.campus !== null || newUserData.phoneNumber !== null){
                 
                 if(userData.firstPost === true){
                     const documentRef = firestore.collection("users").doc(user.uid);
@@ -201,7 +207,7 @@ function EditProfileScreen({navigation}) {
                         <TextInput 
                             style={[styles.textInput]}
                             placeholder={`${userData.username}`}
-                            value={username ? username : userData.username}
+                            value={username ? username : userData?.username}
                             onChangeText={(value) => {
                                 setUsername(value)
                             }}
@@ -215,7 +221,7 @@ function EditProfileScreen({navigation}) {
                             keyboardType="phone-pad"
                             textContentType="telephoneNumber"
                             placeholder={`${userData.phoneNumber}`}
-                            value={phoneNumber ? phoneNumber : userData.phoneNumber}
+                            value={phoneNumber ? phoneNumber : userData?.phoneNumber}
                             onChangeText={(value) => {
                                 setPhoneNumber(value)
                             }}
@@ -225,29 +231,41 @@ function EditProfileScreen({navigation}) {
                         <Text style={styles.textTitle}>Location</Text>
                         <TextInput 
                             style={[styles.textInput]}
+                            placeholder="Takoradi - Anaji"
+                            value={location ? location : userData?.location}
+                            onChangeText={(value) => {
+                                SetLocation(value)
+                            }}
                         />
                     </View>
                     <View style={styles.textInputBox}>
                         <Text style={styles.textTitle}>Digital Address</Text>
                         <TextInput 
                             style={[styles.textInput]}
+                            placeholder="WS-234-3857"
+                            value={digitalAddress ? digitalAddress : userData?.digitalAddress}
+                            onChangeText={(value) => {
+                                setDigitalAddress(value)
+                            }}
                         />
                     </View>
                     <View style={styles.textInputBox}>
                         <Text style={styles.textTitle}>Campus</Text>
                         <Dropdown
-                        style={[styles.dropdown]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        iconStyle={styles.iconStyle}
-                        dropdownPosition='auto'
-                        data={data}
-                        search
-                        maxHeight={300}
-                        labelField="label"
-                        valueField="value"
-                        searchPlaceholder="Search..."
+                            style={[styles.dropdown]}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            inputSearchStyle={styles.inputSearchStyle}
+                            iconStyle={styles.iconStyle}
+                            dropdownPosition='auto'
+                            data={data}
+                            maxHeight={300}
+                            labelField="label"
+                            valueField="value"
+                            placeholder="Takoradi Technical University"
+                            onChange={(value) => {
+                                setCampus(value.value)
+                            }}
                         />
                     </View>
                 </View>
