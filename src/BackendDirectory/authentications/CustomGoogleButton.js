@@ -8,7 +8,7 @@ import { auth } from "../config";
 import { useEffect, useState } from "react";
 
 
-function CustomGoogleButton({onPress}) {
+function CustomGoogleButton() {
 
     const [ userInfo, setUserInfo ] = useState(null);
     const [ loading, setLoading ] = useState(false);
@@ -62,13 +62,18 @@ function CustomGoogleButton({onPress}) {
 
     return (
         <TouchableOpacity style={styles.googleButton} onPress={() => promptAsync()}>
-            <View style={{
+            { loading ? "Signing in... " : 
+            (<View style={{
                 flexDirection:"row",
-                alignItems: 'center'
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 10,
             }}>
-                <Image style={{width: 20, height: 20}} source={require("../../../assets/google.png")} />
-                <Text style={styles.googleButtonText}> { loading ? "Signing in... " : "Sign in with Google"}</Text>
-            </View>
+                <Image style={{width: 20, height: 20,}} source={require("../../../assets/google.png")} />
+                <Text style={styles.googleButtonText}> Sign in with Google</Text>
+                <View style={{width: 20}}></View>
+            </View>)
+            }
         </TouchableOpacity>
     )
 }
@@ -81,12 +86,8 @@ const styles = StyleSheet.create({
         backgroundColor: AppColors.white,
         paddingHorizontal: 10,
         paddingVertical: 14,
-        gap: 8,
         marginVertical: 12,
         width: '85%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     googleButtonText: {
         color: AppColors.labelGray,
