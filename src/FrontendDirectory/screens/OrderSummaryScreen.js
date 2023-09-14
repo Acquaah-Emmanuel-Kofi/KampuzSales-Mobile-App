@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Platform, ScrollView, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
-import HeadTitle from "../components/HeadTitle";
 import AppColors from "../data/Colors";
 import { auth } from "../../BackendDirectory/config";
 import CediSign from "../components/CediSign";
 import RadioGroup from 'react-native-radio-buttons-group';
+import HeadTitle from "../components/HeadTitle";
 
 const data = [
     { label: 'Mobile Money', value: 'momo' },
@@ -86,13 +86,13 @@ function OrderSummaryScreen ({navigation, route}) {
 
     return (
         <View style={styles.container}>
-        <HeadTitle title={"Order Summary"} />
+        <HeadTitle title={'Order Summary'} />
         <ScrollView 
         automaticallyAdjustKeyboardInsets={true}
         alwaysBounceVertical={true}
         automaticallyAdjustsScrollIndicatorInsets={true}
         >
-            <View>
+            <View style={styles.innerContainer}>
                 <Text style={styles.cardTitle}>Item Details</Text>
                 <View style={styles.orderInfo}>
                     { cartData?.map((data) => (
@@ -118,7 +118,7 @@ function OrderSummaryScreen ({navigation, route}) {
                 </View>
             </View>
 
-            <View>
+            <View style={styles.innerContainer}>
                 <Text style={styles.cardTitle}>Payment Details</Text>
                 <View style={styles.orderInfo}>
                     <Text style={styles.textTitle}>Payment Method</Text>
@@ -212,7 +212,7 @@ function OrderSummaryScreen ({navigation, route}) {
                             // }}
                         />
                     </View>
-                    <View style={{width: '45%',}}>
+                    <View style={{width: '46%',}}>
                         <RadioGroup 
                             radioButtons={radioButtons} 
                             onPress={setSelectedId}
@@ -244,8 +244,11 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
     },
+    innerContainer: {
+        marginTop: 20,
+        marginHorizontal: 20
+    },
     orderInfo: {
-        marginHorizontal: 10,
         marginTop: 10,
         marginBottom: 40,
         backgroundColor: AppColors.white,
@@ -265,8 +268,6 @@ const styles = StyleSheet.create({
         })
     },
     cardTitle: {
-        marginHorizontal: 10,
-        paddingLeft: 5,
         fontWeight: 700,
     },
     flex: {
