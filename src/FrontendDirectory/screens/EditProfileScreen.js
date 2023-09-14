@@ -68,7 +68,7 @@ function EditProfileScreen({navigation}) {
     
             if(newUserData.phoneNumber !== null || newUserData.username !== null || newUserData.location !== null || newUserData.digitalAddress !== null || newUserData.campus !== null || newUserData.phoneNumber !== null){
                 
-                if(userData.firstPost === true){
+                if(userData.firstTimePosting === true){
                     const documentRef = firestore.collection("users").doc(user.uid);
                     await documentRef.update(newUserData)
                     .then(() => {
