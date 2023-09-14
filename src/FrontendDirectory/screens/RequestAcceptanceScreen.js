@@ -75,7 +75,7 @@ function RequestAcceptanceScreen({navigation}) {
 
     return (
         <View style={styles.container}>
-            <HeadTitleWithBackIcon title={"Requests Acceptance"} />
+            <HeadTitleWithBackIcon title={"Requests Applicants"} />
             <ScrollView 
             automaticallyAdjustKeyboardInsets={true}
             alwaysBounceVertical={true}
@@ -114,7 +114,7 @@ function RequestAcceptanceScreen({navigation}) {
                         </View>
                         <View style={[styles.content, {marginTop: 10, paddingTop: 10, alignItems: 'center', borderTopColor: AppColors.borderGray, borderTopWidth: 1}]}>
                             <View style={{width: '100%'}}>
-                                <Text style={{textAlign: 'center', fontWeight: 400}}>Vendor Response</Text>
+                                <Text style={{textAlign: 'center', fontWeight: 400, marginBottom: 5}}>Vendor Response</Text>
                                 <Text style={{fontSize: 14, fontWeight: 500}}>Product Name: {request.productTitle}</Text>
                                 <Text style={{fontSize: 16,}}>Price: <CediSign /> {request.budget}</Text>
                                 <Text style={{fontSize: 14, fontWeight: 500}}>Condition: {request.productTitle}</Text>
@@ -128,6 +128,9 @@ function RequestAcceptanceScreen({navigation}) {
                         </View>
                         <TouchableOpacity style={styles.button} onPress={() => handleAcceptance()}>
                             <Text style={{color: AppColors.white, fontWeight: 600}}>Accept</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.deleteButton} onPress={() => handleAcceptance()}>
+                            <Text style={{color: AppColors.primary, fontWeight: 600}}>Delete</Text>
                         </TouchableOpacity>
                     </View>
                 ))}
@@ -183,6 +186,16 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: AppColors.primary,
+        marginTop: 10,
+        paddingVertical: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+    },
+    deleteButton: {
+        backgroundColor: AppColors.white,
+        borderWidth: 1,
+        borderColor: AppColors.primary,
         marginTop: 10,
         paddingVertical: 15,
         justifyContent: 'center',
