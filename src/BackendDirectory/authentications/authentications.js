@@ -40,6 +40,12 @@ export const loginUser = async (email, password) => {
 
 export const registerUser = async (email, password, confirmPassword, username, phoneNumber) => {
     let validPassword = checkPasswordHealth(password);
+    let errors = validPassword.errors;
+
+    let allErrors = errors.map(error => {
+        return '\n - ' + error;
+    });
+
     
     if( email !== "" || password !== "" || confirmPassword !== "" || username !== "" || phoneNumber !== ""){
         authLoading = true;
@@ -51,10 +57,12 @@ export const registerUser = async (email, password, confirmPassword, username, p
             )
         } else {
             if(!validPassword.isValid){
+
                 Alert.alert(
-                    "Invalid Password!",
-                    validPassword.errors
+                    'Invalid Password!',
+                    `${allErrors}`
                 )
+
             } else {
                 authLoading = true;
                 if(password !== confirmPassword){
@@ -66,7 +74,7 @@ export const registerUser = async (email, password, confirmPassword, username, p
                     .then(() => {
                         auth.currentUser.sendEmailVerification({
                             handleCodeInApp: true,
-                            url: 'https://kampuzsales-3cb39.firebaseapp.com',
+                            url: 'https://kampuzsales-db.firebaseapp.com',
                         })
                         .then(() => {
                             Alert.alert(
@@ -84,10 +92,17 @@ export const registerUser = async (email, password, confirmPassword, username, p
                                 username: username,
                                 email: email,
                                 phoneNumber: phoneNumber,
-                                firstPost: true,
+                                firstTimePosting: true,
                                 firstRequestPosting: true,
                                 firstRequestViewing: true,
                                 joinedDate: firebase.firestore.Timestamp.fromDate(new Date()),
+                                notifications: [
+                                    {
+                                        title: `Hi, ${username}! 🚀`,
+                                        message: "Welcome to KampuzSales, feel free to enjoy your shopping!",
+                                        postTime: firebase.firestore.Timestamp.fromDate(new Date())
+                                    }
+                                ]
                             })
                         })
                         .catch((error) => {
@@ -137,23 +152,25 @@ export const resetPassword = (password) => {
 } 
 
 export const sendPasswordResetLink = (email) => {
-    auth.sendPasswordResetEmail(email)
-    .then(() => {
-        Alert.alert(
-            "Success!",
-            "A reset link has been sent to your email. Please reset your password from the browser!"
-        )
-    })
-    .catch((error) => {
-        if( error.message.includes("(auth/invalid-email)")){
+    if(email === ''){
+        Alert.alert('Error!', 'You must provide an e-mail!');
+    } else {
+        auth.sendPasswordResetEmail(email)
+        .then(() => {
             Alert.alert(
-                "Invalid-Email",
-                "Your email address is badly formatted. Please enter a valid email address!"
+                "Success!",
+                "A reset link has been sent to your email. Please reset your password from the browser!"
             )
-        } else {
-            alert("Please enter your email to reset your password!")
-        }
-    })
+        })
+        .catch((error) => {
+            if( error.message.includes("(auth/invalid-email)")){
+                Alert.alert(
+                    "Invalid-Email",
+                    "Your email address is badly formatted. Please enter a valid email address!"
+                )
+            }
+        })
+    }
 } 
 
 export const handleLogout = () => {
@@ -178,7 +195,7 @@ export const handleLogout = () => {
   export const handleDeleteAccount = () => {
     Alert.alert(
       'Delete Account Forever',
-      'Are you sure you want to delete this account?',
+      'This action will delete your personal account, products, and activity.',
       [
           {
               text: 'Cancel',
@@ -231,12 +248,12 @@ const deleteAccount = () => {
         user.delete().then(() => {
             // User deleted.
                 Alert.alert(
-                    'Account Deleted Successfully!',
-                    "😪We're sorry if we couldn't serve you well. Love to see you here back again."
+                    'Account Deleted!',
+                    "😪We're sorry if we couldn't serve you well. Love to see you here back again!"
                 )
             }).catch((error) => {
-            // An error ocurred
-            alert(error.message)
+                // An error ocurred
+                alert(error.message)
             });
     })
     .catch((error) => {
@@ -265,7 +282,7 @@ function checkPasswordHealth(password) {
   
     // Check minimum length
     if (password.length < minLength) {
-      errors.push(`Password should be at least ${minLength} characters long.`);
+      errors.push(`Password should be at least ${minLength} characters long`);
     } else {
       score++;
     }
@@ -274,7 +291,7 @@ function checkPasswordHealth(password) {
     if (/[A-Z]/.test(password)) {
       score++;
     } else {
-      errors.push(`Password should contain at least ${minUpperCase} uppercase letter.`);
+      errors.push(`Password should contain at least ${minUpperCase} uppercase letter`);
     }
   
     // Check lowercase letters
@@ -288,14 +305,14 @@ function checkPasswordHealth(password) {
     if (/[0-9]/.test(password)) {
       score++;
     } else {
-      errors.push(`Password should contain at least ${minNumbers} number.`);
+      errors.push(`Password should contain at least ${minNumbers} number`);
     }
   
     // Check special characters
     if (/[^A-Za-z0-9]/.test(password)) {
       score++;
     } else {
-      errors.push(`Password should contain at least ${minSpecialChars} special character.`);
+      errors.push(`Password should contain at least ${minSpecialChars} special character`);
     }
   
     return {
