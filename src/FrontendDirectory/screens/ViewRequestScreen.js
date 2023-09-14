@@ -1,11 +1,9 @@
-import { ScrollView, View, StyleSheet, Text, Image, Platform } from "react-native";
-import HeadTitleWithBackIcon from "../components/HeadTitleWithBackIcon";
+import { ScrollView, View, StyleSheet, Text, Image, Platform, RefreshControl, TouchableOpacity, SafeAreaView, StatusBar } from "react-native";
 import AppColors from "../data/Colors";
 import CediSign from "../components/CediSign";
-import { TouchableOpacity } from "react-native";
 import { firestore } from "../../BackendDirectory/config";
 import { useEffect, useState } from "react";
-import { RefreshControl } from "react-native";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 function ViewRequestScreen({navigation}) {
 
@@ -58,7 +56,22 @@ function ViewRequestScreen({navigation}) {
 
     return (
         <View style={styles.container}>
-            <HeadTitleWithBackIcon title={"View Request"} />
+            <SafeAreaView>
+                <StatusBar
+                    animated={true}
+                    backgroundColor="#61dafb"
+                    barStyle="dark-content"
+                />
+                <View style={styles.header}>
+                        <Ionicons onPress={() => navigation.goBack()} name="chevron-back-sharp" size={30} color={AppColors.black} />
+                        <View>
+                            <Text style={styles.title}>View Request</Text>
+                        </View>
+                        <TouchableOpacity>
+                            <Ionicons onPress={() => alert("Open Buttom Modal")} name="filter" size={30} color={AppColors.black} />
+                        </TouchableOpacity>
+                </View>  
+            </SafeAreaView>
             <ScrollView 
             automaticallyAdjustKeyboardInsets={true}
             alwaysBounceVertical={true}
@@ -71,7 +84,8 @@ function ViewRequestScreen({navigation}) {
               }
             >
             <View style={{
-                marginBottom: 100
+                marginBottom: 100,
+                marginHorizontal: 10
             }}>
                 {dataFromState?.map((request) => (
                     <View style={styles.card} key={request.id}>
@@ -111,6 +125,18 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
     },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: 10,
+        marginTop: 20,
+    },
+    title: {
+        fontSize: 16,
+        color: AppColors.black,
+        fontWeight: '600',
+    },
     textInputBox: {
         marginVertical: 6,
     },
@@ -131,6 +157,8 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 5,
         backgroundColor: AppColors.white,
+        borderColor: AppColors.primary,
+        borderWidth: 1,
         padding: 10,
         borderRadius: 10,
         paddingVertical: 20,
