@@ -90,7 +90,7 @@ function CartScreen({navigation}) {
 
     return (
         <View style={styles.container}>
-            <HeadTitleWithBackIcon previousScreen={() => navigation.navigate("BuyerInfo")} title={"Cart"} />
+            <HeadTitleWithBackIcon previousScreen={() => navigation.goBack()} title={"Cart"} />
             <CartItems />
             <View style={styles.totalMarginHorizontal}>
                 { totalAmount ? (
