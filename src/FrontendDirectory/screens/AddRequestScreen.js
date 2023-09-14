@@ -285,7 +285,7 @@ function AddRequestScreen({navigation}) {
                     gap: 8,
                 }}>
                     {loading ? null : <MaterialCommunityIcons name="arrange-send-to-back" size={20} color={AppColors.white} />}
-                    <Text style={{color: AppColors.white, fontSize: 16, fontWeight: 400}}>{loading ? "Posting..." : "Post Request"}</Text>
+                    <Text style={{color: AppColors.white, fontSize: 16, fontWeight: 500}}>{loading ? "Posting..." : "Post Request"}</Text>
                 </View>
             </TouchableOpacity>
             </ScrollView>
