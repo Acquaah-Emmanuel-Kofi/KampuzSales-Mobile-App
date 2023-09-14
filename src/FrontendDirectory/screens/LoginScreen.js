@@ -49,7 +49,7 @@ function LoginScreen({navigation}) {
                 />
             </View>
             <Pressable style={styles.inputBox}  onPress={() => navigation.navigate("ForgotPassword")}>
-                <Text style={styles.forgotPasswordLinkText}>Forgot password</Text>
+                <Text style={styles.forgotPasswordLinkText}>Forgot password?</Text>
             </Pressable>
             <View style={styles.customButton}>
                 <CustomButton onPress={() => {
@@ -57,7 +57,7 @@ function LoginScreen({navigation}) {
                 }} buttonText={authLoading ? "Signing in..." : "Sign In"} />
             </View>
             <Text style={styles.switchLoginScreenText}>
-                Don’t have an account? <Text onPress={() => navigation.navigate("Register")} style={styles.switchLoginScreenLinkText}>Sign up</Text>
+                Don’t have an account? <Text onPress={() => navigation.navigate("Register")} style={styles.switchLoginScreenLinkText}>Sign up!</Text>
             </Text>
             <Text style={{
                 color: AppColors.subBlack,
