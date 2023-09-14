@@ -7,12 +7,12 @@ function OrderSuccessScreen({navigation}) {
         <View style={styles.container}>
             <View style={styles.successContainer}>
                 <Ionicons name="checkmark-circle" size={120} color={AppColors.primary} />
-                <Text style={{fontWeight: 500, fontSize: 18}}>Congratulations!</Text>
+                <Text style={{fontWeight: 500, fontSize: 18}}>Congratulations! 🎉</Text>
                 <Text style={{fontWeight: 500, fontSize: 18}}>Your order has been recieved.</Text>
             </View>
             <View style={styles.flexText}>
                 <Text style={{fontSize: 18, fontStyle: 'italic'}}>Thank you for choosing </Text>
-                <Text style={{fontWeight: 500, fontSize: 18}}>KampuzSales </Text>
+                <Text style={{fontWeight: 500, fontSize: 18}}>KampuzSales 🤩</Text>
             </View>
             <View style={styles.buttons}>
                 <TouchableOpacity 
