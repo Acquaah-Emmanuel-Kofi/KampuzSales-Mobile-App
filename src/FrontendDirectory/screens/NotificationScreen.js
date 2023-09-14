@@ -70,28 +70,47 @@ function Notifications() {
     return (
         <View style={styles.container}>
           <HeadTitle title={'Alerts'} />
-          <ScrollView 
-            showsVerticalScrollIndicator={false}
-            contentInsetAdjustmentBehavior="automatic"
-            >
-              {notifications && notifications?.map((data, index) => (
-                <Pressable key={index} style={styles.alertMessageCard} onPress={() => navigation.navigate("Alert", notifications)}>
-                    <Image style={[styles.icon, {width: 24, height: 24}]} source={require('../../../assets/favicon.png')} />
-                    <View style={styles.message}>
-                      <Text style={{
-                        fontWeight:'bold',
-                        marginBottom: 1,
-                      }}>{data.title}</Text>
-                      <Text style={{
-                        flexWrap: 'wrap',
-                      }}>{data.message}</Text>
-                    </View>
-                    <Pressable>
-                        <Fontisto name="close" size={24} color={AppColors.black} />
-                    </Pressable>
-                </Pressable>
-              ))}
-            </ScrollView>
+
+          { notifications?.length == 0 ? (
+              <View style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginTop: 70,
+              }}>
+                  <Image style={{width: 250, height: 250}} source={require("../../../assets/bell.png")} />
+                  <Text style={{
+                      marginTop: 20,
+                      fontSize: 18,
+                  }}>You have no notification yet!</Text>
+                  <Text style={{textAlign: 'center', marginVertical: 10}}>
+                      Just keep on enjoying your shopping already!
+                  </Text>
+                  <Text style={{fontSize: 12, color: AppColors.primary}}>Happy shopping! 🎉</Text>
+              </View>
+          ) : (
+            <ScrollView 
+              showsVerticalScrollIndicator={false}
+              contentInsetAdjustmentBehavior="automatic"
+              >
+                {notifications && notifications?.map((data, index) => (
+                  <Pressable key={index} style={styles.alertMessageCard} onPress={() => navigation.navigate("Alert", notifications)}>
+                      <Image style={[styles.icon, {width: 24, height: 24}]} source={require('../../../assets/favicon.png')} />
+                      <View style={styles.message}>
+                        <Text style={{
+                          fontWeight:'bold',
+                          marginBottom: 1,
+                        }}>{data.title}</Text>
+                        <Text style={{
+                          flexWrap: 'wrap',
+                        }}>{data.message}</Text>
+                      </View>
+                      <Pressable>
+                          <Fontisto name="close" size={24} color={AppColors.black} />
+                      </Pressable>
+                  </Pressable>
+                ))}
+              </ScrollView>
+          )}
         </View>
     )
 }
