@@ -109,7 +109,7 @@ function ViewRequestScreen({navigation}) {
                         </View>
                         <View style={[styles.content, {marginTop: 10, alignItems: 'center'}]}>
                             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("RespondToRequest")}>
-                                <Text style={{color: AppColors.white, fontWeight: 600}}>Responed</Text>
+                                <Text style={{color: AppColors.white, fontWeight: 600}}>Apply</Text>
                             </TouchableOpacity>
                             <Text style={{fontSize: 16, fontWeight: 600}}>Budget: <CediSign /> {request.budget}</Text>
                         </View>
