@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SafeAreaView, Platform, ScrollView, Alert, StyleSheet, TouchableHighlight, Text, TextInput, View, ActivityIndicator } from "react-native";
+import { Platform, ScrollView, Alert, StyleSheet, TouchableOpacity, Text, TextInput, View, ActivityIndicator } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import HeadTitle from "../components/HeadTitle";
 import AppColors from "../data/Colors";
@@ -53,9 +53,9 @@ function VendorInformationScreen ({navigation}) {
     const submit = () => {
         setLoading(true)
 
-        if(campus !== null || digitalAddress !== null || phoneNumber !== null || ghCardNumber !== null || paymentMethod !== null){
+        if(campus !== null || digitalAddress !== null || additionalPhoneNumber !== null || ghCardNumber !== null || paymentMethod !== null){
             if (isValidDigitalAddress(digitalAddress)) {
-                // Alert.alert('Valid Digital Address', 'The digital address is valid.');
+
                 firestore.collection('sellers')
                 .add({
                     userId: auth.currentUser.uid,
@@ -65,11 +65,11 @@ function VendorInformationScreen ({navigation}) {
                     paymentMethod, 
                     campus,
                     numOfProductsPosted: 0,
-                    notifications: userData.notifications,
-                    email: userData.email,
-                    joinedDate: userData.joinedDate,
-                    phoneNumber: userData.phoneNumber,
-                    username: userData.username,
+                    notifications: userData.notifications ? userData.notifications : null,
+                    email: userData.email ? userData.email : null,
+                    joinedDate: userData.joinedDate ? userData.joinedDate : null,
+                    phoneNumber: userData.phoneNumber ? userData.phoneNumber : null,
+                    username: userData.username ? userData.username : null,
                     profileDisplay: userData.profileDisplay ? userData.profileDisplay : null,
                 })
                 .then(async () => {
@@ -124,7 +124,7 @@ function VendorInformationScreen ({navigation}) {
 
     return (
         <View style={styles.container}>
-                <HeadTitle title={"BECOME A SELLER"} />
+            <HeadTitle title={"BECOME A SELLER"} />
             <ScrollView 
             contentContainerStyle={styles.innerContainer}
             automaticallyAdjustKeyboardInsets={true}
@@ -217,13 +217,13 @@ function VendorInformationScreen ({navigation}) {
                                 }}
                                 />
                             </View>
-                        <TouchableHighlight 
+                        </View>
+                        <TouchableOpacity 
                             style={styles.submitButton}
                             disabled={loading ? true : false} 
                             onPress={() => submit()}>
-                            <Text style={{color: AppColors.white}}>Submit</Text>
-                        </TouchableHighlight>
-                        </View>
+                            <Text style={{color: AppColors.white, fontWeight: 500}}>Submit</Text>
+                        </TouchableOpacity>
             </ScrollView>
         </View>
     )
@@ -232,7 +232,9 @@ function VendorInformationScreen ({navigation}) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: AppColors.white,
+    },
+    innerContainer: {
+        paddingBottom: 100
     },
     textInputBox: {
         marginVertical: 6,
@@ -244,15 +246,16 @@ const styles = StyleSheet.create({
     textInput: {
         borderWidth: 1,
         borderColor: AppColors.borderGray,
+        backgroundColor: AppColors.white,
         borderRadius: 8,
         paddingVertical: 10,
         paddingHorizontal: 10,
         fontSize: 14,
     },
     vendorInfo: {
-        marginHorizontal: 10,
+        marginHorizontal: 20,
         marginTop: 20,
-        marginBottom: 100,
+        marginBottom: 30,
         backgroundColor: AppColors.white,
         padding: 10,
         borderRadius: 10,
@@ -272,6 +275,7 @@ const styles = StyleSheet.create({
     dropdown: {
         borderWidth: 1,
         borderColor: AppColors.borderGray,
+        backgroundColor: AppColors.white,
         borderRadius: 8,
         paddingVertical: 2,
         paddingHorizontal: 10,
@@ -309,12 +313,9 @@ const styles = StyleSheet.create({
     },
     submitButton: {
         backgroundColor: AppColors.primary,
-        borderWidth: 1,
-        borderColor: AppColors.primary,
         borderRadius: 8,
-        marginTop: 20,
         height: 50,
-        display: 'flex',
+        marginHorizontal: 20,
         justifyContent: 'center',
         alignItems: 'center',
         ...Platform.select({
