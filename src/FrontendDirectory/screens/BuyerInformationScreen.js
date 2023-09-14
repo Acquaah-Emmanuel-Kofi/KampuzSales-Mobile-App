@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { SafeAreaView, Platform, ScrollView, Alert, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
+import { Platform, ScrollView, Alert, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
-import HeadTitle from "../components/HeadTitle";
 import AppColors from "../data/Colors";
 import { auth, firestore } from "../../BackendDirectory/config";
 import Spinner from "../components/spinner";
+import HeadTitle from "../components/HeadTitle";
 
 const data = [
     { label: 'Takoradi Technical University', value: 'TTU' },
@@ -59,7 +59,7 @@ function BuyerInformationScreen ({navigation, route}) {
     
             if(buyerInfoData.phoneNumber !== null || buyerInfoData.username !== null || buyerInfoData.campus !== null || buyerInfoData.digitalAddress !== null){
                 
-                if(userData.firstPost === true){
+                if(userData.firstTimePosting === true){
                     const documentRef = firestore.collection("users").doc(user.uid);
                     await documentRef.update(buyerInfoData)
                     .then(() => {
@@ -120,7 +120,7 @@ function BuyerInformationScreen ({navigation, route}) {
                     setSellerId(doc.id)
                 : null}
 
-                if(userData.firstPost === false){
+                if(userData.firstTimePosting === false){
                     setUserData(data);
                 }
             })
@@ -139,7 +139,7 @@ function BuyerInformationScreen ({navigation, route}) {
 
     return (
         <View style={styles.container}>
-            <HeadTitle title={"Buyer Information"} />
+            <HeadTitle title={'Buyer Information'} />
             <ScrollView 
             automaticallyAdjustKeyboardInsets={true}
             alwaysBounceVertical={true}
@@ -241,7 +241,6 @@ function BuyerInformationScreen ({navigation, route}) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: AppColors.white,
     },
     textInputBox: {
         marginVertical: 6,
@@ -253,13 +252,14 @@ const styles = StyleSheet.create({
     textInput: {
         borderWidth: 1,
         borderColor: AppColors.borderGray,
+        backgroundColor: AppColors.white,
         borderRadius: 8,
         paddingVertical: 10,
         paddingHorizontal: 10,
         fontSize: 14,
     },
     sellerInfo: {
-        marginHorizontal: 10,
+        marginHorizontal: 20,
         marginTop: 20,
         marginBottom: 40,
         backgroundColor: AppColors.white,
@@ -338,6 +338,7 @@ const styles = StyleSheet.create({
     dropdown: {
         borderWidth: 1,
         borderColor: AppColors.borderGray,
+        backgroundColor: AppColors.white,
         borderRadius: 8,
         paddingVertical: 2,
         paddingHorizontal: 10,
