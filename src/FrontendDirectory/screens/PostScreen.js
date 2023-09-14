@@ -27,6 +27,7 @@ function PostScreen() {
      const [ price, setPrice ] = useState(null);
      const [ quantity, setQuantity ] = useState(null);
      const [ condition, setCondition ] = useState(null);
+     const [ colour, setColour ] = useState(null);
      const [ description, setDescription ] = useState(null);
      const [ isFocus, setIsFocus ] = useState(false);
      const [ selectedImages, setSelectedImages ] = useState(null); 
@@ -51,6 +52,13 @@ function PostScreen() {
         setSubCategoryData(cartData);
 
     }, [category]);
+
+    const conditions = [
+        { label: 'New', value: 'New' },
+        { label: 'Old', value: 'Old' },
+        { label: 'Faulty', value: 'Faulty' },
+        { label: 'Moderate', value: 'Moderate' },
+    ];
 
 
     const handleImageUpload = async () => {
@@ -237,6 +245,7 @@ function PostScreen() {
                     </View>
                     <View style={styles.postDetails}>
                         <View style={styles.textInputBox}>
+                        <Text style={styles.textTitle}>Add Category</Text>
                         <Dropdown
                             style={[styles.dropdown]}
                             placeholderStyle={styles.placeholderStyle}
@@ -261,97 +270,75 @@ function PostScreen() {
                         <View style={styles.textInputBox}>
                         {
                             subCategoryData?.length > 1 ? (
-                                <Dropdown
-                                    style={[styles.dropdown]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    inputSearchStyle={styles.inputSearchStyle}
-                                    iconStyle={styles.iconStyle}
-                                    dropdownPosition='auto'
-                                    data={subCategoryData === null ? categoriesData : subCategoryData}
-                                    maxHeight={300}
-                                    labelField="label"
-                                    valueField="value"
-                                    placeholder={!isFocus ? 'Sub Category' : 'Select sub category'}
-                                    value={subCategory}
-                                    onFocus={() => setIsFocus(true)}
-                                    onBlur={() => setIsFocus(false)}
-                                    onChange={item => {
-                                        setSubCategory(item.value);
-                                        setIsFocus(false);
-                                    }}
-                                    />
+                            <Dropdown
+                                style={[styles.dropdown]}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                inputSearchStyle={styles.inputSearchStyle}
+                                iconStyle={styles.iconStyle}
+                                dropdownPosition='auto'
+                                data={subCategoryData === null ? categoriesData : subCategoryData}
+                                maxHeight={300}
+                                labelField="label"
+                                valueField="value"
+                                placeholder={!isFocus ? 'Sub Category' : 'Select sub category'}
+                                value={subCategory}
+                                onFocus={() => setIsFocus(true)}
+                                onBlur={() => setIsFocus(false)}
+                                onChange={item => {
+                                    setSubCategory(item.value);
+                                    setIsFocus(false);
+                                }}
+                                />
                             ) : null
                         }
                         </View>
                         <View style={styles.textInputBox}>
+                            <Text style={styles.textTitle}>Product Title</Text>
                             <TextInput 
                                 style={[styles.textInput]}
-                                placeholder="Product Title" 
+                                placeholder="Ex. iPhone 12 Pro Max"
                                 value={productTitle}
                                 onChangeText={(content) => setProducTitle(content)}
                             />
                         </View>
                         <View style={styles.priceInputBox}>
-                            <View style={{flexDirection: 'row', width: '60%', justifyContent: 'space-between', alignItems: 'center'}}>
-                                <CediSign />
-                                <View style={styles.price}>
-                                    <TextInput 
-                                        style={[styles.priceInput]}
-                                        placeholder="Price" 
-                                        keyboardType="numeric"
-                                        value={price}
-                                        onChangeText={(value) => setPrice(value)}
-                                    />
-                                    <Text style={{color: AppColors.borderGray}}>.00</Text>
+                            <View style={{width: '50%'}}>
+                                <Text style={styles.textTitle}>Price</Text>
+                                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                                    <CediSign />
+                                    <View style={styles.price}>
+                                        <TextInput 
+                                            style={[styles.priceInput]}
+                                            placeholder="0" 
+                                            keyboardType="numeric"
+                                            value={price}
+                                            onChangeText={(value) => setPrice(value)}
+                                        />
+                                        <Text style={{color: AppColors.borderGray}}>.00</Text>
+                                    </View>
                                 </View>
                             </View>
-                            <TextInput 
-                                style={styles.quantity}
-                                placeholder="Quantity" 
-                                keyboardType="numeric"
-                                value={quantity}
-                                onChangeText={(value) => setQuantity(value)}
-                            />
+                            <View style={{width: '45%'}}>
+                                <Text style={styles.textTitle}>Quantity</Text>
+                                <TextInput 
+                                    style={styles.quantity}
+                                    placeholder="Ex. 2" 
+                                    keyboardType="numeric"
+                                    value={quantity}
+                                    onChangeText={(value) => setQuantity(value)}
+                                />
+                            </View>
                         </View>
                         { category === 'Phones' || category === 'Laptops' ?
                             (
                                 <View style={styles.textInputBox}>
+                                    <Text style={styles.textTitle}>Brand</Text>
                                     <TextInput 
                                         style={[styles.textInput]}
                                         placeholder="Brand" 
-                                        value={condition}
-                                        onChangeText={(content) => setCondition(content)}
-                                    />
-                                </View>
-                            ) : 
-                            (
-                                null
-                            )
-                        }
-                        { category === 'Phones' || category === 'Laptops' ?
-                            (
-                                <View style={styles.textInputBox}>
-                                    <TextInput 
-                                        style={[styles.textInput]}
-                                        placeholder="Storage" 
-                                        value={condition}
-                                        onChangeText={(content) => setCondition(content)}
-                                    />
-                                </View>
-                            ) : 
-                            (
-                                null
-                            )
-                        }
-                        { category === 'Phones' || category === 'Laptops' ?
-                            (
-                                <View style={styles.textInputBox}>
-                                    <TextInput 
-                                        style={[styles.textInput]}
-                                        placeholder="RAM" 
-                                        value={condition}
-                                        onChangeText={(content) => setCondition(content)}
+                                        // value={condition}
+                                        // onChangeText={(content) => setCondition(content)}
                                     />
                                 </View>
                             ) : 
@@ -362,6 +349,7 @@ function PostScreen() {
                         { category === 'Food' ?
                             (
                                 <View style={styles.textInputBox}>
+                                    <Text style={styles.textTitle}>Kind of food?</Text>
                                     <TextInput 
                                         style={[styles.textInput]}
                                         placeholder="Food Type" 
@@ -372,38 +360,39 @@ function PostScreen() {
                             ) : 
                             (
                                 <View style={styles.textInputBox}>
-                                    <TextInput 
-                                        style={[styles.textInput]}
-                                        placeholder="Condition" 
-                                        value={condition}
-                                        onChangeText={(content) => setCondition(content)}
+                                <Text style={styles.textTitle}>What is the condition?</Text>
+                                <Dropdown
+                                    style={[styles.dropdown]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    inputSearchStyle={styles.inputSearchStyle}
+                                    iconStyle={styles.iconStyle}
+                                    dropdownPosition='auto'
+                                    data={conditions}
+                                    maxHeight={300}
+                                    labelField="label"
+                                    valueField="value"
+                                    placeholder={'Help customer gain trust.'}
+                                    value={condition}
+                                    onFocus={() => setIsFocus(true)}
+                                    onBlur={() => setIsFocus(false)}
+                                    onChange={item => {
+                                        setCondition(item.value);
+                                        setIsFocus(false);
+                                    }}
                                     />
-                                </View>
+                            </View>
                             )
                         }
                         { category === 'Clothing' ?
                             (
                                 <View style={styles.textInputBox}>
+                                    <Text style={styles.textTitle}>What is the Colour?</Text>
                                     <TextInput 
                                         style={[styles.textInput]}
                                         placeholder="Colour" 
-                                        value={condition}
-                                        onChangeText={(content) => setCondition(content)}
-                                    />
-                                </View>
-                            ) : 
-                            (
-                                null
-                            )
-                        }
-                        { category === 'Clothing' ?
-                            (
-                                <View style={styles.textInputBox}>
-                                    <TextInput 
-                                        style={[styles.textInput]}
-                                        placeholder="Brand" 
-                                        value={condition}
-                                        onChangeText={(content) => setCondition(content)}
+                                        value={colour}
+                                        onChangeText={(content) => setColour(content)}
                                     />
                                 </View>
                             ) : 
@@ -412,9 +401,10 @@ function PostScreen() {
                             )
                         }
                         <View style={styles.textInputBox}>
+                                <Text style={styles.textTitle}>Description</Text>
                                 <TextInput 
                                     style={[styles.descriptionTextInput]}
-                                    placeholder="Description" 
+                                    placeholder="Ex. There are more in stock..." 
                                     numberOfLines={10}
                                     multiline={true}
                                     value={description}
@@ -442,28 +432,11 @@ function PostScreen() {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: AppColors.white,
     },
     innerContainer: {
-        marginHorizontal: 10,
-        marginTop: 10,
+        marginHorizontal: 20,
         marginBottom: 40,
-        borderRadius: 10,
-        paddingVertical: 20,
-        paddingHorizontal: 10,
-        backgroundColor: AppColors.white,
-        ...Platform.select({
-            ios: {
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 0 },
-              shadowOpacity: 0.3,
-              shadowRadius: 2,
-            },
-            android: {
-              elevation: 5,
-              marginBottom: 50,
-            },
-        }),
+        marginTop: 20,
     },
     postAndThumbnail: {
         flexDirection: 'row',
@@ -525,6 +498,10 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         marginTop: 20,
     },
+    textTitle: {
+        marginBottom: 5,
+        marginLeft: 3,
+    },
     textInputBox: {
         marginVertical: 6,
     },
@@ -545,12 +522,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     priceInput: {
-        width: '70%',
+        width: '60%',
+        backgroundColor: AppColors.white,
     },
     quantity: {
-        width: '35%',
         borderWidth: 1,
         borderColor: AppColors.borderGray,
+        backgroundColor: AppColors.white,
         borderRadius: 8,
         paddingVertical: 10,
         paddingHorizontal: 10,
@@ -559,6 +537,7 @@ const styles = StyleSheet.create({
     textInput: {
         borderWidth: 1,
         borderColor: AppColors.borderGray,
+        backgroundColor: AppColors.white,
         borderRadius: 8,
         paddingVertical: 10,
         paddingHorizontal: 10,
@@ -567,6 +546,7 @@ const styles = StyleSheet.create({
     descriptionTextInput: {
         borderWidth: 1,
         borderColor: AppColors.borderGray,
+        backgroundColor: AppColors.white,
         borderRadius: 8,
         paddingVertical: 10,
         paddingHorizontal: 10,
@@ -632,6 +612,7 @@ const styles = StyleSheet.create({
     dropdown: {
         borderWidth: 1,
         borderColor: AppColors.borderGray,
+        backgroundColor: AppColors.white,
         borderRadius: 8,
         paddingVertical: 2,
         paddingHorizontal: 10,
