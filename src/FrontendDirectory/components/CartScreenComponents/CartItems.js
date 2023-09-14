@@ -146,7 +146,7 @@ function CartItems() {
                         Looks like your cart is currently empty. 
                         Start adding items to your cart by browsing the products from the homepage.
                     </Text>
-                    <Text style={{fontSize: 12, color: AppColors.primary}}>Happy shopping!</Text>
+                    <Text style={{fontSize: 12, color: AppColors.primary}}>Happy shopping! 🎉</Text>
                 </View>
             ): 
             (
