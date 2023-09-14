@@ -6,43 +6,17 @@ import  AppColors  from "../data/Colors";
 import { auth, firebase } from "../../BackendDirectory/config";
 import CustomGoogleButton from "../../BackendDirectory/authentications/CustomGoogleButton";
 
+// import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+// import Recaptcha from 'react-native-recaptcha-that-works';
+
+
 
 function OtpAuthScreen({navigation}) {
 
-//   const [ phoneNumber, setPhoneNumber ] = useState('');
-//   const [ verificationcode, setVerificationCode ] = useState('');
-//   const [ verificationId, setVerificationId ] = useState('');
-//   const recaptchaVerifier = useRef(null);
-
-const [phone, setPhone] = useState('');
-const [verificationId, setVerificationId] = useState('');
-const [otp, setOtp] = useState('');
-
-// Function to send OTP verification code
-const sendOTP = async () => {
-  try {
-    const confirmation = await auth.signInWithPhoneNumber(phone);
-    // setVerificationId(confirmation.verificationId);
-
-    console.log(confirmation);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// Function to verify OTP code
-const verifyOTP = async () => {
-    try {
-      const credential = firebase.auth().PhoneAuthProvider.credential(
-        verificationId,
-        otp
-      );
-      await firebase.auth().signInWithCredential(credential);
-      // OTP verification successful
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [ phoneNumber, setPhoneNumber ] = useState('');
+  const [ verificationcode, setVerificationCode ] = useState('');
+  const [ verificationId, setVerificationId ] = useState('');
+  const recaptchaVerifier = useRef(null);
 
   return (
       <View style={styles.container}>
@@ -73,11 +47,15 @@ const verifyOTP = async () => {
           <View style={styles.customButton}>
               <CustomButton onPress={() => {}} buttonText={authLoading ? "Sending Otp..." : "Send Otp Code"} />
           </View>
-          <CustomGoogleButton />
-          <PlaneCustomButton onPress={() => navigation.navigate("Login")} buttonText={"Sign in with Email"} />
           <Text style={styles.switchLoginScreenText}>
               Don’t have an account? <Text onPress={() => navigation.navigate("Register")} style={styles.switchLoginScreenLinkText}>Sign up</Text>
           </Text>
+          <Text style={{
+                color: AppColors.subBlack,
+                fontSize: 14,
+            }}>Or</Text>
+          <CustomGoogleButton />
+          <PlaneCustomButton onPress={() => navigation.navigate("Login")} buttonText={"Sign in with Email"} />
           </ScrollView>
       </View>
   )
