@@ -25,6 +25,7 @@ function RespondToRequestScreen({navigation}) {
     const conditions = [
         { label: 'New', value: 'New' },
         { label: 'Old', value: 'Old' },
+        { label: 'Faulty', value: 'Faulty' },
         { label: 'Moderate', value: 'Moderate' },
     ];
 
@@ -126,7 +127,7 @@ function RespondToRequestScreen({navigation}) {
     return (
         <View style={styles.container}>
             <HeadTitleWithBackIcon 
-                title={"Respond To Request"}
+                title={"Apply For Requests"}
                 previousScreen={() => navigation.goBack()}
             />
             <ScrollView 
