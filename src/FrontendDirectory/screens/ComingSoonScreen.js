@@ -13,7 +13,6 @@ function ComingSoonScreen({navigation}) {
                 alwaysBounceVertical={true}
                 automaticallyAdjustsScrollIndicatorInsets={true}
                 showsVerticalScrollIndicator={false}>
-                    {/* <Text style={styles.heading}>Coming Soon...</Text> */}
                     <View style={{
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -27,7 +26,7 @@ function ComingSoonScreen({navigation}) {
                         This screen is still under construction. 
                         
                     </Text>
-                    <Text style={{fontSize: 12, color: AppColors.primary}}>Happy shopping!</Text>
+                    <Text style={{fontSize: 12, color: AppColors.primary}}>Happy shopping! 🎉</Text>
                 </View>
                 </ScrollView>
         </View>
