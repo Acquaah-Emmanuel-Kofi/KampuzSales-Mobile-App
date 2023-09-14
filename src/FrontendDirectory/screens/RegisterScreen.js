@@ -90,7 +90,7 @@ function RegisterScreen({navigation}) {
                 }} buttonText={authLoading ? "Signing up..." : "Sign Up"} />
             </View>
             <Text style={styles.switchLoginScreenText}>
-                Already have an account? <Text onPress={() => navigation.navigate("Login")} style={styles.switchLoginScreenLinkText}>Sign in</Text>
+                Already have an account? <Text onPress={() => navigation.navigate("Login")} style={styles.switchLoginScreenLinkText}>Sign in!</Text>
             </Text>
             <View style={{height: 100}}></View>
         </ScrollView>
