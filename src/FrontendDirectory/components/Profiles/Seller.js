@@ -66,7 +66,7 @@ const SellerProfile = ({sellerData}) => {
                     <Text>Products Posted ({sellerData.numOfProductsPosted})</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("SalesHistory")}>
                   <View style={styles.optionsTab}>
                     <AntDesign style={styles.icon} name="linechart" size={24} color={AppColors.primary} />
                     <Text>Sales History</Text>
@@ -114,7 +114,7 @@ const SellerProfile = ({sellerData}) => {
                     <Text>Help & Complaint</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("FAQ")}>
                   <View style={styles.optionsTab}>
                     <MaterialCommunityIcons style={styles.icon} name="head-question-outline" size={24} color={AppColors.primary} />
                     <Text>FAQ</Text>

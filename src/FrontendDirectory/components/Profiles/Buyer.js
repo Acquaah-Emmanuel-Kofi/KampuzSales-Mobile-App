@@ -60,7 +60,7 @@ const BuyerProfile = ({userData}) => {
                     <Text>Delivery Address</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("OrderHistory")}>
                   <View style={styles.optionsTab}>
                     <Octicons style={styles.icon} name="list-unordered" size={24} color={AppColors.primary} />
                     <Text>Order History</Text>
@@ -108,7 +108,7 @@ const BuyerProfile = ({userData}) => {
                     <Text>Help & Complaint</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("FAQ")}>
                   <View style={styles.optionsTab}>
                     <MaterialCommunityIcons style={styles.icon} name="head-question-outline" size={24} color={AppColors.primary} />
                     <Text>FAQ</Text>
