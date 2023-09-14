@@ -55,7 +55,7 @@ function ProfileScreen() {
         <HeadTitle title={"Profile"} />
         <ScrollView showsVerticalScrollIndicator={false}>
 
-            {userData.firstPost === true ? 
+            {userData.firstTimePosting === true ? 
             (
               <BuyerProfile userData={userData} />
             ) : (
