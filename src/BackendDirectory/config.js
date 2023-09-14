@@ -2,14 +2,15 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
+import {API_KEY, APP_ID} from '@env';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBAjoGO8qV6KNLLL2Az0NFqhl1QNkYGgAQ",
-  authDomain: "kampuzsales-3cb39.firebaseapp.com",
-  projectId: "kampuzsales-3cb39",
-  storageBucket: "kampuzsales-3cb39.appspot.com",
-  messagingSenderId: "1007566040071",
-  appId: "1:1007566040071:web:2377c012635c1d58810ea2"
+  apiKey: API_KEY,
+  authDomain: "kampuzsales-db.firebaseapp.com",
+  projectId: "kampuzsales-db",
+  storageBucket: "kampuzsales-db.appspot.com",
+  messagingSenderId: "100237797089",
+  appId: APP_ID
 };
 
 
