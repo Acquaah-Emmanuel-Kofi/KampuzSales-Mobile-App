@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "KampuzSales-Mobile-App",
+    "name": "KampuzSales",
     "slug": "KampuzSales-Mobile-App",
     "plugins": [
       "@react-native-google-signin/google-signin"
