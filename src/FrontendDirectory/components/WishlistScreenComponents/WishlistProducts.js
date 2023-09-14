@@ -219,7 +219,7 @@ function WishlistProducts() {
                     <Text style={{textAlign: 'center', marginVertical: 10}}>
                         Start adding items you love by browsing through the products from the homepage and tapping the wishlist icon.
                     </Text>
-                    <Text style={{fontSize: 12, color: AppColors.primary}}>Happy shopping!</Text>
+                    <Text style={{fontSize: 12, color: AppColors.primary}}>Happy shopping! 🎉</Text>
                 </View>
             ) : 
             (
